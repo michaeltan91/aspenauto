@@ -92,17 +92,27 @@ class Output(object):
                 sheet.cell(row= row_start , column=7).value = obj.pressure
 
         feed_start = rw
-        
         c = sheet.cell(row= feed_start-3 , column=2)
+        c.value = 'Mass balances'
         c.font = Font(bold=True)
-
-        sheet.cell(row= feed_start-3 , column=2).value = 'Mass balances'
-        sheet.cell(row= feed_start-2 , column=2).value = 'Raw materials'
-        sheet.cell(row= feed_start-1 , column=2).value = 'Stream'
-        sheet.cell(row= feed_start-1 , column=3).value = 'Flowrate ktonne/y'
-        sheet.cell(row= feed_start-1 , column=4).value = 'Concentration (wt%)'
-        sheet.cell(row= feed_start-1 , column=6).value = 'Temperature ( C )'
-        sheet.cell(row= feed_start-1 , column=7).value = 'Pressure (bar)'
+        c = sheet.cell(row= feed_start-2 , column=2)
+        c.value = 'Raw materials' 
+        c.font = Font(bold=True)
+        c = sheet.cell(row= feed_start-1 , column=2)
+        c.value = 'Stream'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= feed_start-1 , column=3)
+        c.value = 'Flowrate ktonne/y'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= feed_start-1 , column=4)
+        c.value = 'Concentration (wt%)'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= feed_start-1 , column=6)
+        c.value = 'Temperature ( C )'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= feed_start-1 , column=7)
+        c.value = 'Pressure (bar)'
+        c.font = Font(bold=True)
 
         prod_start = feed_start + feed_count + 4
         c = sheet.cell(row= prod_start-2 , column=2)
@@ -126,12 +136,26 @@ class Output(object):
 
 
         wast_start = prod_start + product_count + 4
-        sheet.cell(row= wast_start-2 , column=2).value = 'Waste streams'
-        sheet.cell(row= wast_start-1 , column=2).value = 'Stream'
-        sheet.cell(row= wast_start-1 , column=3).value = 'Flowrate ktonne/y'
-        sheet.cell(row= wast_start-1 , column=4).value = 'Concentration (wt%)'
-        sheet.cell(row= wast_start-1 , column=6).value = 'Temperature ( C )'
-        sheet.cell(row= wast_start-1 , column=7).value = 'Pressure (bar)'
+        c = sheet.cell(row= wast_start-2 , column=2)
+        c.value = 'Waste streams'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= wast_start-1 , column=2)
+        c.value = 'Stream'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= wast_start-1 , column=3)
+        c.value = 'Flowrate ktonne/y'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= wast_start-1 , column=4)
+        c.value = 'Concentration (wt%)'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= wast_start-1 , column=6)
+        c.value = 'Temperature ( C )'
+        c.font = Font(bold=True)
+        c = sheet.cell(row= wast_start-1 , column=7)
+        c.value = 'Pressure (bar)'
+        c.font = Font(bold=True)
+
+    
 
         wb.save(work_book)
                 

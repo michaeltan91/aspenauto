@@ -52,7 +52,17 @@ class Material(Stream):
         self.moleflow['total'] = stream.Output.MOLEFLMX.MIXED.Value
 
 
+class Work(Stream):
 
+    def __init__(self, stream):
+
+        self.power = []
+        self.speed = []
+
+    def Collect(self, stream):
+
+        self.power = stream.Output.POWER_OUT.Value
+        self.rpm = stream.Output.SPEED_OUT.Value
 class Heat(Stream):
 
     def __init__(self, stream):
