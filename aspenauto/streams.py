@@ -1,6 +1,6 @@
 from .objectcollection import ObjectCollection
 
-class Streams(object):
+class Stream(object):
 
     def __init__(self):
 
@@ -8,7 +8,7 @@ class Streams(object):
 
 
 
-class Material(Streams):
+class Material(Stream):
 
     def __init__(self, stream):
         
@@ -18,6 +18,7 @@ class Material(Streams):
 
         self.massfrac = ObjectCollection()
         self.massflow = ObjectCollection()
+        self.molefrac = ObjectCollection()
         self.moleflow = ObjectCollection()
 
         if 'F-' in stream.Name:
@@ -43,13 +44,16 @@ class Material(Streams):
             self.massflow[obj.Name] = obj.Value
         self.massflow['total'] = stream.Output.MASSFLMX.MIXED.Value
 
+        for obj in stream.Output.MOLEFRAC.MIXED.Elements:
+            self.molefrac[obj.Name] = obj.Value
+
         for obj in stream.Output.MOLEFLOW.MIXED.Elements:
             self.moleflow[obj.Name] = obj.Value
         self.moleflow['total'] = stream.Output.MOLEFLMX.MIXED.Value
 
 
 
-class Heat(Streams):
+class Heat(Stream):
 
     def __init__(self, stream):
 
