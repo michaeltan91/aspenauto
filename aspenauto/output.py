@@ -10,7 +10,7 @@ class Output(object):
         return
 
     
-    def Print(self, material_streams, work_book):
+    def Print_Mass(self, material_streams, work_book):
         
         sheet = 'Mass balances v2' 
         
@@ -91,6 +91,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)
                 sheet.cell(row= row_start , column=7).value = obj.pressure
 
+        # Print feed headers
         feed_start = rw
         c = sheet.cell(row= feed_start-3 , column=2)
         c.value = 'Mass balances'
@@ -114,6 +115,7 @@ class Output(object):
         c.value = 'Pressure (bar)'
         c.font = Font(bold=True)
 
+        # Print product headers 
         prod_start = feed_start + feed_count + 4
         c = sheet.cell(row= prod_start-2 , column=2)
         c.value = 'Products'
@@ -134,7 +136,7 @@ class Output(object):
         c.value = 'Pressure (bar)'
         c.font = Font(bold=True)
 
-
+        # Print waste headers
         wast_start = prod_start + product_count + 4
         c = sheet.cell(row= wast_start-2 , column=2)
         c.value = 'Waste streams'
@@ -158,5 +160,8 @@ class Output(object):
     
 
         wb.save(work_book)
+
+
+
                 
 
