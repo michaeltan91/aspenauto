@@ -1,4 +1,5 @@
 from .objectcollection import ObjectCollection
+from .baseobject import BaseObject
 
 class Stream(object):
 
@@ -6,7 +7,9 @@ class Stream(object):
 
         return
 
+    def set_obj_value(self):
 
+        return
 
 class Material(Stream):
 
@@ -20,7 +23,6 @@ class Material(Stream):
         self.massflow = ObjectCollection()
         self.molefrac = ObjectCollection()
         self.moleflow = ObjectCollection()
-
         if 'F-' in stream.Name:
             self.type = 'Feed'
         elif 'P-' in stream.Name:
@@ -29,6 +31,7 @@ class Material(Stream):
             self.type = 'Waste'
         else:
             self.type = 'Standard'
+        super().__init__()
 
 
     def Collect(self, stream):
@@ -58,18 +61,21 @@ class Work(Stream):
 
         self.power = []
         self.speed = []
+        self.type ='Work'
+        super().__init__()
 
     def Collect(self, stream):
 
         self.power = stream.Output.POWER_OUT.Value
         self.rpm = stream.Output.SPEED_OUT.Value
+
 class Heat(Stream):
 
     def __init__(self, stream):
 
-    
         self.Q = []
         self.type = 'Thermal'
+        super().__init__()
 
     def Collect(self, stream):
 

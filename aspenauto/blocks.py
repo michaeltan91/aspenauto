@@ -1,9 +1,14 @@
 from .objectcollection import ObjectCollection
+from .baseobject import BaseObject
 
 class Block(object):
 
     def __init__(self):
         
+        return
+
+    def set_obj_value(self):
+
         return
 
 

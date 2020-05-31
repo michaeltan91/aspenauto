@@ -3,15 +3,18 @@
 class Utility(object):
 
     def __init__(self):
-
-        return
-
+        self.duty = []
+        self.usage = []
+        self.Tin = []
+        self.Tout = []
+        self.Pin = []
+        self.Pout = []
 
 class Electricity(Utility):
 
     def __init__(self):
-        
-        return
+        self.duty = []
+        self.usage = []
 
     def Collect_Duty(self, param, block):
         self.duty = block.Value
@@ -21,14 +24,6 @@ class Electricity(Utility):
 
 
 class Coolwater(Utility):
-
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
 
     def Collect_Duty(self, param, block):
         self.duty = block.Value
@@ -43,14 +38,6 @@ class Coolwater(Utility):
 
 class HP_Steam(Utility):
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
-
     def Collect_Duty(self, param, block):
         self.duty = block.Value
         self.Tin = param.Output.UTL_IN_TEMP.Value
@@ -63,33 +50,17 @@ class HP_Steam(Utility):
 
 class HPS_Gen(Utility):
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
-
     def Collect_Duty(self, param, block):
-        self.duty = block.Value
+        self.duty = -block.Value
         self.Tin = param.Output.UTL_IN_TEMP.Value
         self.Tout = param.Output.UTL_OUT_TEMP.Value
         self.Pin = param.Output.UTL_IN_PRES.Value
         self.Pout = param.Output.UTL_OUT_PRES.Value
 
     def Collect_Usage(self, block):
-        self.usage = block.Value
+        self.usage = -block.Value
 
 class MP_Steam(Utility):
-
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
 
     def Collect_Duty(self, param, block):
         self.duty = block.Value
@@ -103,54 +74,30 @@ class MP_Steam(Utility):
 
 class MPS_Gen(Utility):
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
-
     def Collect_Duty(self, param, block):
-        self.duty = block.Value
+        self.duty = -block.Value
         self.Tin = param.Output.UTL_IN_TEMP.Value
         self.Tout = param.Output.UTL_OUT_TEMP.Value
         self.Pin = param.Output.UTL_IN_PRES.Value
         self.Pout = param.Output.UTL_OUT_PRES.Value
 
     def Collect_Usage(self, block):
-        self.usage = block.Value
+        self.usage = -block.Value
 
 class LP_Steam(Utility):
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
-
     def Collect_Duty(self, param, block):
-        self.duty = block.Value
+        self.duty = -block.Value
         self.Tin = param.Output.UTL_IN_TEMP.Value
         self.Tout = param.Output.UTL_OUT_TEMP.Value
         self.Pin = param.Output.UTL_IN_PRES.Value
         self.Pout = param.Output.UTL_OUT_PRES.Value
 
     def Collect_Usage(self, block):
-        self.usage = block.Value
+        self.usage = -block.Value
 
 class LPS_Gen(Utility):
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
-        
     def Collect_Duty(self, param, block):
         self.duty = block.Value
         self.Tin = param.Output.UTL_IN_TEMP.Value
@@ -162,14 +109,6 @@ class LPS_Gen(Utility):
         self.usage = block.Value
 
 class Refrigerant(Utility):
-
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
 
     def Collect_Duty(self, param, block):
         self.duty = block.Value

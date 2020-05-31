@@ -31,7 +31,7 @@ from .blocks import (
     SolidsSeparator
 )
 
-class Aspen(object):
+class Process(object):
 
     def __init__(self, aspen_file):
         
@@ -96,6 +96,7 @@ class Aspen(object):
     def Print(self, work_book):
 
         self.output.Print_Mass(self.material_streams, work_book)
+        self.output.Print_Energy(self.utilities, work_book)
 
 
     def load_data(self, aspen_file):
@@ -172,6 +173,7 @@ class Aspen(object):
                 self.streams[obj.Name] = heat
                 self.heat_streams[obj.Name] = heat
         
+        # Load and fill utility dictionaries
         for util in utilities.Elements:
             if util.Name == 'CW':
                 self.utilities[util.Name] = self.coolwater
@@ -192,6 +194,15 @@ class Aspen(object):
             elif util.Name == 'REFRIG':
                 self.utilities[util.Name] = self.refrigerant
 
+        temp = []
+        prefer = ['LP-STEAM', 'LPS-GEN', 'MP-STEAM', 'MPS-GEN', 'HP-STEAM', 'HPS-GEN', 'REFRIG', 'ELECTRIC' , 'NATGAS', 'CW']
+        for i in prefer:
+            if i in self.utilities:
+                temp.append(i)
+        temp2 = ObjectCollection()
+        for j in temp:
+            temp2[j] = self.utilities[j]
+        self.utilities = temp2
 
     def assign_utility(self, block, block_type):
         if block_type == 'RadFrac':
