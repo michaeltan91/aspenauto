@@ -45,7 +45,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                sheet.cell(row= row_start , column=3).value = obj.massflow['total'] * 8000 / 1000 / 1000
+                sheet.cell(row= row_start , column=3).value = obj.massflow * 8000 / 1000 / 1000
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
                 sheet.cell(row= row_start , column=6).value = obj.temperature
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)
@@ -67,7 +67,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                sheet.cell(row= row_start , column=3).value = obj.massflow['total'] * 8000 / 1000 / 1000
+                sheet.cell(row= row_start , column=3).value = obj.massflow * 8000 / 1000 / 1000
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
                 sheet.cell(row= row_start , column=6).value = obj.temperature
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)
@@ -86,7 +86,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                sheet.cell(row= row_start , column=3).value = obj.massflow['total'] * 8000 / 1000 / 1000
+                sheet.cell(row= row_start , column=3).value = obj.massflow * 8000 / 1000 / 1000
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
                 sheet.cell(row= row_start , column=6).value = obj.temperature
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)

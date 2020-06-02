@@ -1,85 +1,97 @@
 from .objectcollection import ObjectCollection
 from .baseobject import BaseObject
+import weakref
 
-class Stream(object):
+class Stream(BaseObject):
 
-    def __init__(self):
+    def __init__(self, stream, aspen):
+        
+        if 'F-' in stream.Name:
+            obj_type = 'Feed'
+        elif 'P-' in stream.Name:
+            obj_type = 'Product'
+        elif 'W-' in stream.Name:
+            obj_type = 'Waste'
+        else:
+            obj_type = 'Standard'
+        self.type = obj_type
+        self.name = stream.Name
+        
+        super().__init__(aspen)
+
+
+    def get_obj_value(self, obj_loc):    
+        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+        return self.aspen.Tree.FindNode(path).Value
+
+    def get_obj_value_frac(self, obj_loc):
+        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+        temp = ObjectCollection()
+        for element in self.aspen.Tree.FindNode(path).Elements:
+            temp[element.Name] = element.Value 
+        return temp
+
+    def set_obj_value(self, obj_loc, value):
+        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not 'HENK':
+            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,'HENK')
+        self.aspen.Tree.FindNode(path).Value = value
+        return
+
+    def set_obj_value_frac(self):
 
         return
 
-    def set_obj_value(self):
+    
 
-        return
-
+        
 class Material(Stream):
 
-    def __init__(self, stream):
-        
-        self.pressure = []
-        self.temperature = []   
-        self.volflow = []
+    stream_type = 'Material'
 
-        self.massfrac = ObjectCollection()
-        self.massflow = ObjectCollection()
-        self.molefrac = ObjectCollection()
-        self.moleflow = ObjectCollection()
-        if 'F-' in stream.Name:
-            self.type = 'Feed'
-        elif 'P-' in stream.Name:
-            self.type = 'Product'
-        elif 'W-' in stream.Name:
-            self.type = 'Waste'
-        else:
-            self.type = 'Standard'
-        super().__init__()
+    properties_in = {
+        'pressure': '\\Input\\PRES\\MIXED',
+        'temperature': '\\Input\\TEMP\\MIXED',
+        'massflow': '\\Input\\TOTFLOW\\MIXED',
+        'moleflow': '\\Input\\TOTFLOW\\MIXED',
+        'volflow': '\\Input\\TOTFLOW\\MIXED'
+    }
+    properties_frac_in = {
+        'massfrac' : '\\Input\\FLOW\\MIXED',
+        'molefrac' : '\\Input\\FLOW\\MIXED'
+    }
 
-
-    def Collect(self, stream):
-        
-        self.temperature = stream.Output.TEMP_OUT.MIXED.Value
-        self.pressure = stream.Output.PRES_OUT.MIXED.Value
-        self.volflow = stream.Output.VOLFLMX.MIXED.Value
-
-        for obj in stream.Output.MASSFRAC.MIXED.Elements:
-            self.massfrac[obj.Name] = obj.Value
-
-        for obj in stream.Output.MASSFLOW.MIXED.Elements:
-            self.massflow[obj.Name] = obj.Value
-        self.massflow['total'] = stream.Output.MASSFLMX.MIXED.Value
-
-        for obj in stream.Output.MOLEFRAC.MIXED.Elements:
-            self.molefrac[obj.Name] = obj.Value
-
-        for obj in stream.Output.MOLEFLOW.MIXED.Elements:
-            self.moleflow[obj.Name] = obj.Value
-        self.moleflow['total'] = stream.Output.MOLEFLMX.MIXED.Value
+    properties_out = {
+        'pressure': '\\Output\\PRES_OUT\\MIXED',
+        'temperature': '\\Output\\TEMP_OUT\\MIXED',
+        'massflow': '\\Output\\MASSFLMX\\MIXED',
+        'moleflow': '\\Output\\MOLEFLMX\\MIXED',
+        'volflow': '\\Output\\VOLFLMX\\MIXED'
+        }
+    properties_frac_out = {
+        'massfrac': '\\Output\\MASSFRAC\\MIXED',
+        'molefrac': '\\Output\\MOLEFRAC\\MIXED'
+    }
 
 
 class Work(Stream):
 
-    def __init__(self, stream):
+    stream_type = 'Work'
 
-        self.power = []
-        self.speed = []
-        self.type ='Work'
-        super().__init__()
+    properties_out = {
+        'power': '\\Output\\POWER_OUT',
+        'speed': '\\Output\\SPEED_OUT'
+    }
 
-    def Collect(self, stream):
+    properties_frac_out = {}
 
-        self.power = stream.Output.POWER_OUT.Value
-        self.rpm = stream.Output.SPEED_OUT.Value
 
 class Heat(Stream):
 
-    def __init__(self, stream):
+    stream_type = 'Heat'
 
-        self.Q = []
-        self.type = 'Thermal'
-        super().__init__()
+    properties_out = {'Q': '\\Output\\QCALC'}
 
-    def Collect(self, stream):
-
-        self.Q = stream.Output.QCALC.Value
-
+    properties_frac_out = {}
     
         

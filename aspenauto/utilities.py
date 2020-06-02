@@ -1,122 +1,134 @@
+from.baseobject import BaseObject
 
+class Utility(BaseObject):
 
-class Utility(object):
+    def __init__(self, block_name, aspen):
+        self.name = block_name
+        super().__init__(aspen)
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-        self.Tin = []
-        self.Tout = []
-        self.Pin = []
-        self.Pout = []
+    def get_obj_value(self, obj_loc):    
+        return self.aspen.Tree.FindNode('\\Data\\Utilities'+obj_loc+str(self.name)).Value
+
 
 class Electricity(Utility):
 
-    def __init__(self):
-        self.duty = []
-        self.usage = []
-
-    def Collect_Duty(self, param, block):
-        self.duty = block.Value
-
-    def Collect_Usage(self, block):
-        self.usage = block.Value
+    properties_out = {
+        'duty': '\\ELECTRIC\\Output\\UTL_DUTY\\',
+        'usage':'\\ELECTRIC\\Output\\UTL_USAGE\\',
+    }   
 
 
 class Coolwater(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
+    properties_out = {
+        'duty': '\\CW\\Output\\UTL_DUTY\\',
+        'usage':'\\CW\\Output\\UTL_USAGE\\',
+        'Tin': '\\CW\\UTL_IN_TEMP\\',
+        'Tout': '\\CW\\UTL_OUT_TEMP\\',
+        'Pin': '\\CW\\UTL_IN_PRES\\',
+        'Pout': '\\CW\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\CW\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\CW\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Usage(self, block):
-        self.usage = block.Value
 
 
 class HP_Steam(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
+    properties_out = {
+        'duty': '\\HP-STEAM\\Output\\UTL_DUTY\\',
+        'usage':'\\HP-STEAM\\Output\\UTL_USAGE\\',
+        'Tin': '\\HP-STEAM\\UTL_IN_TEMP\\',
+        'Tout': '\\HP-STEAM\\UTL_OUT_TEMP\\',
+        'Pin': '\\HP-STEAM\\UTL_IN_PRES\\',
+        'Pout': '\\HP-STEAM\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\HP-STEAM\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\HP-STEAM\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Usage(self, block):
-        self.usage = block.Value
 
 class HPS_Gen(Utility):
+    
+    properties_out = {
+        'duty': '\\HPS-GEN\\Output\\UTL_DUTY\\',
+        'usage':'\\HPS-GEN\\Output\\UTL_USAGE\\',
+        'Tin': '\\HPS-GEN\\UTL_IN_TEMP\\',
+        'Tout': '\\HPS-GEN\\UTL_OUT_TEMP\\',
+        'Pin': '\\HPS-GEN\\UTL_IN_PRES\\',
+        'Pout': '\\HPS-GEN\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\HPS-GEN\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\HPS-GEN\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Duty(self, param, block):
-        self.duty = -block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
-
-    def Collect_Usage(self, block):
-        self.usage = -block.Value
 
 class MP_Steam(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
-
-    def Collect_Usage(self, block):
-        self.usage = block.Value
+    properties_out = {
+        'duty': '\\MP-STEAM\\Output\\UTL_DUTY\\',
+        'usage':'\\MP-STEAM\\Output\\UTL_USAGE\\',
+        'Tin': '\\MP-STEAM\\UTL_IN_TEMP\\',
+        'Tout': '\\MP-STEAM\\UTL_OUT_TEMP\\',
+        'Pin': '\\MP-STEAM\\UTL_IN_PRES\\',
+        'Pout': '\\MP-STEAM\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\MP-STEAM\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\MP-STEAM\\UTL_OUT_VFRAC\\'
+    }
+    
 
 class MPS_Gen(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = -block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
+    properties_out = {
+        'duty': '\\MPS-GEN\\Output\\UTL_DUTY\\',
+        'usage':'\\MPS-GEN\\Output\\UTL_USAGE\\',
+        'Tin': '\\MPS-GEN\\UTL_IN_TEMP\\',
+        'Tout': '\\MPS-GEN\\UTL_OUT_TEMP\\',
+        'Pin': '\\MPS-GEN\\UTL_IN_PRES\\',
+        'Pout': '\\MPS-GEN\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\MPS-GEN\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\MPS-GEN\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Usage(self, block):
-        self.usage = -block.Value
+    
 
 class LP_Steam(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = -block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
+    properties_out = {
+        'duty': '\\LP-STEAM\\Output\\UTL_DUTY\\',
+        'usage':'\\LP-STEAM\\Output\\UTL_USAGE\\',
+        'Tin': '\\LP-STEAM\\UTL_IN_TEMP\\',
+        'Tout': '\\LP-STEAM\\UTL_OUT_TEMP\\',
+        'Pin': '\\LP-STEAM\\UTL_IN_PRES\\',
+        'Pout': '\\LP-STEAM\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\LP-STEAM\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\LP-STEAM\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Usage(self, block):
-        self.usage = -block.Value
 
 class LPS_Gen(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
+    properties_out = {
+        'duty': '\\LPS-GEN\\Output\\UTL_DUTY\\',
+        'usage':'\\LPS-GEN\\Output\\UTL_USAGE\\',
+        'Tin': '\\LPS-GEN\\UTL_IN_TEMP\\',
+        'Tout': '\\LPS-GEN\\UTL_OUT_TEMP\\',
+        'Pin': '\\LPS-GEN\\UTL_IN_PRES\\',
+        'Pout': '\\LPS-GEN\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\LPS-GEN\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\LPS-GEN\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Usage(self, block):
-        self.usage = block.Value
 
 class Refrigerant(Utility):
 
-    def Collect_Duty(self, param, block):
-        self.duty = block.Value
-        self.Tin = param.Output.UTL_IN_TEMP.Value
-        self.Tout = param.Output.UTL_OUT_TEMP.Value
-        self.Pin = param.Output.UTL_IN_PRES.Value
-        self.Pout = param.Output.UTL_OUT_PRES.Value
+    properties_out = {
+        'duty': '\\REFRIG\\Output\\UTL_DUTY\\',
+        'usage':'\\REFRIG\\Output\\UTL_USAGE\\',
+        'Tin': '\\REFRIG\\UTL_IN_TEMP\\',
+        'Tout': '\\REFRIG\\UTL_OUT_TEMP\\',
+        'Pin': '\\REFRIG\\UTL_IN_PRES\\',
+        'Pout': '\\REFRIG\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\REFRIG\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\REFRIG\\UTL_OUT_VFRAC\\'
+    }
 
-    def Collect_Usage(self, block):
-        self.usage = block.Value
 
