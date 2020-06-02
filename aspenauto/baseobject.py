@@ -20,11 +20,11 @@ class BaseObject(object):
     def get_obj_value_frac(self, object_loc):
         raise NotImplementedError
 
-    #def set_obj_value(self, object_loc, value):
-    #    raise NotImplementedError
+    def set_obj_value(self, object_loc, value):
+        raise NotImplementedError
 
-    #def set_obj_value_frac(self, object_loc, value):
-    #    raise NotImplementedError
+    def set_obj_value_frac(self, object_loc, value):
+        raise NotImplementedError
 
     def __getattr__(self, prop):
 
@@ -37,9 +37,9 @@ class BaseObject(object):
         else:
             raise AttributeError('Nonexistant Attribute', prop)
                 
-                
+
     def __setattr__(self, prop, value):
-        if prop in self.properties.keys():
+        if prop in self.properties_in.keys():
             self.set_property(self.properties[prop], value)
 
         else:

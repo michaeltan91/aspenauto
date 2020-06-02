@@ -32,9 +32,9 @@ class Stream(BaseObject):
         return temp
 
     def set_obj_value(self, obj_loc, value):
-        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
-        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not 'HENK':
-            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,'HENK')
+        path = '\\Data\\Streams\\'+str(self.name)+obj_loc[0]
+        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not obj_loc[1]:
+            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,obj_loc[1])
         self.aspen.Tree.FindNode(path).Value = value
         return
 
@@ -50,11 +50,11 @@ class Material(Stream):
     stream_type = 'Material'
 
     properties_in = {
-        'pressure': '\\Input\\PRES\\MIXED',
-        'temperature': '\\Input\\TEMP\\MIXED',
-        'massflow': '\\Input\\TOTFLOW\\MIXED',
-        'moleflow': '\\Input\\TOTFLOW\\MIXED',
-        'volflow': '\\Input\\TOTFLOW\\MIXED'
+        'pressure': ['\\Input\\PRES\\MIXED',],
+        'temperature': ['\\Input\\TEMP\\MIXED',],
+        'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
+        'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
+        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME']
     }
     properties_frac_in = {
         'massfrac' : '\\Input\\FLOW\\MIXED',

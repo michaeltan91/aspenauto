@@ -19,7 +19,7 @@ class Electricity(Utility):
 
 
 class Coolwater(Utility):
-
+    
     properties_out = {
         'duty': '\\CW\\Output\\UTL_DUTY\\',
         'usage':'\\CW\\Output\\UTL_USAGE\\',

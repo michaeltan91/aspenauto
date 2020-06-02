@@ -95,7 +95,7 @@ class Process(object):
         # Assign dictionaries for each block and stream
         blocks = self.aspen.Tree.FindNode("\\Data\\Blocks")
         streams = self.aspen.Tree.FindNode("\\Data\\Streams")
-        utilities = self.aspen.Tree.Data.Utilities  # Dot notation only works ???
+        utilities = self.aspen.Tree.FindNode("\\Data\\Utilities")  # Dot notation only works ???
         # Load Aspen model as text file, to get block type for each block
         temp = []
         with open(aspen_file) as input_data:
@@ -112,7 +112,7 @@ class Process(object):
         temp2 = {}
         for x in range(int(len(temp)/5)):
             temp2[temp[1+ 5*x]] = temp[2 + 5*x] 
-
+        
         # Load and fill block dictionaries 
         for obj in blocks.Elements:
             for name2, block_type in temp2.items():
@@ -132,6 +132,7 @@ class Process(object):
                         self.assign_utility(obj, block_type)
                     elif block_type == 'DSTWU' or block_type == 'RadFrac' or block_type == 'Extract':
                         column = Column(block_type)
+                        print(obj.Name)
                         self.columns[obj.Name] = column
                         self.blocks[obj.Name] = column
                         self.assign_utility(obj, block_type)
