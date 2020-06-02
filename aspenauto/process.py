@@ -132,7 +132,6 @@ class Process(object):
                         self.assign_utility(obj, block_type)
                     elif block_type == 'DSTWU' or block_type == 'RadFrac' or block_type == 'Extract':
                         column = Column(block_type)
-                        print(obj.Name)
                         self.columns[obj.Name] = column
                         self.blocks[obj.Name] = column
                         self.assign_utility(obj, block_type)
@@ -198,7 +197,8 @@ class Process(object):
 
     def assign_utility(self, block, block_type):
         if block_type == 'RadFrac':
-            utility = block.Input.COND_UTIL.Value
+            path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COND_UTIL'
+            utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, self.aspen)
                 self.coolwater[block.Name] = coolwater
@@ -207,7 +207,8 @@ class Process(object):
                 self.refrigerant[block.Name] = refrig
             
         elif block_type == 'Heater':
-            utility = block.Input.UTILITY_ID.Value
+            path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
+            utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, self.aspen)
                 self.coolwater[block.Name] = coolwater
@@ -234,15 +235,20 @@ class Process(object):
                 self.hpsgen[block.Name] = hpsgen
         
         elif block_type == 'Pump' or block_type == 'Comp':
-            if block.Input.UTILITY_ID.Value == 'ELECTRIC':
+            path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
+            utility = self.aspen.Tree.FindNode(path).Value
+            if utility == 'ELECTRIC':
                 electricity = Electricity(block.Name, self.aspen)
                 self.electricity[block.Name] = electricity
+
         elif block_type == 'MComp':
-            for stage in block.Input.SPECS_UTL.Elements:
+            path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\SPECS_UTLD'
+            stages = self.aspen.Tree.FindNode(path).Elements
+            for stage in stages:
                 if stage.Value == 'Electricity':
                     electricity = Electricity(block.Name, self.aspen)
                     self.electricity[block.Name] = electricity
-            for stage in block.Input.COOLER_UTL.Elements:
+            for stage in stages:
                 if stage.Value == 'COOLWAT':
                     coolwater = Coolwater(block.Name, self.aspen)
                     self.coolwater[block.Name] = coolwater

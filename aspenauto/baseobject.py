@@ -39,6 +39,8 @@ class BaseObject(object):
                 
 
     def __setattr__(self, prop, value):
+        print(prop, value)
+        print(self.properties_in)
         if prop in self.properties_in.keys():
             self.set_property(self.properties[prop], value)
 

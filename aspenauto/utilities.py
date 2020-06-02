@@ -9,6 +9,10 @@ class Utility(BaseObject):
     def get_obj_value(self, obj_loc):    
         return self.aspen.Tree.FindNode('\\Data\\Utilities'+obj_loc+str(self.name)).Value
 
+    def set_obj_value(self, obj_loc, value):
+        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+        self.aspen.Tree.FindNode(path).Value = value
+        return 
 
 class Electricity(Utility):
 
