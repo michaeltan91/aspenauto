@@ -19,11 +19,16 @@ class Output(object):
         wb = load_workbook(work_book)
     
         # if the sheet doesn't exist, create a new sheet
-        sheet = wb[sheet]
+        try:
+            sheet = wb[sheet]
+        except:
+            sheet = wb.create_sheet(sheet)
 
         count = 0
-        feed_count = 0
-        product_count = 0
+        feed_count, feed_mass = 0, 0
+        product_count,product_mass = 0, 0
+        waste_count, waste_mass = 0, 0
+
 
         rw = 19
 
@@ -45,7 +50,9 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                sheet.cell(row= row_start , column=3).value = obj.massflow * 8000 / 1000 / 1000
+                massflow = obj.massflow * 8000 / 1000 / 1000
+                feed_mass += massflow
+                sheet.cell(row= row_start , column=3).value = massflow
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
                 sheet.cell(row= row_start , column=6).value = obj.temperature
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)
@@ -61,13 +68,14 @@ class Output(object):
                         sheet.cell(row=row_start + comp_count , column=5).value = frac * 100
                         comp_count += 1
                         count += 1
-
                         product_count += 1
 
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                sheet.cell(row= row_start , column=3).value = obj.massflow * 8000 / 1000 / 1000
+                massflow = obj.massflow * 8000 / 1000 / 1000
+                product_mass += massflow
+                sheet.cell(row= row_start , column=3).value = massflow
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
                 sheet.cell(row= row_start , column=6).value = obj.temperature
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)
@@ -81,12 +89,15 @@ class Output(object):
                         sheet.cell(row=row_start + comp_count , column=4).value = comp
                         sheet.cell(row=row_start + comp_count , column=5).value = frac * 100
                         comp_count += 1
+                        waste_count += 1
                         count += 1
 
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                sheet.cell(row= row_start , column=3).value = obj.massflow * 8000 / 1000 / 1000
+                massflow = obj.massflow * 8000 / 1000 / 1000
+                waste_mass += massflow
+                sheet.cell(row= row_start , column=3).value = massflow
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
                 sheet.cell(row= row_start , column=6).value = obj.temperature
                 sheet.merge_cells(start_row= row_start, start_column=7, end_row=row_start+comp_count-1, end_column=7)
@@ -158,7 +169,39 @@ class Output(object):
         c.value = 'Pressure (bar)'
         c.font = Font(bold=True)
 
-    
+
+        # Print Balance check
+        check_start = wast_start + waste_count
+        c = sheet.cell(row=check_start-6, column= 9)
+        c.value = 'Balance check'
+        c.font = Font(bold=True)
+        c = sheet.cell(row=check_start-5, column= 9)
+        c.value = 'Total inputs'
+        c.font = Font(bold=True)
+        c = sheet.cell(row=check_start-5, column= 10)
+        c.value = 'Total F.rate ktonne/y '
+        c.font = Font(bold=True)
+        c = sheet.cell(row=check_start-4, column= 9)
+        c.value = 'Raw materials'
+        c.font = Font(bold=True)
+        sheet.cell(row=check_start-4, column= 10).value = feed_mass
+        c = sheet.cell(row=check_start-3, column= 9)
+        c.value = 'Products'
+        c.font = Font(bold=True)
+        sheet.cell(row=check_start-3, column= 10).value = product_mass
+        c = sheet.cell(row=check_start-2, column= 9)
+        c.value = 'Waste streams'
+        c.font = Font(bold=True)
+        sheet.cell(row=check_start-2, column= 10).value = waste_mass
+        c = sheet.cell(row=check_start-1, column= 9)
+        c.value = 'Balance check'
+        c.font = Font(bold=True)
+        sheet.cell(row=check_start-1, column= 10).value = feed_mass - product_mass - waste_mass
+        c = sheet.cell(row=check_start-0, column= 9)
+        c.value = 'Balance error'
+        c.font = Font(bold=True)
+        sheet.cell(row=check_start-0, column= 10).value = (feed_mass - product_mass - waste_mass)/feed_mass*100
+
 
         wb.save(work_book)
 
@@ -168,7 +211,11 @@ class Output(object):
         sheet = 'Energy balances v2' 
         
         wb = load_workbook(work_book)
-        sheet = wb[sheet]
+        try:
+            sheet = wb[sheet]
+        except:
+            wb.create_sheet(sheet)
+
         count_right = 0
         count_left = 0
         count_lps, count_mps, count_hps, count_frig = 0, 0, 0, 0
@@ -176,54 +223,65 @@ class Output(object):
         rw = 29
         
         for util, block1 in utilities.items():
-            if (util == 'LP-STEAM' or util == 'LPS-GEN') and block1:
-                cur_row = rw + count_left
-                ii = 0
-                count_left += 1
-                count_lps += 1
-            elif (util == 'MP-STEAM' or util == 'MPS-GEN') and block1:
-                cur_row = rw + count_left + 3
-                ii = 0
-                count_left += 1
-                count_mps += 1
-            elif (util == 'HP-STEAM' or util == 'HPS-GEN') and block1:
-                cur_row = rw + count_left + 6
-                ii = 0
-                count_left += 1
-                count_hps += 1
-            elif util == 'REFRIG' and block1:
-                cur_row = rw + count_left + 9
-                ii = 0
-                count_left += 1
-                count_frig += 1
-            elif util == 'ELECTRIC' and block1:
-                cur_row = rw + count_right
-                ii = 8
-                count_right += 1
-                count_elec += 1
-            elif util == 'NATGAS' and block1:
-                cur_row = rw + count_right + 3
-                ii = 8
-                count_right += 1
-                count_natgas += 1
-            elif util == 'CW' and block1:
-                cur_row = rw + count_right + 6
-                ii = 8
-                count_right += 1
-                count_cw += 1
-            
             for block2, data in block1.items():
+
+                if (util == 'LPS' or util == 'LPS-GEN'):
+                    cur_row = rw + count_left
+                    ii = 0
+                    count_left += 1
+                    count_lps += 1
+                elif (util == 'MPS' or util == 'MPS-GEN'):
+                    cur_row = rw + count_left + 3
+                    ii = 0
+                    count_left += 1
+                    count_mps += 1
+                elif (util == 'HPS' or util == 'HPS-GEN'):
+                    cur_row = rw + count_left + 6
+                    ii = 0
+                    count_left += 1
+                    count_hps += 1
+                elif util == 'RF':
+                    cur_row = rw + count_left + 9
+                    ii = 0
+                    count_left += 1
+                    count_frig += 1
+                elif util == 'ELECTRIC':
+                    cur_row = rw + count_right
+                    ii = 8
+                    count_right += 1
+                    count_elec += 1
+                elif util == 'NATGAS':
+                    cur_row = rw + count_right + 3
+                    ii = 8
+                    count_right += 1
+                    count_natgas += 1
+                elif util == 'CW':
+                    cur_row = rw + count_right + 6
+                    ii = 8
+                    count_right += 1
+                    count_cw += 1
+            
                 if util == 'ELECTRIC':
                     sheet.cell(row=cur_row, column=2+ii).value = block2
                     sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
-                    sheet.cell(row=cur_row, column=6+ii).value = data.usage 
-                else:
+                elif util =='NATGAS':
                     sheet.cell(row=cur_row, column=2+ii).value = block2
-                    sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
                     sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
+
+                else:
+                    if '-GEN' in util:
+                        sheet.cell(row=cur_row, column=2+ii).value = block2
+                        sheet.cell(row=cur_row, column=4+ii).value = -data.duty * 4186.8
+                        sheet.cell(row=cur_row, column=5+ii).value = -data.duty * 4186.8 * 8000 * 1E-6
+                        sheet.cell(row=cur_row, column=6+ii).value = -data.usage * 8000 / 1000 / 1000
+                    else:
+                        sheet.cell(row=cur_row, column=2+ii).value = block2
+                        sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
+                        sheet.cell(row=cur_row, column=5+ii).value = data.duty * 4186.8 * 8000 * 1E-6
+                        sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
     
         headers = ['Unit name','Unit description','Duty -MJ/hr', 'Duty -TJ/y', 'Mass -ktonne/y', 'Remark']
-        headelec = ['Unit name','Unit description','Power -K/W', 'Energy -GWh/y', 'Energy - TJ/y', 'Remark']
+        headelec = ['Unit name','Unit description','Power -kW', 'Energy -GWh/y', 'Energy - TJ/y', 'Remark']
         # Print low pressure steam header
         count_col = 2
         lowpres_start = rw

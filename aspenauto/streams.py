@@ -78,6 +78,8 @@ class Work(Stream):
 
     stream_type = 'Work'
 
+    properties_in = {}
+    
     properties_out = {
         'power': '\\Output\\POWER_OUT',
         'speed': '\\Output\\SPEED_OUT'
@@ -89,6 +91,8 @@ class Work(Stream):
 class Heat(Stream):
 
     stream_type = 'Heat'
+
+    properties_in = {}
 
     properties_out = {'Q': '\\Output\\QCALC'}
 
