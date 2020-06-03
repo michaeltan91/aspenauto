@@ -13,16 +13,18 @@ class Output(object):
     
     def Print_Mass(self, material_streams, work_book):
         
-        sheet = 'Mass balances v2' 
+        sheet_name = 'Mass balances v2' 
         
         
         wb = load_workbook(work_book)
     
         # if the sheet doesn't exist, create a new sheet
         try:
-            sheet = wb[sheet]
+            sheet = wb[sheet_name]
+            wb.remove(sheet)
+            sheet = wb.create_sheet(sheet_name)
         except:
-            sheet = wb.create_sheet(sheet)
+            sheet = wb.create_sheet(sheet_name)
 
         count = 0
         feed_count, feed_mass = 0, 0
@@ -172,35 +174,35 @@ class Output(object):
 
         # Print Balance check
         check_start = wast_start + waste_count
-        c = sheet.cell(row=check_start-6, column= 9)
+        c = sheet.cell(row=check_start-7, column= 9)
         c.value = 'Balance check'
         c.font = Font(bold=True)
-        c = sheet.cell(row=check_start-5, column= 9)
+        c = sheet.cell(row=check_start-6, column= 9)
         c.value = 'Total inputs'
         c.font = Font(bold=True)
-        c = sheet.cell(row=check_start-5, column= 10)
+        c = sheet.cell(row=check_start-6, column= 10)
         c.value = 'Total F.rate ktonne/y '
         c.font = Font(bold=True)
-        c = sheet.cell(row=check_start-4, column= 9)
+        c = sheet.cell(row=check_start-5, column= 9)
         c.value = 'Raw materials'
         c.font = Font(bold=True)
-        sheet.cell(row=check_start-4, column= 10).value = feed_mass
-        c = sheet.cell(row=check_start-3, column= 9)
+        sheet.cell(row=check_start-5, column= 10).value = feed_mass
+        c = sheet.cell(row=check_start-4, column= 9)
         c.value = 'Products'
         c.font = Font(bold=True)
-        sheet.cell(row=check_start-3, column= 10).value = product_mass
-        c = sheet.cell(row=check_start-2, column= 9)
+        sheet.cell(row=check_start-4, column= 10).value = product_mass
+        c = sheet.cell(row=check_start-3, column= 9)
         c.value = 'Waste streams'
         c.font = Font(bold=True)
-        sheet.cell(row=check_start-2, column= 10).value = waste_mass
-        c = sheet.cell(row=check_start-1, column= 9)
+        sheet.cell(row=check_start-3, column= 10).value = waste_mass
+        c = sheet.cell(row=check_start-2, column= 9)
         c.value = 'Balance check'
         c.font = Font(bold=True)
-        sheet.cell(row=check_start-1, column= 10).value = feed_mass - product_mass - waste_mass
-        c = sheet.cell(row=check_start-0, column= 9)
+        sheet.cell(row=check_start-2, column= 10).value = feed_mass - product_mass - waste_mass
+        c = sheet.cell(row=check_start-1, column= 9)
         c.value = 'Balance error'
         c.font = Font(bold=True)
-        sheet.cell(row=check_start-0, column= 10).value = (feed_mass - product_mass - waste_mass)/feed_mass*100
+        sheet.cell(row=check_start-1, column= 10).value = (feed_mass - product_mass - waste_mass)/feed_mass*100
 
 
         wb.save(work_book)
@@ -208,13 +210,15 @@ class Output(object):
 
     def Print_Energy(self, utilities, work_book):
         
-        sheet = 'Energy balances v2' 
+        sheet_name = 'Energy balances v2' 
         
         wb = load_workbook(work_book)
         try:
-            sheet = wb[sheet]
+            sheet = wb[sheet_name]
+            wb.remove(sheet)
+            sheet = wb.create_sheet(sheet_name)
         except:
-            wb.create_sheet(sheet)
+            sheet = wb.create_sheet(sheet_name)
 
         count_right = 0
         count_left = 0
@@ -223,7 +227,7 @@ class Output(object):
         rw = 29
         
         for util, block1 in utilities.items():
-            for block2, data in block1.items():
+            for name, data in block1.items():
 
                 if (util == 'LPS' or util == 'LPS-GEN'):
                     cur_row = rw + count_left
@@ -262,23 +266,23 @@ class Output(object):
                     count_cw += 1
             
                 if util == 'ELECTRIC':
-                    sheet.cell(row=cur_row, column=2+ii).value = block2
+                    sheet.cell(row=cur_row, column=2+ii).value = name
                     sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
                 elif util =='NATGAS':
-                    sheet.cell(row=cur_row, column=2+ii).value = block2
+                    sheet.cell(row=cur_row, column=2+ii).value = name
                     sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
 
                 else:
                     if '-GEN' in util:
-                        sheet.cell(row=cur_row, column=2+ii).value = block2
-                        sheet.cell(row=cur_row, column=4+ii).value = -data.duty * 4186.8
-                        sheet.cell(row=cur_row, column=5+ii).value = -data.duty * 4186.8 * 8000 * 1E-6
-                        sheet.cell(row=cur_row, column=6+ii).value = -data.usage * 8000 / 1000 / 1000
-                    else:
-                        sheet.cell(row=cur_row, column=2+ii).value = block2
+                        sheet.cell(row=cur_row, column=2+ii).value = name
                         sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
                         sheet.cell(row=cur_row, column=5+ii).value = data.duty * 4186.8 * 8000 * 1E-6
                         sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
+                    else:
+                        sheet.cell(row=cur_row, column=2+ii).value = name
+                        sheet.cell(row=cur_row, column=4+ii).value = -data.duty * 4186.8
+                        sheet.cell(row=cur_row, column=5+ii).value = -data.duty * 4186.8 * 8000 * 1E-6
+                        sheet.cell(row=cur_row, column=6+ii).value = -data.usage * 8000 / 1000 / 1000
     
         headers = ['Unit name','Unit description','Duty -MJ/hr', 'Duty -TJ/y', 'Mass -ktonne/y', 'Remark']
         headelec = ['Unit name','Unit description','Power -kW', 'Energy -GWh/y', 'Energy - TJ/y', 'Remark']

@@ -88,6 +88,9 @@ class Process(object):
             stream.Reset()
         for utility in self.utilities:
             utility.Reset()
+    
+    def Close(self):
+        self.aspen.Close()
         
 
     def load_data(self, aspen_file):
@@ -95,11 +98,12 @@ class Process(object):
         # Assign dictionaries for each block and stream
         blocks = self.aspen.Tree.FindNode("\\Data\\Blocks")
         streams = self.aspen.Tree.FindNode("\\Data\\Streams")
-        utilities = self.aspen.Tree.FindNode("\\Data\\Utilities")  # Dot notation only works ???
+        utilities = self.aspen.Tree.FindNode("\\Data\\Utilities")  
         
         # Load and fill block dictionaries 
         for obj in blocks.Elements:
-            path = '\\Data\\Blocks\\'+str(obj.Name)
+            base_path = '\\Data\\Blocks\\'
+            path = base_path+str(obj.Name)
             block_type = self.aspen.Tree.FindNode(path).AttributeValue(6)
             if block_type == 'Mixer' or block_type == 'FSplit' or block_type == 'Mixer':
                 mix = MixSplit(block_type)
@@ -137,18 +141,19 @@ class Process(object):
 
         # Load and fill stream dictionaries
         for obj in streams.Elements:
-            path = '\\Data\\Streams\\'+str(obj.Name)
+            base_path = '\\Data\\Streams\\'
+            path = base_path+str(obj.Name)
             stream_type = self.aspen.Tree.FindNode(path).AttributeValue(6)
             if stream_type == 'MATERIAL':
-                material = Material(obj, self.aspen)
+                material = Material(obj, self.aspen, base_path)
                 self.streams[obj.Name] = material
                 self.material_streams[obj.Name] = material
             elif stream_type == 'HEAT':
-                work = Work(obj, self.aspen)
+                work = Work(obj, self.aspen, base_path)
                 self.work_streams[obj.Name] = work
                 self.streams[obj.Name] = work
             else:
-                heat = Heat(obj, self.aspen)
+                heat = Heat(obj, self.aspen, base_path)
                 self.streams[obj.Name] = heat
                 self.heat_streams[obj.Name] = heat
         

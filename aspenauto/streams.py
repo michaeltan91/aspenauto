@@ -4,7 +4,7 @@ import weakref
 
 class Stream(BaseObject):
 
-    def __init__(self, stream, aspen):
+    def __init__(self, stream, aspen, path):
         
         if 'F-' in stream.Name:
             obj_type = 'Feed'
@@ -16,23 +16,23 @@ class Stream(BaseObject):
             obj_type = 'Standard'
         self.type = obj_type
         self.name = stream.Name
-        
+        self.base_path = path
         super().__init__(aspen)
 
 
     def get_obj_value(self, obj_loc):    
-        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+        path = self.base_path+str(self.name)+obj_loc
         return self.aspen.Tree.FindNode(path).Value
 
     def get_obj_value_frac(self, obj_loc):
-        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+        path = self.base_path+str(self.name)+obj_loc
         temp = ObjectCollection()
         for element in self.aspen.Tree.FindNode(path).Elements:
             temp[element.Name] = element.Value 
         return temp
 
     def set_obj_value(self, obj_loc, value):
-        path = '\\Data\\Streams\\'+str(self.name)+obj_loc[0]
+        path = self.base_path+str(self.name)+obj_loc[0]
         if self.aspen.Tree.FindNode(path).AttributeValue(13) is not obj_loc[1]:
             self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,obj_loc[1])
         self.aspen.Tree.FindNode(path).Value = value

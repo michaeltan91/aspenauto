@@ -7,6 +7,10 @@ class Block(object):
         
         return
 
+    def get_obj_value(self):
+
+        return
+
     def set_obj_value(self):
 
         return
