@@ -107,61 +107,63 @@ class Process(object):
             base_path = '\\Data\\Blocks\\'
             path = base_path+str(obj.Name)
             block_type = self.aspen.Tree.FindNode(path).AttributeValue(6)
+            uid = obj.Name
             if block_type == 'Mixer' or block_type == 'FSplit' or block_type == 'Mixer':
-                mix = MixSplit(block_type, obj.Name)
-                self.mixsplits[obj.Name] = mix
-                self.blocks[obj.Name] = mix
+                mix = MixSplit(block_type, obj.Name, uid)
+                self.mixsplits[uid] = mix
+                self.blocks[uid] = mix
             elif block_type == 'Flash2' or block_type == 'Flash3' or block_type == 'Decanter' or block_type == 'Sep':
-                sep = Separator(block_type, obj.Name)
-                self.separators[obj.Name] = sep
-                self.blocks[obj.Name] = sep
+                sep = Separator(block_type, obj.Name, uid)
+                self.separators[uid] = sep
+                self.blocks[uid] = sep
             elif block_type == 'Heater' or block_type == 'HeatX':
-                exchange = Exchanger(block_type, obj.Name)
-                self.exchangers[obj.Name] = exchange
-                self.blocks[obj.Name] = exchange
+                exchange = Exchanger(block_type, obj.Name, uid)
+                self.exchangers[uid] = exchange
+                self.blocks[uid] = exchange
                 self.assign_utility_heater(obj, block_type)
             elif block_type == 'DSTWU' or block_type == 'RadFrac' or block_type == 'Extract':
-                column = Column(block_type, obj.Name)
-                self.columns[obj.Name] = column
-                self.blocks[obj.Name] = column
+                column = Column(block_type, obj.Name, uid)
+                self.columns[uid] = column
+                self.blocks[uid] = column
                 self.assign_utility_column(obj, block_type)
             elif block_type == 'RStoic' or block_type == 'RYield' or block_type == 'RGibbs' or block_type == 'RPlug':
-                reactor = Reactor(block_type, obj.Name)
-                self.reactors[obj.Name] = reactor
-                self.blocks[obj.Name] = reactor
+                reactor = Reactor(block_type, obj.Name, uid)
+                self.reactors[uid] = reactor
+                self.blocks[uid] = reactor
                 self.assign_utility_reactor(obj, block_type)
             elif block_type == 'Pump' or block_type == 'Compr' or block_type == 'MCompr' or block_type == 'Valve':
-                pressure = Pressure(block_type, obj.Name)   
-                self.pressurechangers[obj.Name] = pressure
-                self.blocks[obj.Name] = pressure
+                pressure = Pressure(block_type, obj.Name, uid)   
+                self.pressurechangers[uid] = pressure
+                self.blocks[uid] = pressure
                 self.assign_utility_pressure(obj, block_type)
             ## Solids not implemented yet
             elif block_type == 'Cyclone' or block_type == 'VScrub':
-                solidsep = SolidsSeparator(block_type, obj.Name)
-                self.solidseparators[obj.Name] = solidsep
-                self.blocks[obj.Name] = solidsep
+                solidsep = SolidsSeparator(block_type, obj.Name, uid)
+                self.solidseparators[uid] = solidsep
+                self.blocks[uid] = solidsep
             elif block_type == 'Hierarchy':
-                hierarchy = Hierarchy(self.aspen, obj.Name, base_path)
-                self.hierarchy[obj.Name] = hierarchy
-                #self.blocks[obj.Name] = hierarchy
+                hierarchy = Hierarchy(self, obj.Name, base_path)
+                self.hierarchy[uid] = hierarchy
+                self.blocks[uid] = hierarchy
 
         # Load and fill stream dictionaries
         for obj in streams.Elements:
             base_path = '\\Data\\Streams\\'
             path = base_path+str(obj.Name)
+            uid = obj.Name
             stream_type = self.aspen.Tree.FindNode(path).AttributeValue(6)
             if stream_type == 'MATERIAL':
-                material = Material(obj, self.aspen, base_path)
-                self.streams[obj.Name] = material
-                self.material_streams[obj.Name] = material
+                material = Material(obj, self.aspen, base_path, uid)
+                self.streams[uid] = material
+                self.material_streams[uid] = material
             elif stream_type == 'HEAT':
-                work = Work(obj, self.aspen, base_path)
-                self.work_streams[obj.Name] = work
-                self.streams[obj.Name] = work
+                work = Work(obj, self.aspen, base_path, uid)
+                self.work_streams[uid] = work
+                self.streams[uid] = work
             else:
-                heat = Heat(obj, self.aspen, base_path)
-                self.streams[obj.Name] = heat
-                self.heat_streams[obj.Name] = heat
+                heat = Heat(obj, self.aspen, base_path, uid)
+                self.streams[uid] = heat
+                self.heat_streams[uid] = heat
         
         # Load and fill utility dictionaries
         for util in utilities.Elements:
@@ -196,114 +198,114 @@ class Process(object):
 
 
     def assign_utility_column(self, block, block_type):
-        util_loc = block.Name
+        uid = block.Name
         if block_type == 'RadFrac':
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COND_UTIL'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
-                coolwater = Coolwater(block.Name, self.aspen, util_loc)
-                self.coolwater[block.Name] = coolwater
+                coolwater = Coolwater(block.Name, self.aspen, uid)
+                self.coolwater[uid] = coolwater
             elif utility == 'RF':
-                refrig = Refrigerant(block.Name, self.aspen, util_loc)
-                self.refrigerant[block.Name] = refrig
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant[uid] = refrig
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\REB_UTIL'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'LPS':
-                lpsteam = LP_Steam(block.Name, self.aspen, util_loc)
-                self.lpsteam[block.Name] = lpsteam
+                lpsteam = LP_Steam(block.Name, self.aspen, uid)
+                self.lpsteam[uid] = lpsteam
             elif utility == 'MPS':
-                mpsteam = MP_Steam(block.Name, self.aspen, util_loc)
-                self.mpsteam[block.Name] = mpsteam
+                mpsteam = MP_Steam(block.Name, self.aspen, uid)
+                self.mpsteam[uid] = mpsteam
             elif utility == 'HPS':
-                hpsteam = HP_Steam(block.Name, self.aspen, util_loc)
-                self.hpsteam[block.Name] = hpsteam
+                hpsteam = HP_Steam(block.Name, self.aspen, uid)
+                self.hpsteam[uid] = hpsteam
     
 
     def assign_utility_heater(self, block, block_type):
-        util_loc = block.Name
+        uid = block.Name
         if block_type == 'Heater':
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
-                coolwater = Coolwater(block.Name, self.aspen, util_loc)
-                self.coolwater[block.Name] = coolwater
+                coolwater = Coolwater(block.Name, self.aspen, uid)
+                self.coolwater[uid] = coolwater
             elif utility == 'RF':
-                refrig = Refrigerant(block.Name, self.aspen, util_loc)
-                self.refrigerant[block.Name] = refrig
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant[uid] = refrig
             elif utility == 'LPS':
-                lpsteam = LP_Steam(block.Name, self.aspen, util_loc)
-                self.lpsteam[block.Name] = lpsteam
+                lpsteam = LP_Steam(block.Name, self.aspen, uid)
+                self.lpsteam[uid] = lpsteam
             elif utility == 'LPS-GEN':
-                lpsgen = LPS_Gen(block.Name, self.aspen, util_loc)
-                self.lpsgen[block.Name] = lpsgen
+                lpsgen = LPS_Gen(block.Name, self.aspen, uid)
+                self.lpsgen[uid] = lpsgen
             elif utility == 'MPS':
-                mpsteam = MP_Steam(block.Name, self.aspen, util_loc)
-                self.mpsteam[block.Name] = mpsteam
+                mpsteam = MP_Steam(block.Name, self.aspen, uid)
+                self.mpsteam[uid] = mpsteam
             elif utility == 'MPS-GEN':
-                mpsgen = MPS_Gen(block.Name, self.aspen, util_loc)
-                self.mpsgen[block.Name] = mpsgen
+                mpsgen = MPS_Gen(block.Name, self.aspen, uid)
+                self.mpsgen[uid] = mpsgen
             elif utility == 'HPS':
-                hpsteam = HP_Steam(block.Name, self.aspen, util_loc)
-                self.hpsteam[block.Name] = hpsteam
+                hpsteam = HP_Steam(block.Name, self.aspen, uid)
+                self.hpsteam[uid] = hpsteam
             elif utility == 'HPS-GEN':
-                hpsgen = HPS_Gen(block.Name, self.aspen, util_loc)
-                self.hpsgen[block.Name] = hpsgen
+                hpsgen = HPS_Gen(block.Name, self.aspen, uid)
+                self.hpsgen[uid] = hpsgen
     
 
     def assign_utility_pressure(self, block, block_type):
-        util_loc = block.Name
+        uid = block.Name
         if block_type == 'Pump' or block_type == 'Compr':
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'ELECTRIC':
-                electricity = Electricity(block.Name, self.aspen, util_loc)
-                self.electricity[block.Name] = electricity
+                electricity = Electricity(block.Name, self.aspen, uid)
+                self.electricity[uid] = electricity
 
         elif block_type == 'MCompr':
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\SPECS_UTL'
             stages = self.aspen.Tree.FindNode(path).Elements
             for stage in stages:
                 if stage.Value == 'ELECTRIC':
-                    electricity = Electricity(block.Name, self.aspen, util_loc)
-                    self.electricity[block.Name] = electricity
+                    electricity = Electricity(block.Name, self.aspen, uid)
+                    self.electricity[uid] = electricity
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COOLER_UTL'
             stages = self.aspen.Tree.FindNode(path).Elements
             for stage in stages:
                 if stage.Value == 'CW':
-                    coolwater = Coolwater(block.Name, self.aspen, util_loc)
-                    self.coolwater[block.Name] = coolwater
+                    coolwater = Coolwater(block.Name, self.aspen, uid)
+                    self.coolwater[uid] = coolwater
                 elif stage.Value == 'RF':
-                    refrigerant = Refrigerant(block.Name, self.aspen, util_loc)
-                    self.refrigerant[block.Name] = refrigerant
+                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    self.refrigerant[uid] = refrigerant
 
 
     def assign_utility_reactor(self, block, block_type):
-        util_loc = block.Name
+        uid = block.Name
         if block_type == 'RStoic' or block_type == 'RYield' or block_type == 'RGibbs':
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
-                coolwater = Coolwater(block.Name, self.aspen, util_loc)
-                self.coolwater[block.Name] = coolwater
+                coolwater = Coolwater(block.Name, self.aspen, uid)
+                self.coolwater[uid] = coolwater
             elif utility == 'RF':
-                refrig = Refrigerant(block.Name, self.aspen, util_loc)
-                self.refrigerant[block.Name] = refrig
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant[uid] = refrig
             elif utility == 'LPS':
-                lpsteam = LP_Steam(block.Name, self.aspen, util_loc)
-                self.lpsteam[block.Name] = lpsteam
+                lpsteam = LP_Steam(block.Name, self.aspen, uid)
+                self.lpsteam[uid] = lpsteam
             elif utility == 'LPS-GEN':
-                lpsgen = LPS_Gen(block.Name, self.aspen, util_loc)
-                self.lpsgen[block.Name] = lpsgen
+                lpsgen = LPS_Gen(block.Name, self.aspen, uid)
+                self.lpsgen[uid] = lpsgen
             elif utility == 'MPS':
-                mpsteam = MP_Steam(block.Name, self.aspen, util_loc)
-                self.mpsteam[block.Name] = mpsteam
+                mpsteam = MP_Steam(block.Name, self.aspen, uid)
+                self.mpsteam[uid] = mpsteam
             elif utility == 'MPS-GEN':
-                mpsgen = MPS_Gen(block.Name, self.aspen, util_loc)
-                self.mpsgen[block.Name] = mpsgen
+                mpsgen = MPS_Gen(block.Name, self.aspen, uid)
+                self.mpsgen[uid] = mpsgen
             elif utility == 'HPS':
-                hpsteam = HP_Steam(block.Name, self.aspen, util_loc)
-                self.hpsteam[block.Name] = hpsteam
+                hpsteam = HP_Steam(block.Name, self.aspen, uid)
+                self.hpsteam[uid] = hpsteam
             elif utility == 'HPS-GEN':
-                hpsgen = HPS_Gen(block.Name, self.aspen, util_loc)
-                self.hpsgen[block.Name] = hpsgen
+                hpsgen = HPS_Gen(block.Name, self.aspen, uid)
+                self.hpsgen[uid] = hpsgen
 

@@ -2,30 +2,33 @@ from.baseobject import BaseObject
 
 class Utility(BaseObject):
 
-    def __init__(self, block_name, aspen, util_loc):
-        self.name = block_name
-        self.util_loc = util_loc
+    def __init__(self, block_name, aspen, uid):
+        self.name = block_name # Name is name set by user in Aspen Plus
+        self.uid = uid # Custom identifier, combination of name of flowsheet and name of block 
         super().__init__(aspen)
 
     def get_obj_value(self, prop_loc):
-        path = '\\Data\\Utilities'+prop_loc+self.util_loc 
+        path = '\\Data\\Utilities'+prop_loc+self.uid
         return self.aspen.Tree.FindNode(path).Value
 
     def set_obj_value(self, prop_loc, value):
-        path = '\\Data\\Utilities'+prop_loc+self.util_loc
+        path = '\\Data\\Utilities'+prop_loc+self.uid
         self.aspen.Tree.FindNode(path).Value = value
         return 
 
 class Electricity(Utility):
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\ELECTRIC\\Output\\UTL_DUTY\\',
         'usage':'\\ELECTRIC\\Output\\UTL_USAGE\\',
     }   
+    properties_frac_out = {}
 
 
 class Coolwater(Utility):
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\CW\\Output\\UTL_DUTY\\',
         'usage':'\\CW\\Output\\UTL_USAGE\\',
@@ -36,11 +39,12 @@ class Coolwater(Utility):
         'vfrac_in': '\\CW\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\CW\\UTL_OUT_VFRAC\\'
     }
-
+    properties_frac_out = {}
 
 
 class HP_Steam(Utility):
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\HPS\\Output\\UTL_DUTY\\',
         'usage':'\\HPS\\Output\\UTL_USAGE\\',
@@ -51,10 +55,12 @@ class HP_Steam(Utility):
         'vfrac_in': '\\HPS\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\HPS\\UTL_OUT_VFRAC\\'
     }
+    properties_frac_out = {}
 
 
 class HPS_Gen(Utility):
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\HPS-GEN\\Output\\UTL_DUTY\\',
         'usage':'\\HPS-GEN\\Output\\UTL_USAGE\\',
@@ -65,11 +71,13 @@ class HPS_Gen(Utility):
         'vfrac_in': '\\HPS-GEN\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\HPS-GEN\\UTL_OUT_VFRAC\\'
     }
+    properties_frac_out = {}
 
 
 class MP_Steam(Utility):
     
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\MPS\\Output\\UTL_DUTY\\',
         'usage':'\\MPS\\Output\\UTL_USAGE\\',
@@ -80,11 +88,13 @@ class MP_Steam(Utility):
         'vfrac_in': '\\MPS\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\MPS\\UTL_OUT_VFRAC\\'
     }
-    
+    properties_frac_out = {}
+
 
 class MPS_Gen(Utility):
 
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\MPS-GEN\\Output\\UTL_DUTY\\',
         'usage':'\\MPS-GEN\\Output\\UTL_USAGE\\',
@@ -95,12 +105,13 @@ class MPS_Gen(Utility):
         'vfrac_in': '\\MPS-GEN\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\MPS-GEN\\UTL_OUT_VFRAC\\'
     }
-
+    properties_frac_out = {}
     
 
 class LP_Steam(Utility):
 
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\LPS\\Output\\UTL_DUTY\\',
         'usage':'\\LPS\\Output\\UTL_USAGE\\',
@@ -111,11 +122,13 @@ class LP_Steam(Utility):
         'vfrac_in': '\\LPS\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\LPS\\UTL_OUT_VFRAC\\'
     }
+    properties_frac_out = {}
 
 
 class LPS_Gen(Utility):
 
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\LPS-GEN\\Output\\UTL_DUTY\\',
         'usage':'\\LPS-GEN\\Output\\UTL_USAGE\\',
@@ -126,11 +139,13 @@ class LPS_Gen(Utility):
         'vfrac_in': '\\LPS-GEN\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\LPS-GEN\\UTL_OUT_VFRAC\\'
     }
+    properties_frac_out = {}
 
 
 class Refrigerant(Utility):
 
     properties_in = {}
+    properties_frac_in = {}
     properties_out = {
         'duty': '\\RF\\Output\\UTL_DUTY\\',
         'usage':'\\RF\\Output\\UTL_USAGE\\',
@@ -141,5 +156,5 @@ class Refrigerant(Utility):
         'vfrac_in': '\\RF\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\RF\\UTL_OUT_VFRAC\\'
     }
-
+    properties_frac_out = {}
 

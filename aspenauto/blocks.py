@@ -3,9 +3,10 @@ from .baseobject import BaseObject
 
 class Block(object):
 
-    def __init__(self):
-        
-        return
+    def __init__(self, block_type, name, uid):
+        self.name = name
+        self.type = block_type
+        self.uid = uid
 
     def get_obj_value(self):
 
@@ -18,63 +19,63 @@ class Block(object):
 
 class MixSplit(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
         
         
-
 class Separator(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
         
-
 
 class Exchanger(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
         
-
 
 class Column(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
-        
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
 
 
 class Reactor(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
-        
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
 
 
 class Pressure(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
-        
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
 
 
 class Solids(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
-        
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
 
 
 class SolidsSeparator(Block):
 
-    def __init__(self, block_type, name):
-        self.name = name
-        self.type = block_type
-        
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}

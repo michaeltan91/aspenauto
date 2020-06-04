@@ -4,7 +4,7 @@ import weakref
 
 class Stream(BaseObject):
 
-    def __init__(self, stream, aspen, path):
+    def __init__(self, stream, aspen, path, uid):
         
         if 'F-' in stream.Name:
             obj_type = 'Feed'
@@ -16,6 +16,7 @@ class Stream(BaseObject):
             obj_type = 'Standard'
         self.type = obj_type
         self.name = stream.Name
+        self.uid = uid 
         self.base_path = path
         super().__init__(aspen)
 
@@ -79,12 +80,12 @@ class Work(Stream):
     stream_type = 'Work'
 
     properties_in = {}
-    
+    properties_frac_in = {}
+
     properties_out = {
         'power': '\\Output\\POWER_OUT',
         'speed': '\\Output\\SPEED_OUT'
     }
-
     properties_frac_out = {}
 
 
@@ -93,9 +94,9 @@ class Heat(Stream):
     stream_type = 'Heat'
 
     properties_in = {}
+    properties_frac_in = {}
 
     properties_out = {'Q': '\\Output\\QCALC'}
-
     properties_frac_out = {}
     
         
