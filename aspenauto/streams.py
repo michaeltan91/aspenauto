@@ -20,21 +20,21 @@ class Stream(BaseObject):
         super().__init__(aspen)
 
 
-    def get_obj_value(self, obj_loc):    
-        path = self.base_path+str(self.name)+obj_loc
+    def get_obj_value(self, prop_loc):    
+        path = self.base_path+str(self.name)+prop_loc
         return self.aspen.Tree.FindNode(path).Value
 
-    def get_obj_value_frac(self, obj_loc):
-        path = self.base_path+str(self.name)+obj_loc
+    def get_obj_value_frac(self, prop_loc):
+        path = self.base_path+str(self.name)+prop_loc
         temp = ObjectCollection()
         for element in self.aspen.Tree.FindNode(path).Elements:
             temp[element.Name] = element.Value 
         return temp
 
-    def set_obj_value(self, obj_loc, value):
-        path = self.base_path+str(self.name)+obj_loc[0]
-        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not obj_loc[1]:
-            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,obj_loc[1])
+    def set_obj_value(self, prop_loc, value):
+        path = self.base_path+str(self.name)+prop_loc[0]
+        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not prop_loc[1]:
+            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,prop_loc[1])
         self.aspen.Tree.FindNode(path).Value = value
         return
 

@@ -18,55 +18,63 @@ class Block(object):
 
 class MixSplit(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
         
 
 class Separator(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
 
 
 class Exchanger(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
 
 
 class Column(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
 
 
 class Reactor(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
 
 
 class Pressure(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
 
 
 class Solids(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         
 
 
 class SolidsSeparator(Block):
 
-    def __init__(self, block_type):
+    def __init__(self, block_type, name):
+        self.name = name
         self.type = block_type
         

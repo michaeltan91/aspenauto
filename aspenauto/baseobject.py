@@ -14,16 +14,16 @@ class BaseObject(object):
     def reset(self):
         self._values = {}
 
-    def get_obj_value(self, object_loc):
+    def get_obj_value(self, prop_loc):
         raise NotImplementedError
 
-    def get_obj_value_frac(self, object_loc):
+    def get_obj_value_frac(self, prop_loc):
         raise NotImplementedError
 
-    def set_obj_value(self, object_loc, value):
+    def set_obj_value(self, prop_loc, value):
         raise NotImplementedError
 
-    def set_obj_value_frac(self, object_loc, value):
+    def set_obj_value_frac(self, prop_loc, value):
         raise NotImplementedError
 
     def __getattr__(self, prop):
@@ -41,23 +41,23 @@ class BaseObject(object):
     def __setattr__(self, prop, value):
 
         if prop in self.properties_in.keys():
-            self.set_property(self.properties[prop], value)
+            self.set_property(self.properties_in[prop], value)
 
         else:
             super(BaseObject, self).__setattr__(prop, value)
 
 
-    def get_property(self, obj_loc):
-        if obj_loc not in self._values.keys():
-            self._values[obj_loc] = self.get_obj_value(obj_loc)
-        return self._values[obj_loc]
+    def get_property(self, prop_loc):
+        if prop_loc not in self._values.keys():
+            self._values[prop_loc] = self.get_obj_value(prop_loc)
+        return self._values[prop_loc]
 
-    def get_property_frac(self, obj_loc):
-        if obj_loc not in self._values.keys():
-            self._values[obj_loc] = self.get_obj_value_frac(obj_loc)
-        return self._values[obj_loc]
+    def get_property_frac(self, prop_loc):
+        if prop_loc not in self._values.keys():
+            self._values[prop_loc] = self.get_obj_value_frac(prop_loc)
+        return self._values[prop_loc]
 
     
-    def set_property(self, obj_loc, value):
-        self.set_obj_value(obj_loc, value)
+    def set_property(self, prop_loc, value):
+        self.set_obj_value(prop_loc, value)
 

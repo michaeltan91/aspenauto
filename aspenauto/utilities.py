@@ -2,16 +2,17 @@ from.baseobject import BaseObject
 
 class Utility(BaseObject):
 
-    def __init__(self, block_name, aspen):
+    def __init__(self, block_name, aspen, util_loc):
         self.name = block_name
+        self.util_loc = util_loc
         super().__init__(aspen)
 
-    def get_obj_value(self, obj_loc):
-        path = '\\Data\\Utilities'+obj_loc+str(self.name) 
+    def get_obj_value(self, prop_loc):
+        path = '\\Data\\Utilities'+prop_loc+self.util_loc 
         return self.aspen.Tree.FindNode(path).Value
 
-    def set_obj_value(self, obj_loc, value):
-        path = '\\Data\\Streams\\'+str(self.name)+obj_loc
+    def set_obj_value(self, prop_loc, value):
+        path = '\\Data\\Utilities'+prop_loc+self.util_loc
         self.aspen.Tree.FindNode(path).Value = value
         return 
 
