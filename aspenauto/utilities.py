@@ -142,6 +142,40 @@ class LPS_Gen(Utility):
     properties_frac_out = {}
 
 
+class LLP_Steam(Utility):
+
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {
+        'duty': '\\LLPS\\Output\\UTL_DUTY\\',
+        'usage':'\\LLPS\\Output\\UTL_USAGE\\',
+        'Tin': '\\LLPS\\UTL_IN_TEMP\\',
+        'Tout': '\\LLPS\\UTL_OUT_TEMP\\',
+        'Pin': '\\LLPS\\UTL_IN_PRES\\',
+        'Pout': '\\LLPS\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\LLPS\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\LLPS\\UTL_OUT_VFRAC\\'
+    }
+    properties_frac_out = {}
+
+
+class LLPS_Gen(Utility):
+
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {
+        'duty': '\\LLPS-GEN\\Output\\UTL_DUTY\\',
+        'usage':'\\LLPS-GEN\\Output\\UTL_USAGE\\',
+        'Tin': '\\LLPS-GEN\\UTL_IN_TEMP\\',
+        'Tout': '\\LLPS-GEN\\UTL_OUT_TEMP\\',
+        'Pin': '\\LLPS-GEN\\UTL_IN_PRES\\',
+        'Pout': '\\LLPS-GEN\\UTL_OUT_PRES\\',
+        'vfrac_in': '\\LLPS-GEN\\UTL_IN_VFRAC\\',
+        'vfrac_out': '\\LLPS-GEN\\UTL_OUT_VFRAC\\'
+    }
+    properties_frac_out = {}
+
+
 class Refrigerant(Utility):
 
     properties_in = {}

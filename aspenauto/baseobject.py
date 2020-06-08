@@ -27,7 +27,6 @@ class BaseObject(object):
         raise NotImplementedError
 
     def __getattr__(self, prop):
-
         if prop in self.properties_out.keys():
             return self.get_property(self.properties_out[prop])
 
@@ -37,15 +36,13 @@ class BaseObject(object):
         else:
             raise AttributeError('Nonexistant Attribute', prop)
                 
-
     def __setattr__(self, prop, value):
-
         if prop in self.properties_in.keys():
             self.set_property(self.properties_in[prop], value)
-
+        elif prop in self.properties_frac_in.keys():
+            self.set_property_frac(self.properties_frac_in[prop], value)
         else:
             super(BaseObject, self).__setattr__(prop, value)
-
 
     def get_property(self, prop_loc):
         if prop_loc not in self._values.keys():
@@ -57,7 +54,10 @@ class BaseObject(object):
             self._values[prop_loc] = self.get_obj_value_frac(prop_loc)
         return self._values[prop_loc]
 
-    
     def set_property(self, prop_loc, value):
         self.set_obj_value(prop_loc, value)
 
+    def set_property_frac(self, prop_loc, value):
+        self.set_obj_value_frac(prop_loc, value)
+
+    

@@ -15,6 +15,8 @@ from .blocks import (
     SolidsSeparator
 )
 from .utilities import (
+    LLP_Steam,
+    LLPS_Gen,
     LP_Steam, 
     LPS_Gen,
     MP_Steam,
@@ -26,7 +28,7 @@ from .utilities import (
     Electricity
 )
 class Hierarchy(object):
-
+    # Hierarchy class
     def __init__(self, process, name, path, uid=""):
 
         self.aspen = process.aspen
@@ -39,6 +41,7 @@ class Hierarchy(object):
             self.uid = uid + '.' + self.name
 
         # Declare dictionaries for easy access of Aspen Results/Variables
+        # objects are stored in the main Process dictionaries for easy access
         # Block dictionaries
         self.blocks = process.blocks
         self.mixsplits = process.mixsplits
@@ -57,6 +60,8 @@ class Hierarchy(object):
         self.work_streams = process.work_streams
         # Utility dictionaries
         self.coolwater = process.coolwater
+        self.llpsteam = process.llpsteam
+        self.llpsgen = process.llpsgen
         self.lpsteam = process.lpsteam
         self.lpsgen = process.lpsgen
         self.mpsteam = process.mpsteam
@@ -64,7 +69,10 @@ class Hierarchy(object):
         self.hpsteam = process.hpsteam
         self.hpsgen = process.hpsgen
         self.electricity = process.electricity
-        self.refrigerant = process.refrigerant
+        self.refrigerant1 = ObjectCollection()
+        self.refrigerant2 = ObjectCollection()
+        self.refrigerant3 = ObjectCollection()
+        self.refrigerant4 = ObjectCollection()
         self.utilities = process.utilities
         # Load input
         self.load_data()
@@ -72,7 +80,6 @@ class Hierarchy(object):
     def load_data(self):
         blocks = self.aspen.Tree.FindNode(self.base_path+"\\Data\\Blocks")
         streams = self.aspen.Tree.FindNode(self.base_path+"\\Data\\Streams")
-        utilities = self.aspen.Tree.FindNode("\\Data\\Utilities")
         
         # Load and fill block dictionaries 
         for obj in blocks.Elements:
@@ -138,13 +145,17 @@ class Hierarchy(object):
                 self.heat_streams[uid] = heat
 
 
-            
+    '''    
         # Load and fill utility dictionaries
         for util in utilities.Elements:
             if util.Name == 'CW':
                 self.utilities[util.Name] = self.coolwater
             elif util.Name == 'ELECTRIC':
-                self.utilities[util.Name] = self.electricity 
+                self.utilities[util.Name] = self.electricity
+            elif util.Name == 'LLPS':
+                self.utilities[util.Name] = self.llpsteam
+            elif util.Name == 'LLPS-GEN':
+                self.utilities[util.Name] = self.llpsgen 
             elif util.Name == 'LPS':
                 self.utilities[util.Name] = self.lpsteam
             elif util.Name == 'LPS-GEN':
@@ -157,8 +168,14 @@ class Hierarchy(object):
                 self.utilities[util.Name] = self.hpsteam
             elif util.Name == 'HPS-GEN':
                 self.utilities[util.Name] = self.hpsgen
-            elif util.Name == 'RF':
-                self.utilities[util.Name] = self.refrigerant
+            elif util.Name == 'RF1':
+                self.utilities[util.Name] = self.refrigerant1
+            elif util.Name == 'RF2':
+                self.utilities[util.Name] = self.refrigerant2
+            elif util.Name == 'RF3':
+                self.utilities[util.Name] = self.refrigerant3
+            elif util.Name == 'RF4':
+                self.utilities[util.Name] = self.refrigerant4
 
         temp = []
         prefer = ['LPS', 'LPS-GEN', 'MPS', 'MPS-GEN', 'HPS', 'HPS-GEN', 'RF', 'ELECTRIC' , 'NATGAS', 'CW']
@@ -169,7 +186,7 @@ class Hierarchy(object):
         for j in temp:
             temp2[j] = self.utilities[j]
         self.utilities = temp2
-
+    '''
 
     def assign_utility_column(self, block, block_type):
         uid = self.uid+'.'+block.Name
@@ -179,14 +196,36 @@ class Hierarchy(object):
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, self.aspen, uid)
                 self.coolwater[uid] = coolwater
-            elif utility == 'RF':
+            elif utility == 'RF1':
                 refrig = Refrigerant(block.Name, self.aspen, uid)
-                self.refrigerant[uid] = refrig
+                self.refrigerant1[uid] = refrig
+            elif utility == 'RF2':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant2[uid] = refrig
+            elif utility == 'RF3':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant3[uid] = refrig
+            elif utility == 'RF4':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant4[uid] = refrig
+            elif utility == 'LLPS-GEN':
+                llpsgen = LLPS_Gen(block.Name, self.aspen, uid)
+                self.llpsgen[uid] = llpsgen
+            elif utility == 'LPS-GEN':
+                lpsgen = LPS_Gen(block.Name, self.aspen, uid)
+                self.lpsgen[uid] = lpsgen
+            elif utility == 'MPS-GEN':
+                mpsgen = MPS_Gen(block.Name, self.aspen, uid)
+                self.mpsgen[uid] = mpsgen
+            
             path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\REB_UTIL'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'LPS':
                 lpsteam = LP_Steam(block.Name, self.aspen, uid)
                 self.lpsteam[uid] = lpsteam
+            elif utility == 'LLPS':
+                llpsteam = LLP_Steam(block.Name, self.aspen, uid)
+                self.llpsteam[uid] = llpsteam
             elif utility == 'MPS':
                 mpsteam = MP_Steam(block.Name, self.aspen, uid)
                 self.mpsteam[uid] = mpsteam
@@ -203,9 +242,24 @@ class Hierarchy(object):
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, self.aspen, uid)
                 self.coolwater[uid] = coolwater
-            elif utility == 'RF':
+            elif utility == 'RF1':
                 refrig = Refrigerant(block.Name, self.aspen, uid)
-                self.refrigerant[uid] = refrig
+                self.refrigerant1[uid] = refrig
+            elif utility == 'RF2':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant2[uid] = refrig
+            elif utility == 'RF3':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant3[uid] = refrig
+            elif utility == 'RF4':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant4[uid] = refrig
+            elif utility == 'LLPS':
+                llpsteam = LLP_Steam(block.Name, self.aspen, uid)
+                self.llpsteam[uid] = llpsteam
+            elif utility == 'LLPS-GEN':
+                llpsgen = LLPS_Gen(block.Name, self.aspen, uid)
+                self.llpsgen[uid] = llpsgen
             elif utility == 'LPS':
                 lpsteam = LP_Steam(block.Name, self.aspen, uid)
                 self.lpsteam[uid] = lpsteam
@@ -248,9 +302,18 @@ class Hierarchy(object):
                 if stage.Value == 'CW':
                     coolwater = Coolwater(block.Name, self.aspen, uid)
                     self.coolwater[uid] = coolwater
-                elif stage.Value == 'RF':
+                elif stage.Value == 'RF1':
                     refrigerant = Refrigerant(block.Name, self.aspen, uid)
-                    self.refrigerant[uid] = refrigerant
+                    self.refrigerant1[uid] = refrigerant
+                elif stage.Value == 'RF2':
+                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    self.refrigerant2[uid] = refrigerant
+                elif stage.Value == 'RF3':
+                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    self.refrigerant3[uid] = refrigerant
+                elif stage.Value == 'RF4':
+                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    self.refrigerant4[uid] = refrigerant
 
 
     def assign_utility_reactor(self, block, block_type):
@@ -261,9 +324,24 @@ class Hierarchy(object):
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, self.aspen, uid)
                 self.coolwater[uid] = coolwater
-            elif utility == 'RF':
+            elif utility == 'RF1':
                 refrig = Refrigerant(block.Name, self.aspen, uid)
-                self.refrigerant[uid] = refrig
+                self.refrigerant1[uid] = refrig
+            elif utility == 'RF2':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant2[uid] = refrig
+            elif utility == 'RF3':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant3[uid] = refrig
+            elif utility == 'RF4':
+                refrig = Refrigerant(block.Name, self.aspen, uid)
+                self.refrigerant4[uid] = refrig
+            elif utility == 'LLPS':
+                llpsteam = LLP_Steam(block.Name, self.aspen, uid)
+                self.llpsteam[uid] = llpsteam
+            elif utility == 'LLPS-GEN':
+                llpsgen = LLPS_Gen(block.Name, self.aspen, uid)
+                self.llpsgen[uid] = llpsgen
             elif utility == 'LPS':
                 lpsteam = LP_Steam(block.Name, self.aspen, uid)
                 self.lpsteam[uid] = lpsteam

@@ -3,7 +3,7 @@ from .baseobject import BaseObject
 import weakref
 
 class Stream(BaseObject):
-
+    # Main stream class
     def __init__(self, stream, aspen, path, uid):
         
         if 'F-' in stream.Name:
@@ -37,16 +37,34 @@ class Stream(BaseObject):
         if self.aspen.Tree.FindNode(path).AttributeValue(13) is not prop_loc[1]:
             self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,prop_loc[1])
         self.aspen.Tree.FindNode(path).Value = value
-        return
 
-    def set_obj_value_frac(self):
+    def set_obj_value_frac(self, prop_loc, val):
+        path = self.base_path+str(self.name)+prop_loc[0]
+        
+        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not prop_loc[1]:
+            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,prop_loc[1])
+        
+        temp1 = {}
+        temp2 = val
+        for element in self.aspen.Tree.FindNode(path).Elements:
+            temp1[element.Name] = element.Value 
+        
+        dict3 = {**temp1, **temp2}
+        print(dict3)
+        for key, value in dict3.items():
+            if key in temp1 and key in temp2:
+                dict3[key] = value
+                self.aspen.Tree.FindNode(path+'\\'+key).Value = value
+            elif key in temp1 and key not in temp2:
+                dict3[key] = 0
+                self.aspen.Tree.FindNode(path+'\\'+key).Value = value
+            elif key not in temp1 and key in temp2:
+                raise AttributeError('Component not defined in Aspen simulation', key)
 
-        return
-
-    
 
         
 class Material(Stream):
+    # Material stream subclass
 
     stream_type = 'Material'
 
@@ -58,8 +76,8 @@ class Material(Stream):
         'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME']
     }
     properties_frac_in = {
-        'massfrac' : '\\Input\\FLOW\\MIXED',
-        'molefrac' : '\\Input\\FLOW\\MIXED'
+        'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
+        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC']
     }
 
     properties_out = {
@@ -76,6 +94,7 @@ class Material(Stream):
 
 
 class Work(Stream):
+    # Work stream subclass
 
     stream_type = 'Work'
 
@@ -90,6 +109,7 @@ class Work(Stream):
 
 
 class Heat(Stream):
+    # Heat stream subclass
 
     stream_type = 'Heat'
 

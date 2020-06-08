@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(name='aspenauto',
       version='1.0',
-      description='TU Delft ESS E&I, Automate Aspen Plus Output',
+      description='TU Delft ESS E&I, Aspen Plus Python Interface',
       author='Michael Tan',
       license='Apache Licence 2.0',
       packages=['aspenauto'],
