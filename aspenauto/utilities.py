@@ -2,10 +2,10 @@ from.baseobject import BaseObject
 
 class Utility(BaseObject):
 
-    def __init__(self, block_name, aspen, uid):
+    def __init__(self, block_name, uid, process):
         self.name = block_name # Name is name set by user in Aspen Plus
         self.uid = uid # Custom identifier, combination of name of flowsheet and name of block 
-        super().__init__(aspen)
+        super().__init__(process)
 
     def get_obj_value(self, prop_loc):
         path = '\\Data\\Utilities'+prop_loc+self.uid

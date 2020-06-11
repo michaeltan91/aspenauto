@@ -4,21 +4,23 @@ import weakref
 
 class Stream(BaseObject):
     # Main stream class
-    def __init__(self, stream, aspen, path, uid):
+    def __init__(self, name, uid, path, process):
         
-        if 'F-' in stream.Name:
+        if 'F-' in name:
             obj_type = 'Feed'
-        elif 'P-' in stream.Name:
+        elif 'P-' in name:
             obj_type = 'Product'
-        elif 'W-' in stream.Name:
+        elif 'W-' in name:
             obj_type = 'Waste'
         else:
             obj_type = 'Standard'
         self.type = obj_type
-        self.name = stream.Name
+        self.name = name
         self.uid = uid 
         self.base_path = path
-        super().__init__(aspen)
+        self.to_block = None
+        self.from_block = None
+        super().__init__(process)
 
 
     def get_obj_value(self, prop_loc):    

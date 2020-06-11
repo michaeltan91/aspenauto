@@ -173,15 +173,15 @@ class Process(object):
             uid = obj.Name
             stream_type = self.aspen.Tree.FindNode(path).AttributeValue(6)
             if stream_type == 'MATERIAL':
-                material = Material(obj, self.aspen, base_path, uid)
+                material = Material(obj.Name, uid, base_path, self)
                 self.streams[uid] = material
                 self.material_streams[uid] = material
             elif stream_type == 'HEAT':
-                work = Work(obj, self.aspen, base_path, uid)
+                work = Work(obj.Name, uid, base_path, self)
                 self.work_streams[uid] = work
                 self.streams[uid] = work
             else:
-                heat = Heat(obj, self.aspen, base_path, uid)
+                heat = Heat(obj.Name, uid, base_path, self)
                 self.streams[uid] = heat
                 self.heat_streams[uid] = heat
         
@@ -215,7 +215,7 @@ class Process(object):
                 self.utilities[util.Name] = self.refrigerant3
             elif util.Name == 'RF4':
                 self.utilities[util.Name] = self.refrigerant4
-
+    
         temp = []
         prefer = ['LLPS','LLPS-GEN', 'LPS', 'LPS-GEN', 'MPS', 'MPS-GEN', 'HPS', 'HPS-GEN', 'RF', 'ELECTRIC' , 'NATGAS', 'CW']
         for i in prefer:
@@ -234,43 +234,43 @@ class Process(object):
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COND_UTIL'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
-                coolwater = Coolwater(block.Name, self.aspen, uid)
+                coolwater = Coolwater(block.Name, uid, self)
                 self.coolwater[uid] = coolwater
             elif utility == 'RF1':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant1[uid] = refrig
             elif utility == 'RF2':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant2[uid] = refrig
             elif utility == 'RF3':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant3[uid] = refrig
             elif utility == 'RF4':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant4[uid] = refrig
             elif utility == 'LLPS-GEN':
-                llpsgen = LLPS_Gen(block.Name, self.aspen, uid)
+                llpsgen = LLPS_Gen(block.Name, uid, self)
                 self.llpsgen[uid] = llpsgen
             elif utility == 'LPS-GEN':
-                lpsgen = LPS_Gen(block.Name, self.aspen, uid)
+                lpsgen = LPS_Gen(block.Name, uid, self)
                 self.lpsgen[uid] = lpsgen
             elif utility == 'MPS-GEN':
-                mpsgen = MPS_Gen(block.Name, self.aspen, uid)
+                mpsgen = MPS_Gen(block.Name, uid, self)
                 self.mpsgen[uid] = mpsgen
 
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\REB_UTIL'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'LPS':
-                lpsteam = LP_Steam(block.Name, self.aspen, uid)
+                lpsteam = LP_Steam(block.Name, uid, self)
                 self.lpsteam[uid] = lpsteam
             elif utility == 'LLPS':
-                llpsteam = LLP_Steam(block.Name, self.aspen, uid)
+                llpsteam = LLP_Steam(block.Name, uid, self)
                 self.llpsteam[uid] = llpsteam
             elif utility == 'MPS':
-                mpsteam = MP_Steam(block.Name, self.aspen, uid)
+                mpsteam = MP_Steam(block.Name, uid, self)
                 self.mpsteam[uid] = mpsteam
             elif utility == 'HPS':
-                hpsteam = HP_Steam(block.Name, self.aspen, uid)
+                hpsteam = HP_Steam(block.Name, uid, self)
                 self.hpsteam[uid] = hpsteam
     
 
@@ -281,43 +281,43 @@ class Process(object):
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
-                coolwater = Coolwater(block.Name, self.aspen, uid)
+                coolwater = Coolwater(block.Name, uid, self)
                 self.coolwater[uid] = coolwater
             elif utility == 'RF1':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant1[uid] = refrig
             elif utility == 'RF2':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant2[uid] = refrig
             elif utility == 'RF3':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant3[uid] = refrig
             elif utility == 'RF4':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant4[uid] = refrig
             elif utility == 'LLPS':
-                llpsteam = LLP_Steam(block.Name, self.aspen, uid)
+                llpsteam = LLP_Steam(block.Name, uid, self)
                 self.llpsteam[uid] = llpsteam
             elif utility == 'LLPS-GEN':
-                llpsgen = LLPS_Gen(block.Name, self.aspen, uid)
+                llpsgen = LLPS_Gen(block.Name, uid, self)
                 self.llpsgen[uid] = llpsgen
             elif utility == 'LPS':
-                lpsteam = LP_Steam(block.Name, self.aspen, uid)
+                lpsteam = LP_Steam(block.Name, uid, self)
                 self.lpsteam[uid] = lpsteam
             elif utility == 'LPS-GEN':
-                lpsgen = LPS_Gen(block.Name, self.aspen, uid)
+                lpsgen = LPS_Gen(block.Name, uid, self)
                 self.lpsgen[uid] = lpsgen
             elif utility == 'MPS':
-                mpsteam = MP_Steam(block.Name, self.aspen, uid)
+                mpsteam = MP_Steam(block.Name, uid, self)
                 self.mpsteam[uid] = mpsteam
             elif utility == 'MPS-GEN':
-                mpsgen = MPS_Gen(block.Name, self.aspen, uid)
+                mpsgen = MPS_Gen(block.Name, uid, self)
                 self.mpsgen[uid] = mpsgen
             elif utility == 'HPS':
-                hpsteam = HP_Steam(block.Name, self.aspen, uid)
+                hpsteam = HP_Steam(block.Name, uid, self)
                 self.hpsteam[uid] = hpsteam
             elif utility == 'HPS-GEN':
-                hpsgen = HPS_Gen(block.Name, self.aspen, uid)
+                hpsgen = HPS_Gen(block.Name, uid, self)
                 self.hpsgen[uid] = hpsgen
     
 
@@ -328,7 +328,7 @@ class Process(object):
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'ELECTRIC':
-                electricity = Electricity(block.Name, self.aspen, uid)
+                electricity = Electricity(block.Name, uid, self)
                 self.electricity[uid] = electricity
 
         elif block_type == 'MCompr':
@@ -336,25 +336,25 @@ class Process(object):
             stages = self.aspen.Tree.FindNode(path).Elements
             for stage in stages:
                 if stage.Value == 'ELECTRIC':
-                    electricity = Electricity(block.Name, self.aspen, uid)
+                    electricity = Electricity(block.Name, uid, self)
                     self.electricity[uid] = electricity
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COOLER_UTL'
             stages = self.aspen.Tree.FindNode(path).Elements
             for stage in stages:
                 if stage.Value == 'CW':
-                    coolwater = Coolwater(block.Name, self.aspen, uid)
+                    coolwater = Coolwater(block.Name, uid, self)
                     self.coolwater[uid] = coolwater
                 elif stage.Value == 'RF1':
-                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    refrigerant = Refrigerant(block.Name, uid, self)
                     self.refrigerant1[uid] = refrigerant
                 elif stage.Value == 'RF2':
-                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    refrigerant = Refrigerant(block.Name, uid, self)
                     self.refrigerant2[uid] = refrigerant
                 elif stage.Value == 'RF3':
-                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    refrigerant = Refrigerant(block.Name, uid, self)
                     self.refrigerant3[uid] = refrigerant
                 elif stage.Value == 'RF4':
-                    refrigerant = Refrigerant(block.Name, self.aspen, uid)
+                    refrigerant = Refrigerant(block.Name, uid, self)
                     self.refrigerant4[uid] = refrigerant
 
 
@@ -365,42 +365,42 @@ class Process(object):
             path = '\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
             utility = self.aspen.Tree.FindNode(path).Value
             if utility == 'CW':
-                coolwater = Coolwater(block.Name, self.aspen, uid)
+                coolwater = Coolwater(block.Name, uid, self)
                 self.coolwater[uid] = coolwater
             elif utility == 'RF1':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant1[uid] = refrig
             elif utility == 'RF2':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant2[uid] = refrig
             elif utility == 'RF3':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant3[uid] = refrig
             elif utility == 'RF4':
-                refrig = Refrigerant(block.Name, self.aspen, uid)
+                refrig = Refrigerant(block.Name, uid, self)
                 self.refrigerant4[uid] = refrig
             elif utility == 'LLPS':
-                llpsteam = LLP_Steam(block.Name, self.aspen, uid)
+                llpsteam = LLP_Steam(block.Name, uid, self)
                 self.llpsteam[uid] = llpsteam
             elif utility == 'LLPS-GEN':
-                llpsgen = LLPS_Gen(block.Name, self.aspen, uid)
+                llpsgen = LLPS_Gen(block.Name, uid, self)
                 self.llpsgen[uid] = llpsgen
             elif utility == 'LPS':
-                lpsteam = LP_Steam(block.Name, self.aspen, uid)
+                lpsteam = LP_Steam(block.Name, uid, self)
                 self.lpsteam[uid] = lpsteam
             elif utility == 'LPS-GEN':
-                lpsgen = LPS_Gen(block.Name, self.aspen, uid)
+                lpsgen = LPS_Gen(block.Name, uid, self)
                 self.lpsgen[uid] = lpsgen
             elif utility == 'MPS':
-                mpsteam = MP_Steam(block.Name, self.aspen, uid)
+                mpsteam = MP_Steam(block.Name, uid, self)
                 self.mpsteam[uid] = mpsteam
             elif utility == 'MPS-GEN':
-                mpsgen = MPS_Gen(block.Name, self.aspen, uid)
+                mpsgen = MPS_Gen(block.Name, uid, self)
                 self.mpsgen[uid] = mpsgen
             elif utility == 'HPS':
-                hpsteam = HP_Steam(block.Name, self.aspen, uid)
+                hpsteam = HP_Steam(block.Name, uid, self)
                 self.hpsteam[uid] = hpsteam
             elif utility == 'HPS-GEN':
-                hpsgen = HPS_Gen(block.Name, self.aspen, uid)
+                hpsgen = HPS_Gen(block.Name, uid, self)
                 self.hpsgen[uid] = hpsgen
 

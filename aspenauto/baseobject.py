@@ -6,11 +6,12 @@ class BaseObject(object):
     properties = {}
     properties_frac = {}
 
-    def __init__(self, aspen):
+    def __init__(self, process):
         
         self._values = {}
-        self.aspen = aspen
-    
+        self.process = weakref.ref(process)
+        self.aspen = process.aspen
+
     def reset(self):
         self._values = {}
 

@@ -7,6 +7,8 @@ class Block(object):
         self.name = name
         self.type = block_type
         self.uid = uid
+        self.to_stream = None
+        self.from_stream = None
 
     def get_obj_value(self):
 
