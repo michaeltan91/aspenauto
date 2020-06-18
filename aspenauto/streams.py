@@ -52,14 +52,13 @@ class Stream(BaseObject):
             temp1[element.Name] = element.Value 
         
         dict3 = {**temp1, **temp2}
-        print(dict3)
         for key, value in dict3.items():
             if key in temp1 and key in temp2:
                 dict3[key] = value
                 self.aspen.Tree.FindNode(path+'\\'+key).Value = value
             elif key in temp1 and key not in temp2:
                 dict3[key] = 0
-                self.aspen.Tree.FindNode(path+'\\'+key).Value = value
+                self.aspen.Tree.FindNode(path+'\\'+key).Value = 0
             elif key not in temp1 and key in temp2:
                 raise AttributeError('Component not defined in Aspen simulation', key)
 
@@ -71,8 +70,8 @@ class Material(Stream):
     stream_type = 'Material'
 
     properties_in = {
-        'pressure': ['\\Input\\PRES\\MIXED',],
-        'temperature': ['\\Input\\TEMP\\MIXED',],
+        'pressure': ['\\Input\\PRES\\MIXED',None],
+        'temperature': ['\\Input\\TEMP\\MIXED',None],
         'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
         'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
         'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME']
