@@ -9,12 +9,15 @@ class Utility(BaseObject):
 
     def get_obj_value(self, prop_loc):
         path = '\\Data\\Utilities'+prop_loc+self.uid
+        '''return self.process().asp.get_util_value(self.name, self.uid, prop_loc)'''
         return self.aspen.Tree.FindNode(path).Value
+        
 
     def set_obj_value(self, prop_loc, value):
         path = '\\Data\\Utilities'+prop_loc+self.uid
         self.aspen.Tree.FindNode(path).Value = value
-        return 
+        '''self.process().asp.set_util_value(self.name, self.uid, prop_loc, value)'''
+        
 
 class Electricity(Utility):
     properties_in = {}

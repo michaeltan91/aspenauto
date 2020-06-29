@@ -32,8 +32,9 @@ from .blocks import (
     Solids,
     SolidsSeparator
 )
-from .hierarchy import Hierarchy
 from .flowsheet import Flowsheet
+from .asp import ASP
+import warnings
 
 class Process(object):
     # Main class
@@ -45,6 +46,7 @@ class Process(object):
         self.aspen.InitFromArchive2(os.path.abspath(aspen_file))
         # Load print output class
         self.output = Output()
+        self.ready = False
 
         # Declare dictionaries for easy access of Aspen Results/Variables
         # Block dictionaries
@@ -81,13 +83,15 @@ class Process(object):
         self.refrigerant4 = ObjectCollection()
         # Assign classes to all Aspen Plus simulation objects
 
+        self.asp = ASP(self)
         self.load_utilities()
         self.flowsheet = Flowsheet(self)
 
 
-    def Run(self):
-        # Run the Aspen Engine
+    def run(self):
+        """Run the Aspen Engine"""
         self.aspen.Engine.Run2()
+        # Check whether Aspen reported an error
         error_path = "\\Data\\Results Summary\\Run-Status\\Output\\PER_ERROR"
         error = self.aspen.Tree.FindNode(error_path).Value
         if error == 1:
@@ -96,15 +100,22 @@ class Process(object):
                 report = report + str(sentence.Value)+'\n'
             print(report)
             #raise RuntimeError('Error/Warning in Aspen Plus simulation')
+        
+        self.ready = True
             
 
-    def Print(self, work_book):
-        # Print output in excel file
-        self.output.Print_Mass(self.material_streams, work_book)
-        self.output.Print_Energy(self.utilities, work_book)
+    def print(self, work_book):
+        """Prints the output in an excel file"""
+        if self.ready == True:
+            self.output.Print_Mass(self.material_streams, work_book)
+            self.output.Print_Energy(self.utilities, work_book)
+        else:
+            warnings.warn('Requesting data from unsolved simulation')
 
 
-    def Reset(self):
+    def reset(self):
+        """Resets the aspen simulations and resets all class attribute values"""
+        # Resets aspen simulation
         self.aspen.Reinit()
         # Resets all class attribute values
         for stream in self.streams:
@@ -112,17 +123,18 @@ class Process(object):
         for utility in self.utilities:
             for block in utility:
                 block.reset()
+        self.ready = False
     
-    
-    def Close(self):
-        # Closes the Aspen Plus Engine IMPORTANT!!!
+
+    def close(self):
+        """Closes the Aspen Plus Engine"""
         self.aspen.Close()
 
 
     def load_utilities(self):
-        utilities = self.aspen.Tree.FindNode("\\Data\\Utilities")
+        utilities = self.asp.get_utility_list()
         # Load and fill utility dictionaries
-        for util in utilities.Elements:
+        for util in utilities:
             if util.Name == 'CW':
                 self.utilities[util.Name] = self.coolwater
             elif util.Name == 'ELECTRIC':

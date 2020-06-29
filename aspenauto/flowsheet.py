@@ -44,7 +44,7 @@ class Flowsheet(object):
                 self.uid = self.name+'.'
                 self.base_path = path+str(name)
         else: 
-            self.uid = uid + '.' + self.name
+            self.uid = uid  + self.name + '.'
             self.base_path = path+str(name)
 
         self.load_data(process)
@@ -53,70 +53,69 @@ class Flowsheet(object):
     def load_data(self, process):
         
         # Assign dictionaries for each block and stream
-        blocks = process.aspen.Tree.FindNode(self.base_path+"\\Data\\Blocks")
-        streams = process.aspen.Tree.FindNode(self.base_path+"\\Data\\Streams")
+        blocks = process.asp.get_block_list(self.uid)
+        streams = process.asp.get_stream_list(self.uid)
         
         # Load and fill block dictionaries 
-        for obj in blocks.Elements:
-            base_path = self.base_path+'\\Data\\Blocks\\'+str(obj.Name)
-            block_type = process.aspen.Tree.FindNode(base_path).AttributeValue(6)
+        '''for obj in blocks.Elements:'''
+        for obj in blocks:
             uid = self.uid+obj.Name
+            block_type = process.asp.get_block_type(uid)
             if block_type == 'Mixer' or block_type == 'FSplit' or block_type == 'Mixer':
-                mix = MixSplit(block_type, obj.Name, uid)
+                mix = MixSplit(block_type, obj.Name, uid, process)
                 process.mixsplits[uid] = mix
                 process.blocks[uid] = mix
             elif block_type == 'Flash2' or block_type == 'Flash3' or block_type == 'Decanter' or block_type == 'Sep':
-                sep = Separator(block_type, obj.Name, uid)
+                sep = Separator(block_type, obj.Name, uid, process)
                 process.separators[uid] = sep
                 process.blocks[uid] = sep
             elif block_type == 'Heater' or block_type == 'HeatX':
-                exchange = Exchanger(block_type, obj.Name, uid)
+                exchange = Exchanger(block_type, obj.Name, uid, process)
                 process.exchangers[uid] = exchange
                 process.blocks[uid] = exchange
                 self.assign_utility_heater(obj, block_type, process)
             elif block_type == 'DSTWU' or block_type == 'RadFrac' or block_type == 'Extract':
-                column = Column(block_type, obj.Name, uid)
+                column = Column(block_type, obj.Name, uid, process)
                 process.columns[uid] = column
                 process.blocks[uid] = column
                 self.assign_utility_column(obj, block_type, process)
             elif block_type == 'RStoic' or block_type == 'RYield' or block_type == 'RGibbs' or block_type == 'RPlug':
-                reactor = Reactor(block_type, obj.Name, uid)
+                reactor = Reactor(block_type, obj.Name, uid, process)
                 process.reactors[uid] = reactor
                 process.blocks[uid] = reactor
                 self.assign_utility_reactor(obj, block_type, process)
             elif block_type == 'Pump' or block_type == 'Compr' or block_type == 'MCompr' or block_type == 'Valve':
-                pressure = Pressure(block_type, obj.Name, uid)   
+                pressure = Pressure(block_type, obj.Name, uid, process)   
                 process.pressurechangers[uid] = pressure
                 process.blocks[uid] = pressure
                 self.assign_utility_pressure(obj, block_type, process)
             ## Solids not implemented yet
             elif block_type == 'Cyclone' or block_type == 'VScrub':
-                solidsep = SolidsSeparator(block_type, obj.Name, uid)
+                solidsep = SolidsSeparator(block_type, obj.Name, uid, process)
                 process.solidseparators[uid] = solidsep
                 process.blocks[uid] = solidsep
-            elif block_type == 'Hierarchy':
+            elif block_type == 'Hierarchy' or block_type == 'HIERARCHY':
                 base_path = self.base_path+'\\Data\\Blocks\\'
                 hierarchy = Flowsheet(process, path = base_path ,name =obj.Name, uid = self.uid)
                 process.hierarchy[uid] = hierarchy
                 process.blocks[uid] = hierarchy
 
         # Load and fill stream dictionaries
-        for obj in streams.Elements:
-            base_path = self.base_path+"\\Data\\Streams\\"
-            path = base_path+str(obj.Name)
+        '''for obj in streams.Elements:'''
+        for obj in streams:
             uid = self.uid+obj.Name
-            stream_type = process.aspen.Tree.FindNode(path).AttributeValue(6)
+            stream_type = process.asp.get_stream_type(uid)
 
             if stream_type == 'MATERIAL':
-                material = Material(obj.Name, uid, base_path, process)
+                material = Material(obj.Name, uid, process)
                 process.streams[uid] = material
                 process.material_streams[uid] = material
-            elif stream_type == 'HEAT':
-                work = Work(obj.Name, uid, base_path, process)
+            elif stream_type == 'WORK':
+                work = Work(obj.Name, uid, process)
                 process.work_streams[uid] = work
                 process.streams[uid] = work
-            else:
-                heat = Heat(obj.Name, uid, base_path, process)
+            elif stream_type == 'HEAT':
+                heat = Heat(obj.Name, uid, process)
                 process.streams[uid] = heat
                 process.heat_streams[uid] = heat
 
@@ -125,8 +124,7 @@ class Flowsheet(object):
         # Assign column utilities
         uid = self.uid + block.Name
         if block_type == 'RadFrac':
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COND_UTIL'
-            utility = process.aspen.Tree.FindNode(path).Value
+            utility = process.asp.get_radfrac_cond_util(uid)
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, uid, process)
                 process.coolwater[uid] = coolwater
@@ -152,8 +150,7 @@ class Flowsheet(object):
                 mpsgen = MPS_Gen(block.Name, uid, process)
                 process.mpsgen[uid] = mpsgen
 
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\REB_UTIL'
-            utility = process.aspen.Tree.FindNode(path).Value
+            utility = process.asp.get_radfrac_reb_util(uid)
             if utility == 'LPS':
                 lpsteam = LP_Steam(block.Name, uid, process)
                 process.lpsteam[uid] = lpsteam
@@ -172,8 +169,7 @@ class Flowsheet(object):
         # Assign heater utilities
         uid = self.uid + block.Name
         if block_type == 'Heater':
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
-            utility = process.aspen.Tree.FindNode(path).Value
+            utility = process.asp.get_heater_util(uid)
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, uid, process)
                 process.coolwater[uid] = coolwater
@@ -218,46 +214,46 @@ class Flowsheet(object):
     def assign_utility_pressure(self, block, block_type, process):
         # Assign utilities of pumps, compressors and multistage compressors
         uid = self.uid + block.Name
-        if block_type == 'Pump' or block_type == 'Compr':
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
-            utility = process.aspen.Tree.FindNode(path).Value
+        if block_type == 'Pump':
+            utility = process.asp.get_pump_util(uid)
+            if utility == 'ELECTRIC':
+                electricity = Electricity(block.Name, uid, process)
+                process.electricity[uid] = electricity
+        elif block_type == 'Compr':
+            utility = process.asp.get_compr_util(uid)
             if utility == 'ELECTRIC':
                 electricity = Electricity(block.Name, uid, process)
                 process.electricity[uid] = electricity
 
         elif block_type == 'MCompr':
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\SPECS_UTL'
-            stages = process.aspen.Tree.FindNode(path).Elements
-            for stage in stages:
-                if stage.Value == 'ELECTRIC':
-                    electricity = Electricity(block.Name, uid, process)
-                    process.electricity[uid] = electricity
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\COOLER_UTL'
-            stages = process.aspen.Tree.FindNode(path).Elements
-            for stage in stages:
-                if stage.Value == 'CW':
-                    coolwater = Coolwater(block.Name, uid, process)
-                    process.coolwater[uid] = coolwater
-                elif stage.Value == 'RF1':
-                    refrigerant = Refrigerant(block.Name, uid, process)
-                    process.refrigerant1[uid] = refrigerant
-                elif stage.Value == 'RF2':
-                    refrigerant = Refrigerant(block.Name, uid, process)
-                    process.refrigerant2[uid] = refrigerant
-                elif stage.Value == 'RF3':
-                    refrigerant = Refrigerant(block.Name, uid, process)
-                    process.refrigerant3[uid] = refrigerant
-                elif stage.Value == 'RF4':
-                    refrigerant = Refrigerant(block.Name, uid, process)
-                    process.refrigerant4[uid] = refrigerant
+            utility = process.asp.get_mcompr_specs_util(uid)
+            if 'ELECTRIC' in utility:
+                electricity = Electricity(block.Name, uid, process)
+                process.electricity[uid] = electricity
+
+            utility = process.asp.get_mcompr_cool_util(uid)
+            if 'CW' in utility:
+                coolwater = Coolwater(block.Name, uid, process)
+                process.coolwater[uid] = coolwater
+            elif 'RF1' in utility:
+                refrigerant = Refrigerant(block.Name, uid, process)
+                process.refrigerant1[uid] = refrigerant
+            elif 'RF2' in utility:
+                refrigerant = Refrigerant(block.Name, uid, process)
+                process.refrigerant2[uid] = refrigerant
+            elif 'RF3' in utility:
+                refrigerant = Refrigerant(block.Name, uid, process)
+                process.refrigerant3[uid] = refrigerant
+            elif 'RF4' in utility:
+                refrigerant = Refrigerant(block.Name, uid, process)
+                process.refrigerant4[uid] = refrigerant
 
 
     def assign_utility_reactor(self, block, block_type, process):
         # Assign reactor utilities
         uid = self.uid + block.Name
         if block_type == 'RStoic' or block_type == 'RYield' or block_type == 'RGibbs':
-            path = self.base_path+'\\Data\\Blocks\\'+str(block.Name)+'\\Input\\UTILITY_ID'
-            utility = process.aspen.Tree.FindNode(path).Value
+            utility = process.asp.get_reactor_util(uid)
             if utility == 'CW':
                 coolwater = Coolwater(block.Name, uid, process)
                 process.coolwater[uid] = coolwater

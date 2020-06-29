@@ -3,9 +3,6 @@ from .objectcollection import ObjectCollection
 
 class BaseObject(object):
 
-    properties = {}
-    properties_frac = {}
-
     def __init__(self, process):
         
         self._values = {}

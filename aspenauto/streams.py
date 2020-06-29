@@ -4,7 +4,7 @@ import weakref
 
 class Stream(BaseObject):
     # Main stream class
-    def __init__(self, name, uid, path, process):
+    def __init__(self, name, uid, process):
         
         if 'F-' in name:
             obj_type = 'Feed'
@@ -17,55 +17,27 @@ class Stream(BaseObject):
         self.type = obj_type
         self.name = name
         self.uid = uid 
-        self.base_path = path
         self.to_block = None
         self.from_block = None
         super().__init__(process)
 
 
     def get_obj_value(self, prop_loc):    
-        path = self.base_path+str(self.name)+prop_loc
-        return self.aspen.Tree.FindNode(path).Value
+        return self.process().asp.get_stream_value(self.uid, prop_loc)
 
     def get_obj_value_frac(self, prop_loc):
-        path = self.base_path+str(self.name)+prop_loc
-        temp = ObjectCollection()
-        for element in self.aspen.Tree.FindNode(path).Elements:
-            temp[element.Name] = element.Value 
-        return temp
+        return self.process().asp.get_stream_value_frac(self.uid, prop_loc)
 
     def set_obj_value(self, prop_loc, value):
-        path = self.base_path+str(self.name)+prop_loc[0]
-        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not prop_loc[1]:
-            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,prop_loc[1])
-        self.aspen.Tree.FindNode(path).Value = value
+        self.process().asp.set_stream_value(self.uid, prop_loc, value)
 
-    def set_obj_value_frac(self, prop_loc, val):
-        path = self.base_path+str(self.name)+prop_loc[0]
-        
-        if self.aspen.Tree.FindNode(path).AttributeValue(13) is not prop_loc[1]:
-            self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,prop_loc[1])
-        
-        temp1 = {}
-        temp2 = val
-        for element in self.aspen.Tree.FindNode(path).Elements:
-            temp1[element.Name] = element.Value 
-        
-        dict3 = {**temp1, **temp2}
-        for key, value in dict3.items():
-            if key in temp1 and key in temp2:
-                dict3[key] = value
-                self.aspen.Tree.FindNode(path+'\\'+key).Value = value
-            elif key in temp1 and key not in temp2:
-                dict3[key] = 0
-                self.aspen.Tree.FindNode(path+'\\'+key).Value = 0
-            elif key not in temp1 and key in temp2:
-                raise AttributeError('Component not defined in Aspen simulation', key)
+    def set_obj_value_frac(self, prop_loc, value):
+        self.process().asp.set_stream_value_frac(self.uid, prop_loc, value)
 
 
         
 class Material(Stream):
-    # Material stream subclass
+    """Aspen Plus Material stream class"""
 
     stream_type = 'Material'
 
@@ -95,7 +67,7 @@ class Material(Stream):
 
 
 class Work(Stream):
-    # Work stream subclass
+    """Aspen Plus Work stream class"""
 
     stream_type = 'Work'
 
@@ -110,7 +82,7 @@ class Work(Stream):
 
 
 class Heat(Stream):
-    # Heat stream subclass
+    """Aspen Plus Heat stream class"""
 
     stream_type = 'Heat'
 
