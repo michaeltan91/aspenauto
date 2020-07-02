@@ -262,22 +262,22 @@ class Output(object):
             
                 if util == 'ELECTRIC':
                     sheet.cell(row=cur_row, column=2+ii).value = name
-                    sheet.cell(row=cur_row, column=4+ii).value = -data.duty * 4186.8
+                    sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
                 elif util =='NATGAS':
                     sheet.cell(row=cur_row, column=2+ii).value = name
-                    sheet.cell(row=cur_row, column=6+ii).value = -data.usage * 8000 / 1000 / 1000
+                    sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
 
                 else:
                     if '-GEN' in util:
                         sheet.cell(row=cur_row, column=2+ii).value = name
-                        sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
-                        sheet.cell(row=cur_row, column=5+ii).value = data.duty * 4186.8 * 8000 * 1E-6
-                        sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
-                    else:
-                        sheet.cell(row=cur_row, column=2+ii).value = name
                         sheet.cell(row=cur_row, column=4+ii).value = -data.duty * 4186.8
                         sheet.cell(row=cur_row, column=5+ii).value = -data.duty * 4186.8 * 8000 * 1E-6
                         sheet.cell(row=cur_row, column=6+ii).value = -data.usage * 8000 / 1000 / 1000
+                    else:
+                        sheet.cell(row=cur_row, column=2+ii).value = name
+                        sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
+                        sheet.cell(row=cur_row, column=5+ii).value = data.duty * 4186.8 * 8000 * 1E-6
+                        sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
     
         headers = ['Unit name','Unit description','Duty -MJ/hr', 'Duty -TJ/y', 'Mass -ktonne/y', 'Remark']
         headelec = ['Unit name','Unit description','Power -kW', 'Energy -GWh/y', 'Energy - TJ/y', 'Remark']

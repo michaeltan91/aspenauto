@@ -84,6 +84,35 @@ class SolidsSeparator(Block):
 
 
 
+class MCompr(Block):
+
+    properties_in = {
+        'model':'\\Input\\TYPE',
+        'type': '\\Input\\TYPE_STG',
+        'stages': '\\Input\\NSTAGE',
+        'pressure': '\\Input\\PRES'
+        }
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
+
+
+
+class Mixer(Block):
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
+
+
+class Fsplit(Block):
+    properties_in = {}
+    properties_frac_in = {}
+    properties_out = {}
+    properties_frac_out = {}
+
+
+
 class Heater(Block):
 
     properties_in = {}
@@ -109,8 +138,6 @@ class Heater(Block):
 class HeatX(Block):
 
     properties_in = {}
-
-
     '''
     Input
     Model fidelity: (Shortcut)    Application.Tree.FindNode("\Data\Blocks\E-104\Input\MODE")

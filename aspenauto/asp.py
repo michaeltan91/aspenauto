@@ -140,6 +140,13 @@ class ASP(object):
         return [obj for obj in self.aspen.Tree.FindNode(path).Elements]
 
 
+    def get_util_type(self, util_name):
+        loc = '\\Input\\UTILITY_TYPE'
+        temp_path = [self.utility, util_name,loc]
+        path = ''.join(temp_path)
+        return self.aspen.Tree.FindNode(path).Value
+
+
     def get_util_value(self, util_name, uid, prop):
         temp_path = [self.utility, util_name, prop, uid]
         path=''.join(temp_path)
@@ -148,6 +155,22 @@ class ASP(object):
     
     def set_util_value(self, util_name, uid, prop, value):
         return
+
+
+    def get_steam_type(self, util_name):
+        vfracin = '\\Input\\VFRAC'
+        vfracout = '\\Input\\VFRAC_OUT'
+        temp_path1 = [self.utility, util_name, vfracin]
+        temp_path2 = [self.utility, util_name, vfracout]
+        path1 = ''.join(temp_path1)
+        path2 = ''.join(temp_path2)
+        self.aspen.Tree.FindNode(path1).Value
+        if self.aspen.Tree.FindNode(path1).Value == 0:
+            return 'STEAM-GEN'
+        elif self.aspen.Tree.FindNode(path2).Value == 0:
+            return 'STEAM'
+
+
 
 
     def get_heater_util(self, uid):

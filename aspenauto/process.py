@@ -2,36 +2,7 @@ import os
 import win32com.client as win32
 
 from .objectcollection import ObjectCollection
-from .blocks import Block
-from .streams import (
-    Material,
-    Work, 
-    Heat
-    )
 from .output import Output
-from .utilities import (
-    LLP_Steam,
-    LLPS_Gen,
-    LP_Steam, 
-    LPS_Gen,
-    MP_Steam,
-    MPS_Gen, 
-    HP_Steam,
-    HPS_Gen, 
-    Coolwater,
-    Refrigerant,
-    Electricity
-)
-from .blocks import (
-    MixSplit,
-    Separator,
-    Exchanger,
-    Column,
-    Reactor,
-    Pressure,
-    Solids,
-    SolidsSeparator
-)
 from .flowsheet import Flowsheet
 from .asp import ASP
 import warnings
@@ -66,21 +37,14 @@ class Process(object):
         self.heat_streams = ObjectCollection()
         self.work_streams = ObjectCollection()
         # Utility dictionaries
-        self.utilities = ObjectCollection()
+        self.naturalgas = ObjectCollection()
         self.coolwater = ObjectCollection()
-        self.llpsteam = ObjectCollection()
-        self.llpsgen = ObjectCollection()
-        self.lpsteam = ObjectCollection()
-        self.lpsgen = ObjectCollection()
-        self.mpsteam = ObjectCollection()
-        self.mpsgen = ObjectCollection()
-        self.hpsteam = ObjectCollection()
-        self.hpsgen = ObjectCollection()
         self.electricity = ObjectCollection()
-        self.refrigerant1 = ObjectCollection()
-        self.refrigerant2 = ObjectCollection()
-        self.refrigerant3 = ObjectCollection()
-        self.refrigerant4 = ObjectCollection()
+        self.refrigerant = ObjectCollection()
+        self.steam = ObjectCollection()
+        self.steamgen = ObjectCollection()
+        self.utilities = ObjectCollection()
+        
         # Assign classes to all Aspen Plus simulation objects
 
         self.asp = ASP(self)
@@ -135,44 +99,28 @@ class Process(object):
         utilities = self.asp.get_utility_list()
         # Load and fill utility dictionaries
         for util in utilities:
-            if util.Name == 'CW':
-                self.utilities[util.Name] = self.coolwater
-            elif util.Name == 'ELECTRIC':
-                self.utilities[util.Name] = self.electricity
-            elif util.Name == 'LLPS':
-                self.utilities[util.Name] = self.llpsteam
-            elif util.Name == 'LLPS-GEN':
-                self.utilities[util.Name] = self.llpsgen
-            elif util.Name == 'LPS':
-                self.utilities[util.Name] = self.lpsteam
-            elif util.Name == 'LPS-GEN':
-                self.utilities[util.Name] = self.lpsgen
-            elif util.Name == 'MPS':
-                self.utilities[util.Name] = self.mpsteam
-            elif util.Name == 'MPS-GEN':
-                self.utilities[util.Name] = self.mpsgen
-            elif util.Name == 'HPS':
-                self.utilities[util.Name] = self.hpsteam
-            elif util.Name == 'HPS-GEN':
-                self.utilities[util.Name] = self.hpsgen
-            elif util.Name == 'RF1':
-                self.utilities[util.Name] = self.refrigerant1
-            elif util.Name == 'RF2':
-                self.utilities[util.Name] = self.refrigerant2
-            elif util.Name == 'RF3':
-                self.utilities[util.Name] = self.refrigerant3
-            elif util.Name == 'RF4':
-                self.utilities[util.Name] = self.refrigerant4
-    
-        temp = []
-        prefer = ['LLPS','LLPS-GEN', 'LPS', 'LPS-GEN', 'MPS', 'MPS-GEN', 'HPS', 'HPS-GEN', 'RF', 'ELECTRIC' , 'NATGAS', 'CW']
-        for i in prefer:
-            if i in self.utilities:
-                temp.append(i)
-        temp2 = ObjectCollection()
-        for j in temp:
-            temp2[j] = self.utilities[j]
-        self.utilities = temp2
+            util_name = util.Name
+            util_type = self.asp.get_util_type(util_name)
+            if util_type == 'WATER':
+                self.coolwater[util_name] = ObjectCollection()
+                self.utilities[util_name] = self.coolwater[util_name]
+            elif util_type == 'ELECTRICITY':
+                self.electricity[util_name] = ObjectCollection()
+                self.utilities[util_name] = self.electricity[util_name]
+            elif util_type == 'GAS':
+                self.naturalgas[util_name] = ObjectCollection()
+                self.utilities[util_name] = self.naturalgas[util_name]
+            elif util_type == 'STEAM':
+                steam_type = self.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    self.steam[util_name] = ObjectCollection()
+                    self.utilities[util_name] = self.steam[util_name]
+                elif steam_type == 'STEAM-GEN':
+                    self.steamgen[util_name] = ObjectCollection()
+                    self.utilities[util_name] = self.steamgen[util_name]
+            elif util_type == 'REFRIGERATIO':
+                self.refrigerant[util_name] = ObjectCollection()
+                self.utilities[util_name] = self.refrigerant[util_name]
         
 
 

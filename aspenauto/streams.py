@@ -1,6 +1,5 @@
 from .objectcollection import ObjectCollection
 from .baseobject import BaseObject
-import weakref
 
 class Stream(BaseObject):
     # Main stream class
