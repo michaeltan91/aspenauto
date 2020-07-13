@@ -22,64 +22,64 @@ class MixSplit(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
         
         
 class Separator(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
         
 
 class Exchanger(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
         
 
 class Column(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 class Reactor(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 class Pressure(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 class Solids(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 class SolidsSeparator(Block):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 
@@ -93,23 +93,23 @@ class MCompr(Block):
         'pressure': '\\Input\\PRES'
         }
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 
 class Mixer(Block):
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 class Fsplit(Block):
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {}
-    properties_frac_out = {}
+    properties = {}
+    properties_frac = {}
 
 
 

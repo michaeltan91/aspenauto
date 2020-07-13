@@ -18,91 +18,91 @@ class Utility(BaseObject):
 class Electricity(Utility):
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {
+    properties = {
         'duty': '\\Output\\UTL_DUTY\\',
         'usage':'\\Output\\UTL_USAGE\\',
     }   
-    properties_frac_out = {}
+    properties_frac = {}
 
 
 class Coolwater(Utility):
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {
+    properties = {
         'duty': '\\Output\\UTL_DUTY\\',
         'usage':'\\Output\\UTL_USAGE\\',
-        'Tin': '\\Output\\UTL_IN_TEMP\\',
-        'Tout': '\\Output\\UTL_OUT_TEMP\\',
-        'Pin': '\\Output\\UTL_IN_PRES\\',
-        'Pout': '\\Output\\UTL_OUT_PRES\\',
+        'temperature_in': '\\Output\\UTL_IN_TEMP\\',
+        'temperature_out': '\\Output\\UTL_OUT_TEMP\\',
+        'pressure_in': '\\Output\\UTL_IN_PRES\\',
+        'pressure_out': '\\Output\\UTL_OUT_PRES\\',
         'vfrac_in': '\\Output\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\Output\\UTL_OUT_VFRAC\\'
     }
-    properties_frac_out = {}
+    properties_frac = {}
 
 
 class Steam(Utility):
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {
+    properties = {
         'duty': '\\Output\\UTL_DUTY\\',
         'usage':'\\Output\\UTL_USAGE\\',
-        'Tin': '\\Output\\UTL_IN_TEMP\\',
-        'Tout': '\\Output\\UTL_OUT_TEMP\\',
-        'Pin': '\\Output\\UTL_IN_PRES\\',
-        'Pout': '\\Output\\UTL_OUT_PRES\\',
+        'temperature_in': '\\Output\\UTL_IN_TEMP\\',
+        'temperature_out': '\\Output\\UTL_OUT_TEMP\\',
+        'pressure_in': '\\Output\\UTL_IN_PRES\\',
+        'pressure_out': '\\Output\\UTL_OUT_PRES\\',
         'vfrac_in': '\\Output\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\Output\\UTL_OUT_VFRAC\\'
     }
-    properties_frac_out = {}
+    properties_frac = {}
 
 
 
 class Steam_Gen(Utility):
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {
+    properties = {
         'duty': '\\Output\\UTL_DUTY\\',
         'usage':'\\Output\\UTL_USAGE\\',
-        'Tin': '\\Output\\UTL_IN_TEMP\\',
-        'Tout': '\\Output\\UTL_OUT_TEMP\\',
-        'Pin': '\\Output\\UTL_IN_PRES\\',
-        'Pout': '\\Output\\UTL_OUT_PRES\\',
+        'temperature_in': '\\Output\\UTL_IN_TEMP\\',
+        'temperature_out': '\\Output\\UTL_OUT_TEMP\\',
+        'pressure_in': '\\Output\\UTL_IN_PRES\\',
+        'pressure_out': '\\Output\\UTL_OUT_PRES\\',
         'vfrac_in': '\\Output\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\Output\\UTL_OUT_VFRAC\\'
     }
-    properties_frac_out = {}
+    properties_frac = {}
 
 
 class Refrigerant(Utility):
 
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {
+    properties = {
         'duty': '\\Output\\UTL_DUTY\\',
         'usage':'\\Output\\UTL_USAGE\\',
-        'Tin': '\\Output\\UTL_IN_TEMP\\',
-        'Tout': '\\Output\\UTL_OUT_TEMP\\',
-        'Pin': '\\Output\\UTL_IN_PRES\\',
-        'Pout': '\\Output\\UTL_OUT_PRES\\',
+        'temperature_in': '\\Output\\UTL_IN_TEMP\\',
+        'temperature_out': '\\Output\\UTL_OUT_TEMP\\',
+        'pressure_in': '\\Output\\UTL_IN_PRES\\',
+        'pressure_out': '\\Output\\UTL_OUT_PRES\\',
         'vfrac_in': '\\Output\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\Output\\UTL_OUT_VFRAC\\'
     }
-    properties_frac_out = {}
+    properties_frac = {}
 
 
 class Gas(Utility):
     
     properties_in = {}
     properties_frac_in = {}
-    properties_out = {
+    properties = {
         'duty': '\\Output\\UTL_DUTY\\',
         'usage':'\\Output\\UTL_USAGE\\',
-        'Tin': '\\Output\\UTL_IN_TEMP\\',
-        'Tout': '\\Output\\UTL_OUT_TEMP\\',
-        'Pin': '\\Output\\UTL_IN_PRES\\',
-        'Pout': '\\Output\\UTL_OUT_PRES\\',
+        'temperature_in': '\\Output\\UTL_IN_TEMP\\',
+        'temperature_out': '\\Output\\UTL_OUT_TEMP\\',
+        'pressure_in': '\\Output\\UTL_IN_PRES\\',
+        'pressure_out': '\\Output\\UTL_OUT_PRES\\',
         'vfrac_in': '\\Output\\UTL_IN_VFRAC\\',
         'vfrac_out': '\\Output\\UTL_OUT_VFRAC\\'
     }
-    properties_frac_out = {}
+    properties_frac = {}

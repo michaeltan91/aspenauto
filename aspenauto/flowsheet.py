@@ -146,7 +146,7 @@ class Flowsheet(object):
                     if steam_type == 'STEAM':
                         process.steam[util_name][uid] = Steam(util_name, uid, process)
                     elif steam_type == 'STEAM-GEN':
-                        process.steamgen[util_name][uid] = Steam_Gen(util_name, uid, process)
+                        process.steam_gen[util_name][uid] = Steam_Gen(util_name, uid, process)
                 elif util_type == 'REFRIGERATIO':
                     process.refrigerant[util_name][uid] = Refrigerant(util_name, uid, process)
 
@@ -161,9 +161,9 @@ class Flowsheet(object):
                     if steam_type == 'STEAM':
                         process.steam[util_name][uid] = Steam(util_name, uid, process)
                     elif steam_type == 'STEAM-GEN':
-                        process.steamgen[util_name][uid] = Steam_Gen(util_name, uid, process)
+                        process.steam_gen[util_name][uid] = Steam_Gen(util_name, uid, process)
                 elif util_type == 'GAS':
-                    process.naturalgas[util_name][uid] = Gas(util_name, uid, process)
+                    process.natural_gas[util_name][uid] = Gas(util_name, uid, process)
 
 
     def assign_utility_heater(self, block, block_type, process):
@@ -181,13 +181,13 @@ class Flowsheet(object):
                 elif util_type == 'ELECTRICITY':
                     process.electricity[util_name][uid] = Electricity(util_name, uid, process)
                 elif util_type == 'GAS':
-                    process.naturalgas[util_name][uid] = Gas(util_name, uid, process)
+                    process.natural_gas[util_name][uid] = Gas(util_name, uid, process)
                 elif util_type == 'STEAM':
                     steam_type = process.asp.get_steam_type(util_name)
                     if steam_type == 'STEAM':
                         process.steam[util_name][uid] = Steam(util_name, uid, process)
                     elif steam_type == 'STEAM-GEN':
-                        process.steamgen[util_name][uid] = Steam_Gen(util_name, uid, process)
+                        process.steam_gen[util_name][uid] = Steam_Gen(util_name, uid, process)
                 elif util_type == 'REFRIGERATIO':
                     process.refrigerant[util_name][uid] = Refrigerant(util_name, uid, process)
     
@@ -251,12 +251,12 @@ class Flowsheet(object):
                 elif util_type == 'ELECTRICITY':
                     process.electricity[util_name][uid] = Electricity(util_name, uid, process)
                 elif util_type == 'GAS':
-                    process.naturalgas[util_name][uid] = Gas(util_name, uid, process)
+                    process.natural_gas[util_name][uid] = Gas(util_name, uid, process)
                 elif util_type == 'STEAM':
                     steam_type = process.asp.get_steam_type(util_name)
                     if steam_type == 'STEAM':
                         process.steam[util_name][uid] = Steam(util_name, uid, process)
                     elif steam_type == 'STEAM-GEN':
-                        process.steamgen[util_name][uid] = Steam_Gen(util_name, uid, process)
+                        process.steam_gen[util_name][uid] = Steam_Gen(util_name, uid, process)
                 elif util_type == 'REFRIGERATIO':
                     process.refrigerant[util_name][uid] = Refrigerant(util_name, uid, process)

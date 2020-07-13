@@ -5,7 +5,8 @@ class ASP(object):
     block = '\\Data\\Blocks\\'
     stream = '\\Data\\Streams\\'
     utility = '\\Data\\Utilities\\'
-
+    setup = '\\Data\\Setup\\'
+    
     def __init__(self, process):
 
         self.aspen = process.aspen
@@ -248,4 +249,16 @@ class ASP(object):
 
     
 
+    def get_simulation_unit_set(self):
+        temp_path = [self.setup]
+        temp_path.extend('Sim-Options\\Input\\Unit Set')
+        path =''.join(temp_path)
+        return self.aspen.Tree.FindNode(path).Value
+
+    def get_simulation_units(self, unit_set, prop):
+        temp_path = [self.setup]
+        temp_path.extend(['Units-Sets\\',unit_set,'\\Unit-Types',prop])
+        path =''.join(temp_path)      
+        return self.aspen.Tree.FindNode(path).Value
+    
 

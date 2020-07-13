@@ -25,11 +25,11 @@ class BaseObject(object):
         raise NotImplementedError
 
     def __getattr__(self, prop):
-        if prop in self.properties_out.keys():
-            return self.get_property(self.properties_out[prop])
+        if prop in self.properties.keys():
+            return self.get_property(self.properties[prop])
 
-        elif prop in self.properties_frac_out.keys():
-            return self.get_property_frac(self.properties_frac_out[prop])
+        elif prop in self.properties_frac.keys():
+            return self.get_property_frac(self.properties_frac[prop])
 
         else:
             raise AttributeError('Nonexistant Attribute', prop)

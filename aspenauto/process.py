@@ -5,6 +5,7 @@ from .objectcollection import ObjectCollection
 from .output import Output
 from .flowsheet import Flowsheet
 from .asp import ASP
+from .units import Units
 import warnings
 
 class Process(object):
@@ -37,18 +38,19 @@ class Process(object):
         self.heat_streams = ObjectCollection()
         self.work_streams = ObjectCollection()
         # Utility dictionaries
-        self.naturalgas = ObjectCollection()
+        self.natural_gas = ObjectCollection()
         self.coolwater = ObjectCollection()
         self.electricity = ObjectCollection()
         self.refrigerant = ObjectCollection()
         self.steam = ObjectCollection()
-        self.steamgen = ObjectCollection()
+        self.steam_gen = ObjectCollection()
         self.utilities = ObjectCollection()
         
         # Assign classes to all Aspen Plus simulation objects
 
         self.asp = ASP(self)
         self.load_utilities()
+        self.units = Units(self)
         self.flowsheet = Flowsheet(self)
 
 
@@ -108,16 +110,16 @@ class Process(object):
                 self.electricity[util_name] = ObjectCollection()
                 self.utilities[util_name] = self.electricity[util_name]
             elif util_type == 'GAS':
-                self.naturalgas[util_name] = ObjectCollection()
-                self.utilities[util_name] = self.naturalgas[util_name]
+                self.natural_gas[util_name] = ObjectCollection()
+                self.utilities[util_name] = self.natural_gas[util_name]
             elif util_type == 'STEAM':
                 steam_type = self.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
                     self.steam[util_name] = ObjectCollection()
                     self.utilities[util_name] = self.steam[util_name]
                 elif steam_type == 'STEAM-GEN':
-                    self.steamgen[util_name] = ObjectCollection()
-                    self.utilities[util_name] = self.steamgen[util_name]
+                    self.steam_gen[util_name] = ObjectCollection()
+                    self.utilities[util_name] = self.steam_gen[util_name]
             elif util_type == 'REFRIGERATIO':
                 self.refrigerant[util_name] = ObjectCollection()
                 self.utilities[util_name] = self.refrigerant[util_name]

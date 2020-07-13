@@ -45,21 +45,23 @@ class Material(Stream):
         'temperature': ['\\Input\\TEMP\\MIXED',None],
         'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
         'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
-        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME']
+        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME'],
+        'vfrac': ['\\Input\\VFRAC\\MIXED',None]
     }
     properties_frac_in = {
         'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
         'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC']
     }
 
-    properties_out = {
+    properties = {
         'pressure': '\\Output\\PRES_OUT\\MIXED',
         'temperature': '\\Output\\TEMP_OUT\\MIXED',
         'massflow': '\\Output\\MASSFLMX\\MIXED',
         'moleflow': '\\Output\\MOLEFLMX\\MIXED',
-        'volflow': '\\Output\\VOLFLMX\\MIXED'
+        'volflow': '\\Output\\VOLFLMX\\MIXED',
+        'vfrac': '\\Output\\VFRAC_OUT\\MIXED'
         }
-    properties_frac_out = {
+    properties_frac = {
         'massfrac': '\\Output\\MASSFRAC\\MIXED',
         'molefrac': '\\Output\\MOLEFRAC\\MIXED'
     }
@@ -73,11 +75,11 @@ class Work(Stream):
     properties_in = {}
     properties_frac_in = {}
 
-    properties_out = {
+    properties = {
         'power': '\\Output\\POWER_OUT',
         'speed': '\\Output\\SPEED_OUT'
     }
-    properties_frac_out = {}
+    properties_frac = {}
 
 
 class Heat(Stream):
@@ -88,7 +90,6 @@ class Heat(Stream):
     properties_in = {}
     properties_frac_in = {}
 
-    properties_out = {'Q': '\\Output\\QCALC'}
-    properties_frac_out = {}
+    properties = {'duty': '\\Output\\QCALC'}
+    properties_frac = {}
     
-        
