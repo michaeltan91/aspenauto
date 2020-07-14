@@ -24,6 +24,11 @@ class Electricity(Utility):
     }   
     properties_frac = {}
 
+    physical_quantity_dict = {
+        'duty': 'duty',
+        'usage':'electric_power'
+    }
+
 
 class Coolwater(Utility):
     properties_in = {}
@@ -39,6 +44,11 @@ class Coolwater(Utility):
         'vfrac_out': '\\Output\\UTL_OUT_VFRAC\\'
     }
     properties_frac = {}
+
+    physical_quantity_dict = {
+        'duty': 'duty',
+        'usage': 'electric_power'
+    }
 
 
 class Steam(Utility):

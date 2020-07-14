@@ -7,7 +7,6 @@ class BaseObject(object):
         
         self._values = {}
         self.process = weakref.ref(process)
-        self.aspen = process.aspen
 
     def reset(self):
         self._values = {}

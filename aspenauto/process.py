@@ -90,7 +90,17 @@ class Process(object):
             for block in utility:
                 block.reset()
         self.ready = False
+
     
+    def reset2(self):
+        """Resets the values retrieved from the Aspen simulation"""
+        for stream in self.streams:
+            stream.reset()
+        for utility in self.utilities:
+            for block in utility:
+                block.reset()
+    
+
 
     def close(self):
         """Closes the Aspen Plus Engine"""

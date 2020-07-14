@@ -93,3 +93,4 @@ class Heat(Stream):
     properties = {'duty': '\\Output\\QCALC'}
     properties_frac = {}
     
+        

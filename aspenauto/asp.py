@@ -157,6 +157,16 @@ class ASP(object):
     def set_util_value(self, util_name, uid, prop, value):
         return
 
+    
+    def get_util_block_value(self, util_name, uid, prop):
+        temp_path = [self.utility, util_name, prop, uid]
+        path=''.join(temp_path)
+        return self.aspen.Tree.FindNode(path).Value
+
+
+    def set_util_block_value(self, util_name, uid, prop, value):
+        return
+
 
     def get_steam_type(self, util_name):
         vfracin = '\\Input\\VFRAC'
