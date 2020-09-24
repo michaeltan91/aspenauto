@@ -103,7 +103,6 @@ class ASP(object):
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop[0]])
         path=''.join(temp_path)
-
         if self.aspen.Tree.FindNode(path).AttributeValue(13) is not prop[1]:
             self.aspen.Tree.FindNode(path).SetAttributeValue(13,0,prop[1])
         self.aspen.Tree.FindNode(path).Value = value   
@@ -148,13 +147,13 @@ class ASP(object):
         return self.aspen.Tree.FindNode(path).Value
 
 
-    def get_util_value(self, util_name, uid, prop):
-        temp_path = [self.utility, util_name, prop, uid]
+    def get_util_value(self, util_name, prop):
+        temp_path = [self.utility, util_name, prop]
         path=''.join(temp_path)
         return self.aspen.Tree.FindNode(path).Value
 
     
-    def set_util_value(self, util_name, uid, prop, value):
+    def set_util_value(self, util_name, prop, value):
         return
 
     

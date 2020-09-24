@@ -6,8 +6,8 @@ from .objectcollection import ObjectCollection
 
 class Output(object):
     
-    def __init__(self):
-        
+    def __init__(self, process):
+        self.process = process
         return
 
     
@@ -52,7 +52,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                massflow = obj.massflow * 8000 / 1000 / 1000
+                massflow = obj.massflow
                 feed_mass += massflow
                 sheet.cell(row= row_start , column=3).value = massflow
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
@@ -75,7 +75,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                massflow = obj.massflow * 8000 / 1000 / 1000
+                massflow = obj.massflow
                 product_mass += massflow
                 sheet.cell(row= row_start , column=3).value = massflow
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
@@ -97,7 +97,7 @@ class Output(object):
                 sheet.merge_cells(start_row= row_start, start_column=2, end_row=row_start+comp_count-1, end_column=2)
                 sheet.cell(row= row_start , column=2).value = name
                 sheet.merge_cells(start_row= row_start, start_column=3, end_row=row_start+comp_count-1, end_column=3)
-                massflow = obj.massflow * 8000 / 1000 / 1000
+                massflow = obj.massflow
                 waste_mass += massflow
                 sheet.cell(row= row_start , column=3).value = massflow
                 sheet.merge_cells(start_row= row_start, start_column=6, end_row=row_start+comp_count-1, end_column=6)
@@ -185,182 +185,64 @@ class Output(object):
             self.fill_cell_bold(sheet, start-1, count_col, head)
             count_col += 1
         
-        row_count = start
-        for util in Utility:
+        util_head = ['Unit name','Unit description','Duty MJ/hr', 'Duty TJ/y', 'Mass ktonne/y', 'Remark']
+        elec_head = ['Unit name','Unit description','Power kW', 'Energy GWh/y', 'Energy TJ/y', 'Remark']
+        cntrl = 0 
+        cntrr = 0
+        row_start = 18
 
-            row_count += 1 
-            util_count += 1 
-                
-
-
-
-
-        count_right = 0
-        count_left = 0
-        count_llps, count_lps, count_mps, count_hps = 0, 0, 0, 0
-        count_frig1, count_frig2, count_frig3, count_frig4 = 0, 0, 0, 0
-        count_elec, count_natgas, count_cw = 0, 0, 0
-        rw = start + util_count + 6
+        temp1 = [util for util in self.process.steam]
+        temp2 = [util for util in self.process.steam_gen]
+        temp = {}
         
-        for util, block1 in utilities.items():
-            for name, data in block1.items():
-                if (util == 'LLPS' or util == 'LLPS-GEN'):
-                    cur_row = rw + count_left
-                    ii = 0
-                    count_left += 1
-                    count_llps += 1
-                elif (util == 'LPS' or util == 'LPS-GEN'):
-                    cur_row = rw + count_left + 3 
-                    ii = 0
-                    count_left += 1
-                    count_lps += 1
-                elif (util == 'MPS' or util == 'MPS-GEN'):
-                    cur_row = rw + count_left + 6
-                    ii = 0
-                    count_left += 1
-                    count_mps += 1
-                elif (util == 'HPS' or util == 'HPS-GEN'):
-                    cur_row = rw + count_left + 9
-                    ii = 0
-                    count_left += 1
-                    count_hps += 1
-                elif util == 'RF1':
-                    cur_row = rw + count_left + 12
-                    ii = 0
-                    count_left += 1
-                    count_frig1 += 1
-                elif util == 'RF2':
-                    cur_row = rw + count_left + 15
-                    ii = 0
-                    count_left += 1
-                    count_frig2 += 1
-                elif util == 'RF3':
-                    cur_row = rw + count_left + 18
-                    ii = 0
-                    count_left += 1
-                    count_frig3 += 1
-                elif util == 'RF4':
-                    cur_row = rw + count_left + 21
-                    ii = 0
-                    count_left += 1
-                    count_frig4 += 1
-                elif util == 'ELECTRIC':
-                    cur_row = rw + count_right
-                    ii = 8
-                    count_right += 1
-                    count_elec += 1
-                elif util == 'NATGAS':
-                    cur_row = rw + count_right + 3
-                    ii = 8
-                    count_right += 1
-                    count_natgas += 1
-                elif util == 'CW':
-                    cur_row = rw + count_right + 6
-                    ii = 8
-                    count_right += 1
-                    count_cw += 1
-            
-                if util == 'ELECTRIC':
-                    sheet.cell(row=cur_row, column=2+ii).value = name
-                    sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
-                elif util =='NATGAS':
-                    sheet.cell(row=cur_row, column=2+ii).value = name
-                    sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
 
-                else:
-                    if '-GEN' in util:
-                        sheet.cell(row=cur_row, column=2+ii).value = name
-                        sheet.cell(row=cur_row, column=4+ii).value = -data.duty * 4186.8
-                        sheet.cell(row=cur_row, column=5+ii).value = -data.duty * 4186.8 * 8000 * 1E-6
-                        sheet.cell(row=cur_row, column=6+ii).value = -data.usage * 8000 / 1000 / 1000
-                    else:
-                        sheet.cell(row=cur_row, column=2+ii).value = name
-                        sheet.cell(row=cur_row, column=4+ii).value = data.duty * 4186.8
-                        sheet.cell(row=cur_row, column=5+ii).value = data.duty * 4186.8 * 8000 * 1E-6
-                        sheet.cell(row=cur_row, column=6+ii).value = data.usage * 8000 / 1000 / 1000
-    
-        headers = ['Unit name','Unit description','Duty -MJ/hr', 'Duty -TJ/y', 'Mass -ktonne/y', 'Remark']
-        headelec = ['Unit name','Unit description','Power -kW', 'Energy -GWh/y', 'Energy - TJ/y', 'Remark']
 
-        # Print low pressure steam header
-        count_col = 2
-        lowlowpres_start = rw
-        self.fill_cell_bold(sheet, lowlowpres_start-3, count_col, 'Breakdown of requirements')
-        self.fill_cell_bold(sheet, lowlowpres_start-2, count_col, 'Low Low pressure steam')
-        for head in headers:
-            self.fill_cell_bold(sheet, lowlowpres_start-1, count_col, head)
-            count_col += 1
-        # Print low pressure steam header
-        count_col = 2
-        lowpres_start = lowlowpres_start + count_llps + 3
-        self.fill_cell_bold(sheet, lowpres_start-2, count_col, 'Low pressure steam')
-        for head in headers:
-            self.fill_cell_bold(sheet, lowpres_start-1, count_col, head)
-            count_col += 1
-        # Print medium pressure steam header
-        count_col = 2
-        mp_start = lowpres_start + count_lps + 3
-        self.fill_cell_bold(sheet, mp_start-2, count_col, 'Medium pressure steam')
-        for head in headers:
-            self.fill_cell_bold(sheet, mp_start-1, count_col, head)
-            count_col += 1
-        # Print high pressure steam header
-        count_col = 2
-        hp_start = mp_start + count_mps + 3 
-        self.fill_cell_bold(sheet, hp_start-2, count_col, 'High pressure steam')
-        for head in headers:
-            self.fill_cell_bold(sheet, hp_start-1, count_col, head)
-            count_col += 1
-        # Print refrigerator 1 header
-        count_col = 2
-        frig_start1 = hp_start + count_hps + 3
-        self.fill_cell_bold(sheet, frig_start1-2, count_col, 'Refrigerator 1')
-        for head in headers:
-            self.fill_cell_bold(sheet, frig_start1-1, count_col, head)
-            count_col += 1
-        # Print refrigerator 2 header
-        count_col = 2
-        frig_start2 = frig_start1 + count_frig1 + 3
-        self.fill_cell_bold(sheet, frig_start2-2, count_col, 'Refrigerator 2')
-        for head in headers:
-            self.fill_cell_bold(sheet, frig_start2-1, count_col, head)
-            count_col += 1
-        # Print refrigerator 3 header
-        count_col = 2
-        frig_start3 = frig_start2 + count_frig2 + 3
-        self.fill_cell_bold(sheet, frig_start3-2, count_col, 'Refrigerator 3')
-        for head in headers:
-            self.fill_cell_bold(sheet, frig_start3-1, count_col, head)
-            count_col += 1
-        # Print refrigerator 4 header
-        count_col = 2
-        frig_start4 = frig_start3 + count_frig3 + 3
-        self.fill_cell_bold(sheet, frig_start4-2, count_col, 'Refrigerator 4')
-        for head in headers:
-            self.fill_cell_bold(sheet, frig_start4-1, count_col, head)
-            count_col += 1
+        head_count = 0
+        self.fill_cell_bold(sheet, row_start + cntrr, 10, 'Electricity')
+        cntrr += 1
+        for header in elec_head:
+            self.fill_cell_bold(sheet,  row_start + cntrr, 10 + head_count, header)
+            head_count += 1
+        cntrr += 1
+        for util in self.process.electricity:
+            for block in util.blocks:
+                sheet.cell(row= row_start + cntrr , column=10).value = block.uid
+                sheet.cell(row= row_start + cntrr, column=12).value = block.usage
+                sheet.cell(row= row_start + cntrr, column=13).value = block.usage * 8000 * 1E-6
+                sheet.cell(row= row_start + cntrr, column=14).value = block.usage * 8000 * 1E-6 * 3.6
+                cntrr += 1
+        cntrr += 1
 
-        # Print electricity header
-        count_col = 10
-        elec_start = rw
-        self.fill_cell_bold(sheet, elec_start-2, count_col, 'Electricity')
-        for head in headelec:
-            self.fill_cell_bold(sheet, elec_start-1, count_col, head)
-            count_col += 1
-        # Print natural gas header
-        count_col = 10
-        natgas_start = elec_start+ count_elec + 3
-        self.fill_cell_bold(sheet, natgas_start-2, count_col, 'Natural gas')
-        for head in headers:
-            self.fill_cell_bold(sheet, natgas_start-1, count_col, head)
-            count_col += 1
-        # Print cool water header
-        count_col = 10
-        water_start = natgas_start + count_natgas + 3
-        self.fill_cell_bold(sheet, water_start-2, count_col, 'Cooling water')
-        for head in headers:
-            self.fill_cell_bold(sheet, water_start-1, count_col, head)
-            count_col += 1
+        head_count = 0
+        self.fill_cell_bold(sheet, row_start + cntrr, 10, 'Natural gas')
+        cntrr += 1
+        for header in util_head:
+            self.fill_cell_bold(sheet,  row_start + cntrr, 10 + head_count, header)
+            head_count += 1
+        cntrr += 1
+        for util in self.process.natural_gas:
+            for block in util.blocks:
+                sheet.cell(row= row_start + cntrr , column=10).value = block.uid
+                sheet.cell(row= row_start + cntrr, column=12).value = block.duty
+                sheet.cell(row= row_start + cntrr, column=14).value = block.usage
+                cntrr += 1
+        cntrr += 1
+
+        head_count = 0
+        self.fill_cell_bold(sheet, row_start + cntrr, 10, 'Cooling water')
+        cntrr += 1
+        for header in util_head:
+            self.fill_cell_bold(sheet,  row_start + cntrr, 10 + head_count, header)
+            head_count += 1
+        cntrr += 1
+        for util in self.process.coolwater:
+            for block in util.blocks:
+                sheet.cell(row= row_start + cntrr , column=10).value = block.uid
+                sheet.cell(row= row_start + cntrr, column=12).value = block.duty
+                sheet.cell(row= row_start + cntrr, column=13).value = block.duty * 1E-6 * 8000
+                sheet.cell(row= row_start + cntrr, column=14).value = block.usage
+                cntrr += 1
+        cntrr += 1
 
         wb.save(work_book)
 
@@ -372,3 +254,6 @@ class Output(object):
         c = sheet.cell(row=row1, column=column1)
         c.value = value
         c.font = Font(bold=True)
+
+    def combine_dict(self):
+        return

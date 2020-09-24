@@ -126,6 +126,18 @@ class Units(object):
             'Watt': 1,
             'kW': 2,
             'MW':4
+        },
+        'frequency': {
+            'Hz': 1,
+            'rpm': 2,
+            'rad/sec':4,
+            'rps': 5,
+            'krpm': 6,
+            'MMrpm': 7,
+            'rph': 8
+        },
+        'frac': {
+            'frac': 0 
         } 
     }
 

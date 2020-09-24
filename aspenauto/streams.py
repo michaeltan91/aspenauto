@@ -5,11 +5,11 @@ class Stream(BaseObject):
     # Main stream class
     def __init__(self, name, uid, process):
         
-        if 'F-' in name:
+        if 'FS-' in name:
             obj_type = 'Feed'
-        elif 'P-' in name:
+        elif 'PS-' in name:
             obj_type = 'Product'
-        elif 'W-' in name:
+        elif 'WS-' in name:
             obj_type = 'Waste'
         else:
             obj_type = 'Standard'
@@ -52,7 +52,6 @@ class Material(Stream):
         'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
         'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC']
     }
-
     properties = {
         'pressure': '\\Output\\PRES_OUT\\MIXED',
         'temperature': '\\Output\\TEMP_OUT\\MIXED',
@@ -92,5 +91,3 @@ class Heat(Stream):
 
     properties = {'duty': '\\Output\\QCALC'}
     properties_frac = {}
-    
-        
