@@ -2,9 +2,10 @@ from .objectcollection import ObjectCollection
 from .baseobject import BaseObject
 
 class Stream(BaseObject):
-    # Main stream class
+    """Main stream class"""
     def __init__(self, name, uid, process):
         
+        # Assign feed, product, waste and standard stream tags
         if 'FS-' in name:
             obj_type = 'Feed'
         elif 'PS-' in name:
@@ -50,7 +51,8 @@ class Material(Stream):
     }
     properties_frac_in = {
         'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
-        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC']
+        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC'],
+        'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
     }
     properties = {
         'pressure': '\\Output\\PRES_OUT\\MIXED',

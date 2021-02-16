@@ -2,6 +2,7 @@ import weakref
 from .objectcollection import ObjectCollection 
 
 class BaseObject(object):
+    """Base object"""
 
     def __init__(self, process):
         
@@ -9,6 +10,7 @@ class BaseObject(object):
         self.process = weakref.ref(process)
 
     def reset(self):
+        """Resets all retrieved class attribute values"""
         self._values = {}
 
     def get_obj_value(self, prop_loc):
@@ -25,21 +27,16 @@ class BaseObject(object):
 
     def __getattr__(self, prop):
         if prop in self.properties.keys():
-            #return self.get_property(self.properties[prop])
             return self.get_property(prop)
         elif prop in self.properties_frac.keys():
-            #return self.get_property_frac(self.properties_frac[prop])
             return self.get_property_frac(prop)
-
         else:
             raise AttributeError('Nonexistant Attribute', prop)
                 
     def __setattr__(self, prop, value):
         if prop in self.properties_in.keys():
-            #self.set_property(self.properties_in[prop], value)
             self.set_property(prop, value)
         elif prop in self.properties_frac_in.keys():
-            #self.set_property_frac(self.properties_frac_in[prop], value)
             self.set_property_frac(prop, value)
         else:
             super(BaseObject, self).__setattr__(prop, value)

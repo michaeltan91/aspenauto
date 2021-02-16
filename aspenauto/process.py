@@ -89,10 +89,10 @@ class Process(object):
 
 
     def reset(self):
-        """Resets the aspen simulations and resets all class attribute values"""
-        # Resets aspen simulation
+        """Reset the aspen simulations and reset all class attribute values"""
+        # Reset aspen simulation
         self.aspen.Reinit()
-        # Resets all class attribute values
+        # Reset all retrieved class attribute values
         for stream in self.streams:
             stream.reset()
         for utility in self.utilities:
@@ -102,7 +102,7 @@ class Process(object):
 
     
     def reset2(self):
-        """Resets the values retrieved from the Aspen simulation"""
+        """Reset the values retrieved from the Aspen simulation"""
         for stream in self.streams:
             stream.reset()
         for utility in self.utilities:

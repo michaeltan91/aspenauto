@@ -44,6 +44,18 @@ class ASP(object):
         temp_path.extend([prop])
         path=''.join(temp_path)
         return self.aspen.Tree.FindNode(path).Value
+    
+
+    def get_block_value_frac(self, uid, prop):
+
+        uids = uid.split('.')
+        temp_path = [self.block+name for name in uids]
+        temp_path.extend([prop])
+        path=''.join(temp_path)
+        temp = ObjectCollection()
+        for element in self.aspen.Tree.FindNode(path).Elements:
+            temp[element.Name] = element.Value 
+        return temp
 
 
     def set_block_value(self, uid, prop, value):

@@ -12,7 +12,10 @@ class Block(BaseObject):
         super().__init__(process)
 
     def get_obj_value(self, prop_loc):
-        return self.process().get_block_value(self.uid, prop_loc)
+        return self.process().asp.get_block_value(self.uid, prop_loc)
+
+    def get_obj_value_frac(self, prop_loc):
+        return self.process().asp.get_block_value_frac(self.uid, prop_loc)
 
     def set_obj_value(self, prop_loc, value):
         self.process().asp.set_block_value(self.uid, prop_loc, value)
@@ -82,83 +85,282 @@ class SolidsSeparator(Block):
     properties_frac = {}
 
 
+##############################################################################
+
+
+class Compr(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'model': '\\Input\\MODEL_TYPE',
+        'outlet_spec': '\\Input\\OPT_SPEC',
+        'pressure': '\\Input\\PRES',
+        'pressure_increase': '\\Input\\DELP',
+        'type' : '\\Input\\TYPE'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\POC',
+        'pressure_increase': '\\Output\\DELP_CAL',
+        'utility': '\\Output\\UTL_ID',
+        'utility_duty': '\\Output\\UTL_DUTY',
+        'utility_usage': '\\Output\\UTL_USAGE'
+        }
+    properties_frac = {}
 
 
 class MCompr(Block):
-
     properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
         'model':'\\Input\\TYPE',
-        'type': '\\Input\\TYPE_STG',
+        'outlet_spec': '\\Input\\OPT_SPEC',
+        'pressure': '\\Input\\PRES',
         'stages': '\\Input\\NSTAGE',
-        'pressure': '\\Input\\PRES'
+        'type': '\\Input\\TYPE_STG'
+        }
+    properties_frac_in = {
+        'cooler_spec': '\\Input\\OPT_CLSPEC',
+        'cooler_duty': '\\Input\\DUTY',
+        'cooler_temperature': '\\Input\\CL_TEMP'
+    }
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        }
+    properties_frac = {
+        'cooler_temperature': '\\Output\\COOL_TEMP'
+        }
+
+
+class Pump(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'model': '\\Input\\PUMP_TYPE',
+        'outlet_spec': '\\Input\\OPT_SPEC',
+        'pressure': '\\Input\\PRES',
+        'pressure_increase': '\\Input\\DELP'
         }
     properties_frac_in = {}
-    properties = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\POC',
+        'pressure_increase': '\\Output\\DELP_CAL',
+        'utility': '\\Output\\UTL_ID',
+        'utility_duty': '\\Output\\UTL_DUTY',
+        'utility_usage': '\\Output\\UTL_USAGE'
+    }
     properties_frac = {}
+
 
 
 
 class Mixer(Block):
-    properties_in = {}
+    properties_in = {'block_method': '\\Input\\OPSETNAME'}
     properties_frac_in = {}
-    properties = {}
+    properties = {'block_method': '\\Input\\OPSETNAME'}
     properties_frac = {}
 
 
 class Fsplit(Block):
-    properties_in = {}
+    properties_in = {'block_method': '\\Input\\OPSETNAME'}
+    properties_frac_in = {
+        '\\Input\\FRAC'
+    }
+    properties = {'block_method': '\\Input\\OPSETNAME'}
+    properties_frac = {
+        '\\Input\\FRAC'
+    }
+
+
+
+class Flash2(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'duty': '\\Input\\DUTY',
+        'pressure': '\\Input\\PRES',
+        'temperature': '\\Input\\TEMP'
+    }
     properties_frac_in = {}
-    properties = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\B_PRES',
+        'temperature': '\\Output\\B_TEMP'
+    }
+    properties_frac = {}
+
+
+class Flash3(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'duty': '\\Input\\DUTY',
+        'pressure': '\\Input\\PRES',
+        'temperature': '\\Input\\TEMP',
+        'vfrac': '\\Input\\VFRAC'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\B_PRES',
+        'temperature': '\\Output\\B_TEMP',
+        'vfrac': '\\Output\\B_VFRAC'
+    }
+    properties_frac = {}
+
+
+class Decanter(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'duty': '\\Input\\DUTY',
+        'pressure': '\\Input\\PRES',
+        'temperature': '\\Input\\TEMP'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\B_PRES',
+        'temperature': '\\Output\\B_TEMP'
+    }
+    properties_frac = {}
+
+
+class Separator1(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
     properties_frac = {}
 
 
 
 class Heater(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'flash_spec': '\\Input_SPEC_OPT',
+        'pressure': '\\Input\\PRES',
+        'temperature': '\\Input\\TEMP'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\B_PRES',
+        'temperature': '\\Output\\B_TEMP',
+        'utility': '\\Output\\UTL_ID',
+        'utility_duty': '\\Output\\UTL_DUTY',
+        'utility_usage': '\\Output\\UTL_USAGE',
+        'vfrac': '\\Output\\B_VFRAC'
+    }
+    properties_frac = {}
 
-    properties_in = {}
-    '''
-    Input
-    pressure:  Application.Tree.FindNode("\Data\Blocks\E-105\Input\PRES")
-    temperature: Application.Tree.FindNode("\Data\Blocks\E-105\Input\TEMP")
-    flash specifications    Application.Tree.FindNode("\Data\Blocks\E-107\Input\SPEC_OPT")
-
-    '''
-
-    '''
-    Output
-    pressure    Application.Tree.FindNode("\Data\Blocks\E-106\Output\B_PRES")
-    temperature Application.Tree.FindNode("\Data\Blocks\E-106\Output\B_TEMP")
-    vaporfrac   Application.Tree.FindNode("\Data\Blocks\E-106\Output\B_VFRAC")
-
-    util duty   Application.Tree.FindNode("\Data\Blocks\E-106\Output\\UTIL_DUTY")
-    util usage  Application.Tree.FindNode("\Data\Blocks\E-106\Output\\UTL_USAGE")
-    util id     Application.Tree.FindNode("\Data\Blocks\E-106\Output\\UTL_ID")
-    '''
 
 class HeatX(Block):
-
-    properties_in = {}
-    '''
-    Input
-    Model fidelity: (Shortcut)    Application.Tree.FindNode("\Data\Blocks\E-104\Input\MODE")
-    Calculation mode: (Design)   Application.Tree.FindNode("\Data\Blocks\E-104\Input\MODE0")
-    Calculation mode: (Design)   Application.Tree.FindNode("\Data\Blocks\E-104\Input\PROGRAM_MODE")
-    Specification: (T-Cold)      Application.Tree.FindNode("\Data\Blocks\E-104\Input\SPEC")
-    Specification unit: (C)      Application.Tree.FindNode("\Data\Blocks\E-104\Input\SPECUN")
-    Specification value: (160)   Application.Tree.FindNode("\Data\Blocks\E-104\Input\VALUE")
-    Heaterexchanger type (countercurrent): Application.Tree.FindNode("\Data\Blocks\E-104\Input\TYPE")
-    '''
-
-    '''
-    Output
-    Cold T Out          Application.Tree.FindNode("\Data\Blocks\E-104\Output\TEMP_CLD\INLET") 1st entry
-    Cold P Out          Application.Tree.FindNode("\Data\Blocks\E-104\Output\PRES_CLD\INLET") 1st entry
-
-    Hot T Out           Application.Tree.FindNode("\Data\Blocks\E-104\Output\TEMP_HOT\INLET") last entry
-    Hot P Out           Application.Tree.FindNode("\Data\Blocks\E-104\Output\PRES_HOT\INLET") last entry
-
-    Duty                Application.Tree.FindNode("\Data\Blocks\E-104\Output\DUTY_CLD\INLET") last entry
-    '''
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'spec': '\\Input\\SPEC',
+        'temperature': '\\Input\\VALUE'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'duty': '\\Output\\HX_DUTY',
+        'spec': '\\Input\\SPEC',
+        'pressure_cold_in': '\\Output\\COLDINP',
+        'pressure_cold_out': '\\Output\\COLD_PRES',
+        'pressure_hot_in': '\\Output\\HOTINP',
+        'pressure_hot_out': '\\Output\\HOT_PRES',
+        'temperature_cold_in': '\\Ouput\\COLDINT',
+        'temperature_cold_out': '\\Output\\COLD_TEMP',
+        'temperature_hot_in': '\\Output\\HOTINT',
+        'temperature_hot_out': '\\Output\\HOT_TEMP',
+        'temperature_set': '\\Input\\VALUE'
+    }
+    properties_frac = {}
 
 
-    
+
+class RadFrac(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME',
+        'condenser': '\\Input\\CONDENSER',
+        'pressure_top': '\\Input\\PRES1',
+        'reboiler': '\\Input\\REBOILER',
+        'reflux_ratio': '\\Input\\BASIS_RR',
+        'stages': '\\Input\\NSTAGE'
+    }
+    properties_frac_in = {
+        'feed_stage': '\\Input\\FEED_STAGE'
+    }
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'condenser': '\\Input\\CONDENSER',
+        'condenser_utility': '\\Output\\COND_UTIL',
+        'condenser_duty': '\\Output\\COND_DUTY',
+        'condenser_usage': '\\Output\\COND_USAGE',
+        'reboiler': '\\Input\\REBOILER',
+        'reboiler_utility': '\\Output\\REB_UTIL',
+        'reboiler_duty': '\\Output\\REB_DUTY',
+        'reboiler_usage': '\\Output\\REB_USAGE',
+        'mole_DFR': '\\Output\\DFR',
+        'mole_RR': '\\Output\\MOLE_RR',
+        'pressure_top': '\\Output\\PRES1',
+        'stages': '\\Input\\NSTAGE'
+    }
+    properties_frac = {
+        'feed_stage': '\\Input\\FEED_STAGE'
+    }
+
+
+
+class RGibbs(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac_in = {
+        'inerts': '\\Input\\FRAC'
+    }
+    properties = {
+        'block_method': '\\Input\\OPSETNAME',
+        'pressure': '\\Output\\B_PRES',
+        'temperature': '\\Output\\B_TEMP',
+        'vfrac': '\\Output\\B_VFRAC',
+        'utility': '\\Output\\UTL_ID',
+        'utility_duty': '\\Output\\UTL_DUTY',
+        'utility_usage': '\\Output\\UTL_USAGE'
+    }
+    properties_frac = {
+        'inerts': '\\Input\\FRAC'
+    }
+
+
+class RPlug(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac = {}
+
+
+class RStoic(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac = {}
+
+
+class RYield(Block):
+    properties_in = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac_in = {}
+    properties = {
+        'block_method': '\\Input\\OPSETNAME'
+    }
+    properties_frac = {}
