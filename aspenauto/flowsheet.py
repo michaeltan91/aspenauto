@@ -52,7 +52,8 @@ class Flowsheet(object):
         blocks = process.asp.get_block_list(self.uid)
         streams = process.asp.get_stream_list(self.uid)
         
-        # Load and fill block dictionaries 
+        # Load and fill block dictionaries
+        # Block functionality is Work in Progress  
         '''for obj in blocks.Elements:'''
         for obj in blocks:
             uid = self.uid+obj.Name
