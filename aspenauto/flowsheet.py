@@ -22,7 +22,24 @@ from .blocks import (
     Reactor,
     Pressure,
     Solids,
-    SolidsSeparator
+    SolidsSeparator,
+
+    Compr,
+    MCompr,
+    Pump,
+    Mixer,
+    Fsplit,
+    Flash2,
+    Flash3,
+    Decanter,
+    Separator1,
+    Heater,
+    HeatX,
+    RadFrac,
+    RGibbs,
+    RPlug,
+    RStoic,
+    RYield
 )
 
 
@@ -58,6 +75,7 @@ class Flowsheet(object):
         for obj in blocks:
             uid = self.uid+obj.Name
             block_type = process.asp.get_block_type(uid)
+            '''
             if block_type == 'Mixer' or block_type == 'FSplit' or block_type == 'Mixer':
                 mix = MixSplit(block_type, obj.Name, uid, process)
                 process.mixsplits[uid] = mix
@@ -91,11 +109,84 @@ class Flowsheet(object):
                 solidsep = SolidsSeparator(block_type, obj.Name, uid, process)
                 process.solidseparators[uid] = solidsep
                 process.blocks[uid] = solidsep
+            '''
+
+            if block_type == 'Mixer':
+                temp = Mixer(block_type, obj.Name, uid, process)
+                process.mixer[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'Fsplit':
+                temp = Fsplit(block_type, obj.Name, uid, process)
+                process.fsplit[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'Heater':
+                temp = Heater(block_type, obj.Name, uid, process)
+                process.heater[uid] = temp
+                process.blocks[uid] = temp
+                self.assign_utility_heater(obj, process)
+            elif block_type == 'HeatX':
+                temp = HeatX(block_type, obj.Name, uid, process)
+                process.heatx[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'RadFrac':
+                temp = RadFrac(block_type, obj.Name, uid, process)
+                process.radfrac[uid] = temp
+                process.blocks[uid] = temp
+                self.assign_utility_radfrac(obj, process)
+            elif block_type == 'Compr':
+                temp = Compr(block_type, obj.Name, uid, process)
+                process.compr[uid] = temp
+                process.blocks[uid] = temp
+                self.assign_utility_compr(obj, process)
+            elif block_type == 'MCompr':
+                temp = MCompr(block_type, obj.Name, uid, process)
+                process.mcompr[uid] = temp
+                process.blocks[uid] = temp
+                self.assign_utility_mcompr(obj, process)
+            elif block_type == 'Pump':
+                temp = Pump(block_type, obj.Name, uid, process)
+                process.pump[uid] = temp
+                process.blocks[uid] = temp
+                self.assign_utility_pump(obj, process)
+            elif block_type == 'Flash2':
+                temp = Flash2(block_type, obj.Name, uid, process)
+                process.flash2[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'Flash3':
+                temp = Flash3(block_type, obj.Name, uid, process)
+                process.flash3[uid] = temp  
+                process.blocks[uid] = temp
+            elif block_type == 'Decanter':
+                temp = Decanter(block_type, obj.Name, uid, process)
+                process.decanter[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'Sep':
+                temp = Separator1(block_type, obj.Name, uid, process)
+                process.sep[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'RGibbs':
+                temp = RGibbs(block_type, obj.Name, uid, process)
+                process.rgibbs[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'RPlug':
+                temp = RPlug(block_type, obj.Name, uid, process)
+                process.rplug[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'RStoic':
+                temp = RStoic(block_type, obj.Name, uid, process)
+                process.rstoic[uid] = temp
+                process.blocks[uid] = temp
+            elif block_type == 'RYield':
+                temp = RYield(block_type, obj.Name, uid, process)
+                process.ryield[uid] = temp
+                process.blocks[uid] = temp
             elif block_type == 'Hierarchy' or block_type == 'HIERARCHY':
                 base_path = self.base_path+'\\Data\\Blocks\\'
                 hierarchy = Flowsheet(process, path = base_path ,name =obj.Name, uid = self.uid)
                 process.hierarchy[uid] = hierarchy
                 process.blocks[uid] = hierarchy
+
+
 
         # Load and fill stream dictionaries
         '''for obj in streams.Elements:'''
@@ -117,6 +208,183 @@ class Flowsheet(object):
                 process.heat_streams[uid] = heat
                 
 
+    def assign_utility_radfrac(self, block, process):
+        # Assign radfrac utilities
+        uid = self.uid + block.Name
+        util_name = process.asp.get_radfrac_cond_util(uid)
+        try: 
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else: 
+            if util_type == 'WATER':
+                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+            elif util_type == 'STEAM':
+                steam_type = process.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                elif steam_type == 'STEAM-GEN':
+                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
+            elif util_type == 'REFRIGERATIO':
+                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+        
+        util_name = process.asp.get_radfrac_reb_util(uid)
+        try: 
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else: 
+            if util_type == 'STEAM':
+                steam_type = process.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                elif steam_type == 'STEAM-GEN':
+                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
+            elif util_type == 'GAS':
+                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+
+    def assign_utility_heater(self, block, process):
+        # Assign heater utilities
+        uid = self.uid + block.Name
+        util_name = process.asp.get_heater_util(uid)
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'WATER':
+                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+            elif util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+            elif util_type == 'GAS':
+                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+            elif util_type == 'STEAM':
+                steam_type = process.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                elif steam_type == 'STEAM-GEN':
+                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
+            elif util_type == 'REFRIGERATIO':
+                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+
+    def assign_utility_compr(self, block, process):
+        uid = self.uid + block.Name
+        util_name = process.asp.get_compr_util(uid)
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+
+
+    def assign_utility_mcompr(self, block, process):
+        uid = self.uid + block.Name
+        util_name = process.asp.get_mcompr_specs_util(uid)[0]
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+
+        util_name = process.asp.get_mcompr_cool_util(uid)[0]
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'WATER':
+                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+            elif util_type == 'REFRIGERATIO':
+                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+
+
+    def assign_utility_pump(self, block, process):
+        uid = self.uid + block.Name
+        util_name = process.asp.get_pump_util(uid)
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+
+
+    def assign_utility_rgibbs(self, block, process):
+        uid = self.uid + block.Name
+        util_name = process.asp.get_reactor_util(uid)
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'WATER':
+                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+            elif util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+            elif util_type == 'GAS':
+                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+            elif util_type == 'STEAM':
+                steam_type = process.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                elif steam_type == 'STEAM-GEN':
+                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
+            elif util_type == 'REFRIGERATIO':
+                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+
+    def assign_utility_rstoic(self, block, process):
+        uid = self.uid + block.Name
+        util_name = process.asp.get_reactor_util(uid)
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'WATER':
+                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+            elif util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+            elif util_type == 'GAS':
+                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+            elif util_type == 'STEAM':
+                steam_type = process.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                elif steam_type == 'STEAM-GEN':
+                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
+            elif util_type == 'REFRIGERATIO':
+                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+    
+    def assign_utility_ryield(self, block, process):
+        uid = self.uid + block.Name
+        util_name = process.asp.get_reactor_util(uid)
+        try:
+            util_type = process.asp.get_util_type(util_name)
+        except TypeError:
+            pass
+        else:
+            if util_type == 'WATER':
+                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+            elif util_type == 'ELECTRICITY':
+                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, process)
+            elif util_type == 'GAS':
+                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+            elif util_type == 'STEAM':
+                steam_type = process.asp.get_steam_type(util_name)
+                if steam_type == 'STEAM':
+                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                elif steam_type == 'STEAM-GEN':
+                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
+            elif util_type == 'REFRIGERATIO':
+                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+
+
+'''
     def assign_utility_column(self, block, block_type, process):
         # Assign column utilities
         uid = self.uid + block.Name
@@ -248,3 +516,4 @@ class Flowsheet(object):
                         process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, process)
                 elif util_type == 'REFRIGERATIO':
                     process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, uid, process)
+'''
