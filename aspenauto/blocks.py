@@ -5,7 +5,7 @@ class Block(BaseObject):
 
     def __init__(self, block_type, name, uid, process):
         self.name = name
-        self.type = block_type
+        self.block_type = block_type
         self.uid = uid
         self.to_stream = None
         self.from_stream = None
@@ -136,7 +136,7 @@ class Pump(Block):
         'block_method': '\\Input\\OPSETNAME',
         'model': '\\Input\\PUMP_TYPE',
         'outlet_spec': '\\Input\\OPT_SPEC',
-        'pressure': '\\Input\\PRES',
+        'pressure': ['\\Input\\PRES', None],
         'pressure_increase': '\\Input\\DELP'
         }
     properties_frac_in = {}
@@ -174,10 +174,10 @@ class Fsplit(Block):
 
 class Flash2(Block):
     properties_in = {
-        'block_method': '\\Input\\OPSETNAME',
-        'duty': '\\Input\\DUTY',
-        'pressure': '\\Input\\PRES',
-        'temperature': '\\Input\\TEMP'
+        'block_method': ['\\Input\\OPSETNAME', None],
+        'duty': ['\\Input\\DUTY', None],
+        'pressure': ['\\Input\\PRES', None],
+        'temperature': ['\\Input\\TEMP', None]
     }
     properties_frac_in = {}
     properties = {
@@ -190,11 +190,11 @@ class Flash2(Block):
 
 class Flash3(Block):
     properties_in = {
-        'block_method': '\\Input\\OPSETNAME',
-        'duty': '\\Input\\DUTY',
-        'pressure': '\\Input\\PRES',
-        'temperature': '\\Input\\TEMP',
-        'vfrac': '\\Input\\VFRAC'
+        'block_method': ['\\Input\\OPSETNAME', None],
+        'duty': ['\\Input\\DUTY', None],
+        'pressure': ['\\Input\\PRES', None],
+        'temperature': ['\\Input\\TEMP', None],
+        'vfrac': ['\\Input\\VFRAC', None]
     }
     properties_frac_in = {}
     properties = {
@@ -208,10 +208,10 @@ class Flash3(Block):
 
 class Decanter(Block):
     properties_in = {
-        'block_method': '\\Input\\OPSETNAME',
-        'duty': '\\Input\\DUTY',
-        'pressure': '\\Input\\PRES',
-        'temperature': '\\Input\\TEMP'
+        'block_method': ['\\Input\\OPSETNAME', None],
+        'duty': ['\\Input\\DUTY', None],
+        'pressure': ['\\Input\\PRES', None],
+        'temperature': ['\\Input\\TEMP', None]
     }
     properties_frac_in = {}
     properties = {
@@ -236,10 +236,10 @@ class Separator1(Block):
 
 class Heater(Block):
     properties_in = {
-        'block_method': '\\Input\\OPSETNAME',
-        'flash_spec': '\\Input_SPEC_OPT',
-        'pressure': '\\Input\\PRES',
-        'temperature': '\\Input\\TEMP'
+        'block_method': ['\\Input\\OPSETNAME', None],
+        'flash_spec': ['\\Input_SPEC_OPT', None] ,
+        'pressure': ['\\Input\\PRES', None],
+        'temperature': ['\\Input\\TEMP', None]
     }
     properties_frac_in = {}
     properties = {
@@ -247,7 +247,7 @@ class Heater(Block):
         'pressure': '\\Output\\B_PRES',
         'temperature': '\\Output\\B_TEMP',
         'utility': '\\Output\\UTL_ID',
-        'utility_duty': '\\Output\\UTL_DUTY',
+        'utility_duty': '\\Output\\UTIL_DUTY',
         'utility_usage': '\\Output\\UTL_USAGE',
         'vfrac': '\\Output\\B_VFRAC'
     }
