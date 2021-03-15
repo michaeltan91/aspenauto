@@ -32,6 +32,8 @@ class Process(object):
         # Declare dictionaries for easy access of Aspen Results/Variables
         # Block dictionaries
         self.blocks = ObjectCollection()
+        self.hierarchy = ObjectCollection()
+
         self.mixsplits = ObjectCollection()
         self.separators = ObjectCollection()
         self.exchangers = ObjectCollection()
@@ -40,7 +42,31 @@ class Process(object):
         self.pressurechangers = ObjectCollection()
         self.solids = ObjectCollection()
         self.solidseparators = ObjectCollection()
-        self.hierarchy = ObjectCollection()
+
+        ### New blocks
+        self.compr = ObjectCollection()
+        self.mcompr = ObjectCollection()
+        self.pump = ObjectCollection()
+        
+        self.mixer = ObjectCollection()
+        self.fsplit = ObjectCollection()
+
+        self.flash2 = ObjectCollection()
+        self.flash3 = ObjectCollection()
+        self.decanter = ObjectCollection()
+        self.sep = ObjectCollection()
+
+        self.heater = ObjectCollection()
+        self.heatx = ObjectCollection()
+
+        self.radfrac = ObjectCollection()
+
+        self.rgibbs = ObjectCollection()
+        self.rstoic = ObjectCollection()
+        self.rplug = ObjectCollection()
+        self.ryield = ObjectCollection()
+        
+
         # Stream dictionaries
         self.streams = ObjectCollection()
         self.material_streams = ObjectCollection()
