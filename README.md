@@ -17,9 +17,17 @@ print(M1.streams['PS-CH3OH'].pressure)
 print(M1.streams['PS-CH3OH'].temperature)
 
 # modify stream properties
-print(M1.streams['PS-CH3OH'].massflow) = 100
-print(M1.streams['PS-CH3OH'].massfrac) = []
-print(M1.streams['PS-CH3OH'].pressure) = 10
-print(M1.streams['PS-CH3OH'].temperature) = 400
+M1.streams['PS-CH3OH'].massflow = 100
+M1.streams['PS-CH3OH'].massfrac = []
+M1.streams['PS-CH3OH'].pressure = 10
+M1.streams['PS-CH3OH'].temperature = 400
+
+# access block properties
+print(M1.blocks['M1-E01'].pressure)
+print(M1.blocks['M1-E01'].temperature)
+
+# modifty block properties
+M1.blocks['M1-E01'].temperature = 60
+M1.blocks['M1-E01'].pressure = 10
 ```
 
