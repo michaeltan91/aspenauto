@@ -31,3 +31,8 @@ M1.blocks['M1-E01'].temperature = 60
 M1.blocks['M1-E01'].pressure = 10
 ```
 
+# Requirements
+Python 3.X
+Aspen Plus installation
+Aspen Plus licence
+
