@@ -32,7 +32,7 @@ M1.blocks['M1-E01'].pressure = 10
 ```
 
 # Requirements
-Python 3.X
-Aspen Plus installation
+Python 3\
+Aspen Plus installation\
 Aspen Plus licence
 
