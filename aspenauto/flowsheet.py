@@ -168,6 +168,7 @@ class Flowsheet(object):
                 temp = RGibbs(block_type, obj.Name, uid, process)
                 process.rgibbs[uid] = temp
                 process.blocks[uid] = temp
+                self.assign_utility_rgibbs(obj, process)
             elif block_type == 'RPlug':
                 temp = RPlug(block_type, obj.Name, uid, process)
                 process.rplug[uid] = temp
@@ -176,10 +177,12 @@ class Flowsheet(object):
                 temp = RStoic(block_type, obj.Name, uid, process)
                 process.rstoic[uid] = temp
                 process.blocks[uid] = temp
+                self.assign_utility_rstoic(obj, process)
             elif block_type == 'RYield':
                 temp = RYield(block_type, obj.Name, uid, process)
                 process.ryield[uid] = temp
                 process.blocks[uid] = temp
+                self.assign_utility_ryield(obj, process)
             elif block_type == 'Hierarchy' or block_type == 'HIERARCHY':
                 base_path = self.base_path+'\\Data\\Blocks\\'
                 hierarchy = Flowsheet(process, path = base_path ,name =obj.Name, uid = self.uid)
