@@ -17,7 +17,7 @@ from .utilities import (
     Gas
 )
 
-class Process(object):
+class Model(object):
     # Main class
 
     def __init__(self, aspen_file):
@@ -89,13 +89,16 @@ class Process(object):
         self.flowsheet = Flowsheet(self)
 
 
-    def run(self):
+    def run(self, report_error = True):
         """Run the Aspen Engine"""
+        # Reset the Aspen simulation and delete the previously retrieved values from the simulation 
+        self.reset()
+        # Run the Aspen simulation 
         self.aspen.Engine.Run2()
         # Check whether Aspen reported an error
         error_path = "\\Data\\Results Summary\\Run-Status\\Output\\PER_ERROR"
         error = self.aspen.Tree.FindNode(error_path).Value
-        if error == 1:
+        if report_error is True and error == 1:
             report = ''
             for sentence in self.aspen.Tree.FindNode(error_path).Elements:
                 report = report + str(sentence.Value)+'\n'

@@ -2,7 +2,7 @@ from .objectcollection import ObjectCollection
 from .baseobject import BaseObject
 
 class Block(BaseObject):
-
+    """Aspen block object"""
     def __init__(self, block_type, name, uid, process):
         self.name = name
         self.block_type = block_type
