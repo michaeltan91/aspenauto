@@ -4,8 +4,8 @@
 ## Loading the Interface
 ```python
 # Load an Aspen Plus backup file
-from aspenauto import Process
-M1 = Process('M1 Methanol.bkp')
+from aspenauto import Model
+M1 = Model('M1 Methanol.bkp')
 ```
 
 ## Simulation Commands
