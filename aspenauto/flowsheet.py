@@ -45,7 +45,7 @@ from .blocks import (
 
 
 class Flowsheet(object):
-
+    """Aspen flowsheet object"""
     def __init__(self, process, path = '',name ='Main', uid=''):
 
         self.name = name
@@ -64,7 +64,7 @@ class Flowsheet(object):
 
     
     def load_data(self, process):
-        
+        """Load the simulation of the current Aspen flowsheet"""
         # Assign dictionaries for each block and stream
         blocks = process.asp.get_block_list(self.uid)
         streams = process.asp.get_stream_list(self.uid)
