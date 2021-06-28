@@ -5,8 +5,8 @@ Aspenauto is an object oriented wrapper for Aspen Plus V8.8
 # Example usage
 ```python
 # load an Aspen Plus backup file
-from aspenauto import Process
-M1 = Process('M1. Methanol.bkp')
+from aspenauto import Model
+M1 = Model('M1. Methanol.bkp')
 # run the model
 M1.run()
 
