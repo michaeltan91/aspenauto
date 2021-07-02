@@ -108,21 +108,6 @@ class ASP(object):
             temp[element.Name] = element.Value 
         return temp
 
-    
-    def get_stream_value_frac_special(self, uid, prop):
-
-        uids = uid.split('.')
-        temp_path = [self.block+name for name in uids[:-1]]
-        temp_path.extend([self.stream,uids[-1],prop])
-        path=''.join(temp_path)
-        temp1 = ObjectCollection()
-        for element1 in self.aspen.Tree.FindNode(path).Elements:
-            temp2 = ObjectCollection()
-            for element2 in element1.Elements:
-                temp2[element2.Name] = element2.Value
-            temp1[element1.Name] = temp2 
-        return temp1
-
 
     def set_stream_value(self, uid, prop, value):
 
@@ -162,6 +147,29 @@ class ASP(object):
                 raise AttributeError('Component not defined in Aspen simulation', key)
 
     
+    def get_stream_special_flow(self, uid, prop, flowtype):
+        uids = uid.split('.')
+        temp_path = [self.block+name for name in uids[:-1]]
+        temp_path.extend([self.stream,uids[-1],prop, flowtype])
+        path=''.join(temp_path)
+        return self.aspen.Tree.FindNode(path).Value
+
+
+    def get_stream_special_value_frac(self, uid, prop):
+
+        uids = uid.split('.')
+        temp_path = [self.block+name for name in uids[:-1]]
+        temp_path.extend([self.stream,uids[-1],prop])
+        path=''.join(temp_path)
+        temp1 = ObjectCollection()
+        for element1 in self.aspen.Tree.FindNode(path).Elements:
+            temp2 = ObjectCollection()
+            for element2 in element1.Elements:
+                temp2[element2.Name] = element2.Value
+            temp1[element1.Name] = temp2 
+        return temp1
+
+
     def get_utility_list(self):
         path = self.utility
         return [obj for obj in self.aspen.Tree.FindNode(path).Elements]

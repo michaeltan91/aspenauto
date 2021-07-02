@@ -1,5 +1,6 @@
 from .objectcollection import ObjectCollection
 from .baseobject import BaseObject
+from collections import Counter
 
 class Stream(BaseObject):
     """Main stream class"""
@@ -121,8 +122,28 @@ class Stream_Special(BaseObject):
     def get_obj_value(self, key, prop_loc):    
         return self.process().asp.get_stream_value(self.uid, prop_loc)
 
-    def get_obj_value_frac(self, key, prop_loc):
-        return self.process().asp.get_stream_value_frac_special(self.uid, prop_loc)
+    def get_obj_value_frac(self, prop, prop_loc):
+        
+        temp = self.process().asp.get_stream_special_value_frac(self.uid, prop_loc)
+        temp.pop('$TOTAL')
+        removal = []
+        for key, value in temp.items():
+            try:
+                flow = self.process().asp.get_stream_special_flow(self.uid, self.solids[prop], key)
+                value.update((x, y*flow) for x, y in value.items())
+            except TypeError:
+                removal.append(key)
+                pass
+        for key in removal:
+            temp.pop(key)
+
+        a = Counter()
+        for b in temp:
+            a += Counter(b)
+        flow = self.process().asp.get_stream_special_flow(self.uid, self.solids[prop], '$TOTAL')
+        for key, value in a.items():
+            a[key] = value/flow
+        return ObjectCollection(a)
 
     def set_obj_value(self, prop_loc, value):
         self.process().asp.set_stream_value(self.uid, prop_loc, value)
@@ -134,7 +155,6 @@ class Stream_Special(BaseObject):
 class Material_MIXCISLD(Stream_Special):
     """Aspen Plus MIXCISLD Material stream class"""
     stream_type = 'Material'
-    stream_type = 'Work'
 
     properties_in = {
         'pressure': ['\\Input\\PRES\\MIXED',None],
@@ -150,7 +170,47 @@ class Material_MIXCISLD(Stream_Special):
         'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
     }
 
-    properties = {}
+    properties = {
+        'massflow': '\\Output\\MASSFLMX\\$TOTAL',
+        'moleflow': '\\Output\\MOLEFLMX\\$TOTAL',
+        'volflow': '\\Output\\VOLFLMX\\$TOTAL'
+    }
+
+    properties_frac = {
+        'massfrac': '\\Output\\MASSFRAC',
+        'molefrac': '\\Output\\MOLEFRAC'
+    }
+
+    solids = {
+        'massfrac': '\\Output\\MASSFLMX\\',
+        'molefrac': '\\Output\\MOLEFLMX\\'
+    }
+
+
+class Material_MCINCPSD(Stream_Special):
+    """Aspen Plus MCINCPSD Material stream class"""
+    stream_type = 'Material'
+
+    properties_in = {
+        'pressure': ['\\Input\\PRES\\MIXED',None],
+        'temperature': ['\\Input\\TEMP\\MIXED',None],
+        'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
+        'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
+        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME'],
+        'vfrac': ['\\Input\\VFRAC\\MIXED',None]
+    }
+    properties_frac_in = {
+        'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
+        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC'],
+        'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
+    }
+
+    properties = {
+        'massflow': '\\Output\\MASSFLMX\\$TOTAL',
+        'moleflow': '\\Output\\MOLEFLMX\\$TOTAL',
+        'volflow': '\\Output\\VOLFLMX\\$TOTAL'
+    }
+
     properties_frac = {
         'massfrac': '\\Output\\MASSFRAC',
         'molefrac': '\\Output\\MOLEFRAC'

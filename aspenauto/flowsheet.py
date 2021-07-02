@@ -1,5 +1,5 @@
 from .streams import (
-    Material, Material_MIXCISLD,
+    Material, Material_MIXCISLD, Material_MCINCPSD,
     Work, 
     Heat
     )
