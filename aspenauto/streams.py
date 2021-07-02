@@ -22,10 +22,10 @@ class Stream(BaseObject):
         super().__init__(process)
 
 
-    def get_obj_value(self, prop_loc):    
+    def get_obj_value(self, key, prop_loc):    
         return self.process().asp.get_stream_value(self.uid, prop_loc)
 
-    def get_obj_value_frac(self, prop_loc):
+    def get_obj_value_frac(self, key, prop_loc):
         return self.process().asp.get_stream_value_frac(self.uid, prop_loc)
 
     def set_obj_value(self, prop_loc, value):
@@ -93,3 +93,70 @@ class Heat(Stream):
 
     properties = {'duty': '\\Output\\QCALC'}
     properties_frac = {}
+
+
+
+
+class Stream_Special(BaseObject):
+    """Main stream class"""
+    def __init__(self, name, uid, process):
+        
+        # Assign feed, product, waste and standard stream tags
+        if 'FS-' in name:
+            obj_type = 'Feed'
+        elif 'PS-' in name:
+            obj_type = 'Product'
+        elif 'WS-' in name:
+            obj_type = 'Waste'
+        else:
+            obj_type = 'Standard'
+        self.type = obj_type
+        self.name = name
+        self.uid = uid 
+        self.to_block = None
+        self.from_block = None
+        super().__init__(process)
+
+
+    def get_obj_value(self, key, prop_loc):    
+        return self.process().asp.get_stream_value(self.uid, prop_loc)
+
+    def get_obj_value_frac(self, key, prop_loc):
+        return self.process().asp.get_stream_value_frac_special(self.uid, prop_loc)
+
+    def set_obj_value(self, prop_loc, value):
+        self.process().asp.set_stream_value(self.uid, prop_loc, value)
+
+    def set_obj_value_frac(self, prop_loc, value):
+        self.process().asp.set_stream_value_frac(self.uid, prop_loc, value)
+
+
+class Material_MIXCISLD(Stream_Special):
+    """Aspen Plus MIXCISLD Material stream class"""
+    stream_type = 'Material'
+    stream_type = 'Work'
+
+    properties_in = {
+        'pressure': ['\\Input\\PRES\\MIXED',None],
+        'temperature': ['\\Input\\TEMP\\MIXED',None],
+        'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
+        'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
+        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME'],
+        'vfrac': ['\\Input\\VFRAC\\MIXED',None]
+    }
+    properties_frac_in = {
+        'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
+        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC'],
+        'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
+    }
+
+    properties = {}
+    properties_frac = {
+        'massfrac': '\\Output\\MASSFRAC',
+        'molefrac': '\\Output\\MOLEFRAC'
+    }
+
+    solids = {
+        'massfrac': '\\Output\\MASSFLMX\\',
+        'molefrac': '\\Output\\MOLEFLMX\\'
+    }

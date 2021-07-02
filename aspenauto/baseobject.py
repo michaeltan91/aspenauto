@@ -13,10 +13,10 @@ class BaseObject(object):
         """Resets all retrieved class attribute values"""
         self._values = {}
 
-    def get_obj_value(self, prop_loc):
+    def get_obj_value(self, key, prop_loc):
         raise NotImplementedError
 
-    def get_obj_value_frac(self, prop_loc):
+    def get_obj_value_frac(self, key, prop_loc):
         raise NotImplementedError
 
     def set_obj_value(self, prop_loc, value):
@@ -44,13 +44,13 @@ class BaseObject(object):
     def get_property(self, key):
         if key not in self._values.keys():
             prop_loc = self.properties[key]
-            self._values[key] = self.get_obj_value(prop_loc)
+            self._values[key] = self.get_obj_value(key, prop_loc)
         return self._values[key]
 
     def get_property_frac(self, key):
         if key not in self._values.keys():
             prop_loc = self.properties_frac[key]
-            self._values[key] = self.get_obj_value_frac(prop_loc)
+            self._values[key] = self.get_obj_value_frac(key, prop_loc)
         return self._values[key]
 
     def set_property(self, key, value):

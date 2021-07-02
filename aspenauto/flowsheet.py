@@ -1,5 +1,5 @@
 from .streams import (
-    Material,
+    Material, Material_MIXCISLD,
     Work, 
     Heat
     )
@@ -195,9 +195,16 @@ class Flowsheet(object):
             stream_type = process.asp.get_stream_type(uid)
 
             if stream_type == 'MATERIAL':
-                material = Material(obj.Name, uid, process)
-                process.streams[uid] = material
-                process.material_streams[uid] = material
+                material_stream_type = process.aspen.Tree.FindNode("\\Data\\Flowsheet\\Section\\GLOBAL\\Input\\SCLASS").Value
+                if material_stream_type == 'CONVEN':
+                    material = Material(obj.Name, uid, process)
+                    process.streams[uid] = material
+                    process.material_streams[uid] = material
+                elif material_stream_type == 'MIXCISLD':
+                    material = Material_MIXCISLD(obj.Name, uid, process)
+                    process.streams[uid] = material
+                    process.material_streams[uid] = material
+                
             elif stream_type == 'WORK':
                 work = Work(obj.Name, uid, process)
                 process.work_streams[uid] = work
