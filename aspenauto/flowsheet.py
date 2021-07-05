@@ -204,6 +204,10 @@ class Flowsheet(object):
                     material = Material_MIXCISLD(obj.Name, uid, process)
                     process.streams[uid] = material
                     process.material_streams[uid] = material
+                elif material_stream_type == 'MCINCPSD':
+                    material = Material_MCINCPSD(obj.Name, uid, process)
+                    process.streams[uid] = material
+                    process.material_streams[uid] = material
                 
             elif stream_type == 'WORK':
                 work = Work(obj.Name, uid, process)
