@@ -11,10 +11,10 @@ class Block(BaseObject):
         self.from_stream = None
         super().__init__(process)
 
-    def get_obj_value(self, prop_loc):
+    def get_obj_value(self, key, prop_loc):
         return self.process().asp.get_block_value(self.uid, prop_loc)
 
-    def get_obj_value_frac(self, prop_loc):
+    def get_obj_value_frac(self, key, prop_loc):
         return self.process().asp.get_block_value_frac(self.uid, prop_loc)
 
     def set_obj_value(self, prop_loc, value):

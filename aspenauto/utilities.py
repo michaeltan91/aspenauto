@@ -8,7 +8,7 @@ class Utility(BaseObject):
         self.blocks = ObjectCollection()
         super().__init__(process)
 
-    def get_obj_value(self, prop_loc):
+    def get_obj_value(self, key, prop_loc):
         return self.process().asp.get_util_value(self.name, prop_loc)
 
     def set_obj_value(self, prop_loc, value):
@@ -102,7 +102,7 @@ class Utility_Block(BaseObject):
         self.uid = uid # Custom identifier, combination of name of flowsheet and name of block 
         super().__init__(process)
 
-    def get_obj_value(self, prop_loc):
+    def get_obj_value(self, key, prop_loc):
         return self.process().asp.get_util_block_value(self.name, self.uid, prop_loc)
 
     def set_obj_value(self, prop_loc, value):
