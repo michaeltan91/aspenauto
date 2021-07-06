@@ -221,7 +221,44 @@ class Material_MCINCPSD(Stream_Special):
     }
 
     properties = {
-        'massflow': '\\Output\\MASSFLMX\\$TOTAL',
+        'massflow': '\\Output\\MASSFLMX',
+        'moleflow': '\\Output\\MOLEFLMX',
+        'volflow': '\\Output\\VOLFLMX',
+        'pressure': '\\Output\\PRES_OUT',
+        'temperature': '\\Output\\TEMP_OUT'
+    }
+
+    properties_frac = {
+        'massfrac': '\\Output\\MASSFRAC',
+        'molefrac': '\\Output\\MOLEFRAC'
+    }
+
+    solids = {
+        'massfrac': '\\Output\\MASSFLMX\\',
+        'molefrac': '\\Output\\MOLEFLMX\\'
+    }
+
+
+class Material_MIXCIPSD(Stream_Special):
+    """Aspen Plus MIXCIPSD Material stream class"""
+    stream_type = 'Material'
+
+    properties_in = {
+        'pressure': ['\\Input\\PRES\\MIXED',None],
+        'temperature': ['\\Input\\TEMP\\MIXED',None],
+        'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
+        'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
+        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME'],
+        'vfrac': ['\\Input\\VFRAC\\MIXED',None]
+    }
+    properties_frac_in = {
+        'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
+        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC'],
+        'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
+    }
+
+    properties = {
+        'massflow': '\\Output\\MASSFLMX',
         'moleflow': '\\Output\\MOLEFLMX',
         'volflow': '\\Output\\VOLFLMX',
         'pressure': '\\Output\\PRES_OUT',
