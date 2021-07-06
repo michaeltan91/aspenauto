@@ -85,7 +85,7 @@ class Model(object):
 
         self.asp = ASP(self)
         self.load_utilities()
-        self.units = Units(self)
+        #self.units = Units(self)
         self.flowsheet = Flowsheet(self)
 
 
