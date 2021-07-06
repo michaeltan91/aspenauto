@@ -21,6 +21,7 @@ class ASP(object):
 
 
     def get_block_list(self, uid):
+        '''Returns a list of all the blocks of the current aspen flowsheet'''
         if uid == '':
             path = self.block
         else:
@@ -32,6 +33,7 @@ class ASP(object):
 
 
     def get_block_type(self, uid):
+        '''Returns the type of the block'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         path=''.join(temp_path)
@@ -39,6 +41,7 @@ class ASP(object):
 
     
     def get_block_value(self, uid, prop):
+        '''Returns the value of a block property'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend([prop])
@@ -47,7 +50,7 @@ class ASP(object):
     
 
     def get_block_value_frac(self, uid, prop):
-
+        '''Returns the fractional values of a block property'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend([prop])
@@ -59,6 +62,7 @@ class ASP(object):
 
 
     def set_block_value(self, uid, prop, value):
+        '''Sets the value of a block property in the aspen simulation'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend([prop[0]])
@@ -69,6 +73,7 @@ class ASP(object):
 
 
     def get_stream_list(self, uid):
+        '''Returns a list of all the streams of the current aspen flowsheet'''
         if uid == '':
             path = self.stream
         else:
@@ -80,7 +85,7 @@ class ASP(object):
 
     
     def get_stream_type(self, uid):
-
+        '''Returns the type of the stream'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1]])
@@ -89,7 +94,7 @@ class ASP(object):
 
 
     def get_stream_value(self, uid, prop):
-
+        '''Returns the value of a stream property'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop])
@@ -98,7 +103,7 @@ class ASP(object):
 
 
     def get_stream_value_frac(self, uid, prop):
-
+        '''Returns the value of a fractional stream property'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop])
@@ -110,7 +115,7 @@ class ASP(object):
 
 
     def set_stream_value(self, uid, prop, value):
-
+        '''Sets the value of a stream property in the aspen simulation'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop[0]])
@@ -121,7 +126,7 @@ class ASP(object):
 
 
     def set_stream_value_frac(self, uid, prop, value):
-
+        '''Sets the value of a fractional stream property in the aspen simulation'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop[0]])
@@ -148,6 +153,7 @@ class ASP(object):
 
     
     def get_stream_special_flow(self, uid, prop, flowtype):
+        '''Return the value of a material stream property that is not of stream class "CONVEN"'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop, flowtype])
@@ -156,18 +162,22 @@ class ASP(object):
 
 
     def get_stream_special_value(self, uid, prop):
+        '''Return the value of a material stream property that is not of stream class "CONVEN"'''
         uids = uid.split()
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop])
         path=''.join(temp_path)
         temp = ObjectCollection()
         for element in self.aspen.Tree.FindNode(path).Elements:
-            temp[element.Name] = element.Value
+            if element.Value == None:
+                temp[element.Name] = 0
+            else:
+                temp[element.Name] = element.Value
         return temp
 
 
     def get_stream_special_value_frac(self, uid, prop):
-
+        '''Return the value of a material stream property that is not of stream class "CONVEN"'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop])
@@ -182,11 +192,13 @@ class ASP(object):
 
 
     def get_utility_list(self):
+        '''Returns a list of the utilities of the aspen simulation'''
         path = self.utility
         return [obj for obj in self.aspen.Tree.FindNode(path).Elements]
 
 
     def get_util_type(self, util_name):
+        '''Returns the utility type'''
         loc = '\\Input\\UTILITY_TYPE'
         temp_path = [self.utility, util_name,loc]
         path = ''.join(temp_path)
@@ -194,6 +206,7 @@ class ASP(object):
 
 
     def get_util_value(self, util_name, prop):
+        '''Returns the value of a utility property'''
         temp_path = [self.utility, util_name, prop]
         path=''.join(temp_path)
         return self.aspen.Tree.FindNode(path).Value
@@ -204,6 +217,8 @@ class ASP(object):
 
     
     def get_util_block_value(self, util_name, uid, prop):
+        '''Returns the value of a utility block property'''
+        # Blocks using the utility
         temp_path = [self.utility, util_name, prop, uid]
         path=''.join(temp_path)
         return self.aspen.Tree.FindNode(path).Value
@@ -214,6 +229,7 @@ class ASP(object):
 
 
     def get_steam_type(self, util_name):
+        '''Return the type of steam utility, utilization or production'''
         vfracin = '\\Input\\VFRAC'
         vfracout = '\\Input\\VFRAC_OUT'
         temp_path1 = [self.utility, util_name, vfracin]
@@ -230,7 +246,7 @@ class ASP(object):
 
 
     def get_heater_util(self, uid):
-
+        '''Returns the utility of a heater'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\UTILITY_ID')
@@ -239,7 +255,7 @@ class ASP(object):
     
 
     def get_radfrac_cond_util(self, uid):
-        
+        '''Returns the utility of a radfrac condensor'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\COND_UTIL')
@@ -248,7 +264,7 @@ class ASP(object):
 
 
     def get_radfrac_reb_util(self, uid):
-
+        '''Returns the utility of a radfrac reboiler'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\REB_UTIL')
@@ -257,7 +273,7 @@ class ASP(object):
 
 
     def get_reactor_util(self, uid):
-
+        '''Returns the utility of a reactor'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\UTILITY_ID')
@@ -266,7 +282,7 @@ class ASP(object):
 
     
     def get_pump_util(self, uid):
-
+        '''Returns the utility of a pump'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\UTILITY_ID')
@@ -275,7 +291,7 @@ class ASP(object):
 
 
     def get_compr_util(self, uid):
-
+        '''Returns the utility of a compressor'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\UTILITY_ID')
@@ -284,7 +300,7 @@ class ASP(object):
 
     
     def get_mcompr_specs_util(self, uid):
-
+        '''Returns the main utility of a multistage compressor'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\SPECS_UTL')
@@ -294,7 +310,7 @@ class ASP(object):
 
 
     def get_mcompr_cool_util(self, uid):
-
+        '''Returns the cooling utility of a multistage compressor'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\COOLER_UTL')

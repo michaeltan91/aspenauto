@@ -3,6 +3,8 @@ from .baseobject import BaseObject
 
 class Block(BaseObject):
     """Aspen block object"""
+    # Subclass of BaseObject
+
     def __init__(self, block_type, name, uid, process):
         self.name = name
         self.block_type = block_type
@@ -19,73 +21,6 @@ class Block(BaseObject):
 
     def set_obj_value(self, prop_loc, value):
         self.process().asp.set_block_value(self.uid, prop_loc, value)
-
-
-class MixSplit(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-        
-        
-class Separator(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-        
-
-class Exchanger(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-        
-
-class Column(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-
-
-class Reactor(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-
-
-class Pressure(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-
-
-class Solids(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-
-
-class SolidsSeparator(Block):
-
-    properties_in = {}
-    properties_frac_in = {}
-    properties = {}
-    properties_frac = {}
-
-
-##############################################################################
 
 
 class Compr(Block):
