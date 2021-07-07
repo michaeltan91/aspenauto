@@ -2,7 +2,14 @@ from .baseobject import BaseObject
 from .objectcollection import ObjectCollection
 
 class Utility(BaseObject):
+    '''Main utility class'''
+    # The different aspen utility properties are stored in several property dictionaries per utility type subclass.
+    # In each dictionary, the aspen utility property is the key of the dictionary while part of the storage location in the COM interface 
+    # is the respective value
+    # Aspen Plus has different storage locations for the utility input and output, thus requiring separate input and output property dictionaries
+    # Additionally, there are separate dictionaries for fractional properties.
 
+    # Any new block properties can be added to existing stream subclasses by using the same format
     def __init__(self, util_name, process):
         self.name = util_name # Name is name set by user in Aspen Plus
         self.blocks = ObjectCollection()
@@ -96,6 +103,14 @@ class Gas(Utility):
 
 
 class Utility_Block(BaseObject):
+    '''Main Utility Block class'''
+    # The different aspen utility block properties are stored in several property dictionaries per utility block type subclass.
+    # In each dictionary, the aspen utility block property is the key of the dictionary while part of the storage location in the COM interface 
+    # is the respective value
+    # Aspen Plus has different storage locations for the utility block input and output, thus requiring separate input and output property dictionaries
+    # Additionally, there are separate dictionaries for fractional properties.
+
+    # Any new utility block properties can be added to existing stream subclasses by using the same format
 
     def __init__(self, util_name, uid, process):
         self.name = util_name # Name is name set by user in Aspen Plus

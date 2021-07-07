@@ -4,6 +4,14 @@ from collections import Counter
 
 class Stream(BaseObject):
     """Main stream class"""
+    # The different aspen stream properties are stored in several property dictionaries per stream type subclass.
+    # In each dictionary, the aspen stream property is the key of the dictionary while part of the storage location in the COM interface 
+    # is the respective value
+    # Aspen Plus has different storage locations for the stream input and output, thus requiring separate input and output property dictionaries
+    # Additionally, there are separate dictionaries for fractional properties such as massfrac and molefrac
+
+    # Any new stream properties can be added to existing stream subclasses by using the same format
+
     def __init__(self, name, uid, process):
         
         # Assign feed, product, waste and standard stream tags
@@ -38,7 +46,7 @@ class Stream(BaseObject):
 
         
 class Material(Stream):
-    """Aspen Plus Material stream class"""
+    """Aspen Plus Material stream subclass"""
 
     stream_type = 'Material'
 
@@ -55,6 +63,7 @@ class Material(Stream):
         'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC'],
         'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
     }
+
     properties = {
         'pressure': '\\Output\\PRES_OUT\\MIXED',
         'temperature': '\\Output\\TEMP_OUT\\MIXED',
@@ -70,7 +79,8 @@ class Material(Stream):
 
 
 class Work(Stream):
-    """Aspen Plus Work stream class"""
+    
+    """Aspen Plus Work stream subclass"""
 
     stream_type = 'Work'
 
@@ -85,7 +95,7 @@ class Work(Stream):
 
 
 class Heat(Stream):
-    """Aspen Plus Heat stream class"""
+    """Aspen Plus Heat stream subclass"""
 
     stream_type = 'Heat'
 
@@ -99,7 +109,15 @@ class Heat(Stream):
 
 
 class Stream_Special(BaseObject):
-    """Main stream class"""
+    """Main special stream class for nonconventional material streams"""
+    # The different aspen stream properties are stored in several property dictionaries per stream type subclass.
+    # In each dictionary, the aspen stream property is the key of the dictionary while part of the storage location in the COM interface 
+    # is the respective value
+    # Aspen Plus has different storage locations for the stream input and output, thus requiring separate input and output property dictionaries
+    # Additionally, there are separate dictionaries for fractional properties such as massfrac and molefrac
+
+    # Any new stream properties can be added to existing stream subclasses by using the same format
+
     def __init__(self, name, uid, process):
         
         # Assign feed, product, waste and standard stream tags
@@ -203,6 +221,7 @@ class Material_MIXCISLD(Stream_Special):
 
 
 class Material_MCINCPSD(Stream_Special):
+    
     """Aspen Plus MCINCPSD Material stream class"""
     stream_type = 'Material'
 

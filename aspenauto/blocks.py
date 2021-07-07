@@ -3,7 +3,13 @@ from .baseobject import BaseObject
 
 class Block(BaseObject):
     """Aspen block object"""
-    # Subclass of BaseObject
+    # The different aspen block properties are stored in several property dictionaries per block type subclass.
+    # In each dictionary, the aspen block property is the key of the dictionary while part of the storage location in the COM interface 
+    # is the respective value
+    # Aspen Plus has different storage locations for the block input and output, thus requiring separate input and output property dictionaries
+    # Additionally, there are separate dictionaries for fractional properties.
+
+    # Any new block properties can be added to existing stream subclasses by using the same format
 
     def __init__(self, block_type, name, uid, process):
         self.name = name
