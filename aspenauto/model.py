@@ -18,7 +18,7 @@ from .utilities import (
 )
 
 class Model(object):
-    # Main class
+    '''Main aspen auto class'''
 
     def __init__(self, aspen_file):
         
@@ -29,8 +29,7 @@ class Model(object):
         self.output = Output(self)
         self.ready = False
 
-        # Declare dictionaries for easy access of Aspen Results/Variables
-        # Block dictionaries
+        # Prepate dictionaries for the blocks of the same type
         self.blocks = ObjectCollection()
         self.hierarchy = ObjectCollection()
 
@@ -43,7 +42,7 @@ class Model(object):
         self.solids = ObjectCollection()
         self.solidseparators = ObjectCollection()
 
-        ### New blocks
+        ### Prepate dictionaries for the specific blocks in Apen Plus
         self.compr = ObjectCollection()
         self.mcompr = ObjectCollection()
         self.pump = ObjectCollection()
@@ -67,7 +66,7 @@ class Model(object):
         self.ryield = ObjectCollection()
         
 
-        # Stream dictionaries
+        # Prepare stream dictionaries for the individual stream types and the combined collection
         self.streams = ObjectCollection()
         self.material_streams = ObjectCollection()
         self.heat_streams = ObjectCollection()

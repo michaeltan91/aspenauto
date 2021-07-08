@@ -1,7 +1,8 @@
 from .objectcollection import ObjectCollection
 
 class ASP(object):
-
+    '''Aspen Plus Python object'''
+    
     block = '\\Data\\Blocks\\'
     stream = '\\Data\\Streams\\'
     utility = '\\Data\\Utilities\\'
