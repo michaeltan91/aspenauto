@@ -259,18 +259,36 @@ class ASP(object):
         '''Returns the utility of a radfrac condensor'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
-        temp_path.extend('\\Input\\COND_UTIL')
+        temp_path.extend('\\Input\\CONDENSER')
         path=''.join(temp_path)
-        return self.aspen.Tree.FindNode(path).Value
+        condenser_type = self.aspen.Tree.FindNode(path).Value
+
+        if condenser_type == 'NONE':
+            return
+
+        else:
+            temp_path = [self.block+name for name in uids]
+            temp_path.extend('\\Input\\COND_UTIL')
+            path=''.join(temp_path)
+            return self.aspen.Tree.FindNode(path).Value
 
 
     def get_radfrac_reb_util(self, uid):
         '''Returns the utility of a radfrac reboiler'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
-        temp_path.extend('\\Input\\REB_UTIL')
+        temp_path.extend('\\Input\\REBOILER')
         path=''.join(temp_path)
-        return self.aspen.Tree.FindNode(path).Value
+        reboiler_type = self.aspen.Tree.FindNode(path).Value
+
+        if reboiler_type == 'NONE':
+            return
+
+        else:
+            temp_path = [self.block+name for name in uids]
+            temp_path.extend('\\Input\\REB_UTIL')
+            path=''.join(temp_path)
+            return self.aspen.Tree.FindNode(path).Value
 
 
     def get_reactor_util(self, uid):
