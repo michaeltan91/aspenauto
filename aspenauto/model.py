@@ -1,12 +1,12 @@
+"""Contains the main structure and methods"""
 import os
+import warnings
 import win32com.client as win32
 
 from .objectcollection import ObjectCollection
 from .output import Output
 from .flowsheet import Flowsheet
 from .asp import ASP
-from .units import Units
-import warnings
 
 from .utilities import (
     Electricity,
@@ -21,7 +21,7 @@ class Model(object):
     '''Main aspen auto class'''
 
     def __init__(self, aspen_file):
-        
+
         # Load Aspen Model
         self.aspen = win32.Dispatch('Apwn.Document')
         self.aspen.InitFromArchive2(os.path.abspath(aspen_file))
@@ -46,7 +46,7 @@ class Model(object):
         self.compr = ObjectCollection()
         self.mcompr = ObjectCollection()
         self.pump = ObjectCollection()
-        
+
         self.mixer = ObjectCollection()
         self.fsplit = ObjectCollection()
 
@@ -64,7 +64,7 @@ class Model(object):
         self.rstoic = ObjectCollection()
         self.rplug = ObjectCollection()
         self.ryield = ObjectCollection()
-        
+
 
         # Prepare stream dictionaries for the individual stream types and the combined collection
         self.streams = ObjectCollection()
@@ -79,7 +79,7 @@ class Model(object):
         self.steam = ObjectCollection()
         self.steam_gen = ObjectCollection()
         self.utilities = ObjectCollection()
-        
+
         # Assign classes to all Aspen Plus simulation objects
 
         self.asp = ASP(self)
@@ -90,9 +90,9 @@ class Model(object):
 
     def run(self, report_error = True):
         """Run the Aspen Engine"""
-        # Reset the Aspen simulation and delete the previously retrieved values from the simulation 
+        # Reset the Aspen simulation and delete the previously retrieved values from the simulation
         self.reset()
-        # Run the Aspen simulation 
+        # Run the Aspen simulation
         self.aspen.Engine.Run2()
         # Check whether Aspen reported an error
         error_path = "\\Data\\Results Summary\\Run-Status\\Output\\PER_ERROR"
@@ -103,13 +103,13 @@ class Model(object):
                 report = report + str(sentence.Value)+'\n'
             print(report)
             #raise RuntimeError('Error/Warning in Aspen Plus simulation')
-        
+
         self.ready = True
-            
+
 
     def print(self, work_book):
         """Prints the output in an excel file"""
-        if self.ready == True:
+        if self.ready is True:
             self.output.Print_Mass(self.material_streams, work_book)
             self.output.Print_Energy(self.utilities, work_book)
         else:
@@ -128,7 +128,7 @@ class Model(object):
                 block.reset()
         self.ready = False
 
-    
+
     def reset2(self):
         """Reset the values retrieved from the Aspen simulation"""
         for stream in self.streams:
@@ -136,7 +136,6 @@ class Model(object):
         for utility in self.utilities:
             for block in utility.blocks:
                 block.reset()
-    
 
 
     def close(self):
@@ -145,6 +144,7 @@ class Model(object):
 
 
     def load_utilities(self):
+        """Loads the utilities from the Aspen Model"""
         utilities = self.asp.get_utility_list()
         # Load and fill utility dictionaries
         for util in utilities:
@@ -170,7 +170,3 @@ class Model(object):
             elif util_type == 'REFRIGERATIO':
                 self.refrigerant[util_name] = Refrigerant(util_name, self)
                 self.utilities[util_name] = self.refrigerant[util_name]
-        
-
-
-

@@ -1,19 +1,22 @@
+"""Contains the stream class and its respective subclasses"""
+from collections import Counter
 from .objectcollection import ObjectCollection
 from .baseobject import BaseObject
-from collections import Counter
 
 class Stream(BaseObject):
     """Main stream class"""
-    # The different aspen stream properties are stored in several property dictionaries per stream type subclass.
-    # In each dictionary, the aspen stream property is the key of the dictionary while part of the storage location in the COM interface 
-    # is the respective value
-    # Aspen Plus has different storage locations for the stream input and output, thus requiring separate input and output property dictionaries
-    # Additionally, there are separate dictionaries for fractional properties such as massfrac and molefrac
+    # The different aspen stream properties are stored in several property dictionaries per
+    # stream type subclass. In each dictionary, the aspen stream property is the key of
+    # the dictionary while part of the storage location in the COM interface is the respective value
+    # Aspen Plus has different storage locations for the stream input and output,
+    # thus requiring separate input and output property dictionaries
+    # Additionally, there are separate dictionaries for fractional properties such as massfrac
+    # and molefrac
 
     # Any new stream properties can be added to existing stream subclasses by using the same format
 
     def __init__(self, name, uid, process):
-        
+
         # Assign feed, product, waste and standard stream tags
         if 'FS-' in name:
             obj_type = 'Feed'
@@ -25,13 +28,13 @@ class Stream(BaseObject):
             obj_type = 'Standard'
         self.type = obj_type
         self.name = name
-        self.uid = uid 
+        self.uid = uid
         self.to_block = None
         self.from_block = None
         super().__init__(process)
 
 
-    def get_obj_value(self, key, prop_loc):    
+    def get_obj_value(self, key, prop_loc):
         return self.process().asp.get_stream_value(self.uid, prop_loc)
 
     def get_obj_value_frac(self, key, prop_loc):
@@ -44,7 +47,6 @@ class Stream(BaseObject):
         self.process().asp.set_stream_value_frac(self.uid, prop_loc, value)
 
 
-        
 class Material(Stream):
     """Aspen Plus Material stream subclass"""
 
@@ -79,7 +81,7 @@ class Material(Stream):
 
 
 class Work(Stream):
-    
+
     """Aspen Plus Work stream subclass"""
 
     stream_type = 'Work'
@@ -108,18 +110,19 @@ class Heat(Stream):
 
 
 
-class Stream_Special(BaseObject):
+class StreamSpecial(BaseObject):
     """Main special stream class for nonconventional material streams"""
-    # The different aspen stream properties are stored in several property dictionaries per stream type subclass.
-    # In each dictionary, the aspen stream property is the key of the dictionary while part of the storage location in the COM interface 
-    # is the respective value
-    # Aspen Plus has different storage locations for the stream input and output, thus requiring separate input and output property dictionaries
-    # Additionally, there are separate dictionaries for fractional properties such as massfrac and molefrac
+    # The different aspen stream properties are stored in several property dictionaries per
+    # stream type subclass. In each dictionary, the aspen stream property is the key of the
+    # dictionary while part of the storage location in the COM interface is the respective value
+    # Aspen Plus has different storage locations for the stream input and output, thus requiring
+    # separate input and output property dictionaries. Additionally, there are separate dictionaries
+    # for fractional properties such as massfrac and molefrac
 
     # Any new stream properties can be added to existing stream subclasses by using the same format
 
     def __init__(self, name, uid, process):
-        
+
         # Assign feed, product, waste and standard stream tags
         if 'FS-' in name:
             obj_type = 'Feed'
@@ -131,7 +134,7 @@ class Stream_Special(BaseObject):
             obj_type = 'Standard'
         self.type = obj_type
         self.name = name
-        self.uid = uid 
+        self.uid = uid
         self.to_block = None
         self.from_block = None
         super().__init__(process)
@@ -139,42 +142,41 @@ class Stream_Special(BaseObject):
 
     def get_obj_value(self, key, prop_loc):
 
-        y = self.process().asp.get_stream_special_value(self.uid, prop_loc)
-        y.pop('$TOTAL')
-        
+        temp = self.process().asp.get_stream_special_value(self.uid, prop_loc)
+        temp.pop('$TOTAL')
+
         if key == 'massflow' or key == 'moleflow' or key == 'volflow':
-            return sum(y.values())
+            return sum(temp.values())
 
         else:
-            return max(y.values())
-        
+            return max(temp.values())
 
-    def get_obj_value_frac(self, prop, prop_loc):
-        
+
+    def get_obj_value_frac(self, key, prop_loc):
+
         temp = self.process().asp.get_stream_special_value_frac(self.uid, prop_loc)
         temp.pop('$TOTAL')
         removal = []
         total_flow = 0
 
-        for key, value in temp.items():
+        for key_1, value in temp.items():
             try:
-                flow = self.process().asp.get_stream_special_flow(self.uid, self.solids[prop], key)
+                flow = self.process().asp.get_stream_special_flow(self.uid, self.solids[key], key_1)
                 value.update((x, y*flow) for x, y in value.items())
                 total_flow += flow
             except TypeError:
-                removal.append(key)
-                pass
-        for key in removal:
-            temp.pop(key)
+                removal.append(key_1)
+        for key_1 in removal:
+            temp.pop(key_1)
 
-        a = Counter()
-        for b in temp:
-            a += Counter(b)
+        temp2 = Counter()
+        for temp_var in temp:
+            temp2 += Counter(temp_var)
 
-        for key, value in a.items():
-            a[key] = value/total_flow
+        for key_1, value in temp2.items():
+            temp2[key_1] = value/total_flow
 
-        return ObjectCollection(a)
+        return ObjectCollection(temp2)
 
     def set_obj_value(self, prop_loc, value):
         self.process().asp.set_stream_value(self.uid, prop_loc, value)
@@ -183,7 +185,7 @@ class Stream_Special(BaseObject):
         self.process().asp.set_stream_value_frac(self.uid, prop_loc, value)
 
 
-class Material_MIXCISLD(Stream_Special):
+class MaterialMIXCISLD(StreamSpecial):
     """Aspen Plus MIXCISLD Material stream class"""
     stream_type = 'Material'
 
@@ -220,8 +222,8 @@ class Material_MIXCISLD(Stream_Special):
     }
 
 
-class Material_MCINCPSD(Stream_Special):
-    
+class MaterialMCINCPSD(StreamSpecial):
+
     """Aspen Plus MCINCPSD Material stream class"""
     stream_type = 'Material'
 
@@ -258,7 +260,7 @@ class Material_MCINCPSD(Stream_Special):
     }
 
 
-class Material_MIXCIPSD(Stream_Special):
+class MaterialMIXCIPSD(StreamSpecial):
     """Aspen Plus MIXCIPSD Material stream class"""
     stream_type = 'Material'
 

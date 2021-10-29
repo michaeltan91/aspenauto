@@ -1,15 +1,16 @@
-from .objectcollection import ObjectCollection
+"""Contains the block class and its respective subclasses"""
 from .baseobject import BaseObject
 
 class Block(BaseObject):
     """Aspen block object"""
-    # The different aspen block properties are stored in several property dictionaries per block type subclass.
-    # In each dictionary, the aspen block property is the key of the dictionary while part of the storage location in the COM interface 
-    # is the respective value
-    # Aspen Plus has different storage locations for the block input and output, thus requiring separate input and output property dictionaries
-    # Additionally, there are separate dictionaries for fractional properties.
+    # The different aspen block properties are stored in several property dictionaries per
+    # block type subclass. In each dictionary, the aspen block property is the key of the
+    # dictionary while part of the storage location in the COM interface is the respective value.
+    # Aspen Plus has different storage locations for the block input and output, thus requiring
+    # separate input and output property dictionaries. Additionally, there are separate
+    # dictionaries for fractional properties.
 
-    # Any new block properties can be added to existing stream subclasses by using the same format
+    # Any new block properties can be added to existing block subclasses by using the same format
 
     def __init__(self, block_type, name, uid, process):
         self.name = name
@@ -28,8 +29,12 @@ class Block(BaseObject):
     def set_obj_value(self, prop_loc, value):
         self.process().asp.set_block_value(self.uid, prop_loc, value)
 
+    def set_obj_value_frac(self, prop_loc, value):
+        return
+
 
 class Compr(Block):
+    """Aspen Plus Compr block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME',
         'model': '\\Input\\MODEL_TYPE',
@@ -51,6 +56,7 @@ class Compr(Block):
 
 
 class MCompr(Block):
+    """Aspen Plus MCompr block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME',
         'model':'\\Input\\TYPE',
@@ -73,6 +79,7 @@ class MCompr(Block):
 
 
 class Pump(Block):
+    """Aspen Plus Pump block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME',
         'model': '\\Input\\PUMP_TYPE',
@@ -95,6 +102,7 @@ class Pump(Block):
 
 
 class Mixer(Block):
+    """Aspen Plus Mixer block class"""
     properties_in = {'block_method': '\\Input\\OPSETNAME'}
     properties_frac_in = {}
     properties = {'block_method': '\\Input\\OPSETNAME'}
@@ -102,6 +110,7 @@ class Mixer(Block):
 
 
 class Fsplit(Block):
+    """Aspen Plus Fsplit block class"""
     properties_in = {'block_method': '\\Input\\OPSETNAME'}
     properties_frac_in = {
         '\\Input\\FRAC'
@@ -114,6 +123,7 @@ class Fsplit(Block):
 
 
 class Flash2(Block):
+    """Aspen Plus Flash2 block class"""
     properties_in = {
         'block_method': ['\\Input\\OPSETNAME', None],
         'duty': ['\\Input\\DUTY', None],
@@ -130,6 +140,7 @@ class Flash2(Block):
 
 
 class Flash3(Block):
+    """Aspen Plus Flash3 block class"""
     properties_in = {
         'block_method': ['\\Input\\OPSETNAME', None],
         'duty': ['\\Input\\DUTY', None],
@@ -148,6 +159,7 @@ class Flash3(Block):
 
 
 class Decanter(Block):
+    """Aspen Plus Decanter block class"""
     properties_in = {
         'block_method': ['\\Input\\OPSETNAME', None],
         'duty': ['\\Input\\DUTY', None],
@@ -164,6 +176,7 @@ class Decanter(Block):
 
 
 class Separator1(Block):
+    """Aspen Plus Separator1 block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME'
     }
@@ -176,6 +189,7 @@ class Separator1(Block):
 
 
 class Heater(Block):
+    """Aspen Plus Heater block class"""
     properties_in = {
         'block_method': ['\\Input\\OPSETNAME', None],
         'flash_spec': ['\\Input_SPEC_OPT', None] ,
@@ -196,6 +210,7 @@ class Heater(Block):
 
 
 class HeatX(Block):
+    """Aspen Plus HeatX block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME',
         'spec': '\\Input\\SPEC',
@@ -221,6 +236,7 @@ class HeatX(Block):
 
 
 class RadFrac(Block):
+    """Aspen Plus RadFrac block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME',
         'condenser': '\\Input\\CONDENSER',
@@ -254,6 +270,7 @@ class RadFrac(Block):
 
 
 class RGibbs(Block):
+    """Aspen Plus RGibbs block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME'
     }
@@ -275,6 +292,7 @@ class RGibbs(Block):
 
 
 class RPlug(Block):
+    """Aspen Plus Rplug block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME'
     }
@@ -286,6 +304,7 @@ class RPlug(Block):
 
 
 class RStoic(Block):
+    """Aspen Plus RStoic block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME'
     }
@@ -297,6 +316,7 @@ class RStoic(Block):
 
 
 class RYield(Block):
+    """Aspen Plus RYield block class"""
     properties_in = {
         'block_method': '\\Input\\OPSETNAME'
     }
