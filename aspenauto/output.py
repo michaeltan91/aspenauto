@@ -2,7 +2,7 @@ import pyexcel
 from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 from openpyxl.styles import Font, Fill
-from .objectcollection import ObjectCollection
+from epynet import ObjectCollection
 
 class Output(object):
     

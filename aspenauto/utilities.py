@@ -1,5 +1,5 @@
+from epynet import ObjectCollection
 from .baseobject import BaseObject
-from .objectcollection import ObjectCollection
 
 class Utility(BaseObject):
     '''Main utility class'''

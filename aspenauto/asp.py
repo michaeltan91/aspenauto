@@ -1,5 +1,5 @@
 """This is the file with specific methods for retrieving aspen plus object values"""
-from .objectcollection import ObjectCollection
+from epynet import ObjectCollection
 
 class ASP(object):
     '''Aspen Plus Python object'''

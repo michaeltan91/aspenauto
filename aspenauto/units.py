@@ -1,4 +1,4 @@
-from .objectcollection import ObjectCollection
+from epynet import ObjectCollection
 import weakref
 
 class Units(object):

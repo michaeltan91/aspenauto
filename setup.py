@@ -9,6 +9,7 @@ setup(name='aspenauto',
       install_requires = [
           'xlrd',
           'pyexcel',
-          'pandas'
+          'pandas',
+          'epynet'
       ],
       zip_safe=False)

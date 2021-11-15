@@ -1,6 +1,7 @@
 """Contains the stream class and its respective subclasses"""
 from collections import Counter
-from .objectcollection import ObjectCollection
+from epynet import ObjectCollection
+
 from .baseobject import BaseObject
 
 class Stream(BaseObject):
