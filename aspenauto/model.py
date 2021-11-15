@@ -2,7 +2,7 @@
 import os
 import warnings
 import win32com.client as win32
-from .objectcollection import ObjectCollection
+from epynet import ObjectCollection
 
 from .output import Output
 from .flowsheet import Flowsheet
