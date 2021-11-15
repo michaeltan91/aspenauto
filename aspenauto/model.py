@@ -2,8 +2,8 @@
 import os
 import warnings
 import win32com.client as win32
-
 from .objectcollection import ObjectCollection
+
 from .output import Output
 from .flowsheet import Flowsheet
 from .asp import ASP
@@ -94,6 +94,8 @@ class Model(object):
         self.reset()
         # Run the Aspen simulation
         self.aspen.Engine.Run2()
+        version_path = "\\Settings\\startupdir"
+        print(self.aspen.Tree.FindNode(version_path).Value)
         # Check whether Aspen reported an error
         error_path = "\\Data\\Results Summary\\Run-Status\\Output\\PER_ERROR"
         error = self.aspen.Tree.FindNode(error_path).Value
