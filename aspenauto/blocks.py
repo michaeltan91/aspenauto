@@ -2,7 +2,7 @@
 from .baseobject import BaseObject
 
 class Block(BaseObject):
-    """Aspen block object"""
+    """Main block class"""
     # The different aspen block properties are stored in several property dictionaries per
     # block type subclass. In each dictionary, the aspen block property is the key of the
     # dictionary while part of the storage location in the COM interface is the respective value.

@@ -5,12 +5,12 @@ from .streams import (
     Heat
     )
 from .utilities import (
-    Electricity_Block,
-    Coolwater_Block,
-    Steam_Block,
-    Steam_Gen_Block,
-    Refrigerant_Block,
-    Gas_Block
+    ElectricityBlock,
+    CoolwaterBlock,
+    SteamBlock,
+    SteamGenBlock,
+    RefrigerantBlock,
+    GasBlock
 )
 
 from .blocks import (
@@ -228,16 +228,16 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'WATER':
-                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+                process.coolwater[util_name].blocks[uid] = CoolwaterBlock(util_name, uid, process)
             elif util_type == 'STEAM':
                 steam_type = process.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
-                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                    process.steam[util_name].blocks[uid] = SteamBlock(util_name, uid, process)
                 elif steam_type == 'STEAM-GEN':
-                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, \
+                    process.steam_gen[util_name].blocks[uid] = SteamGenBlock(util_name, \
                     uid, process)
             elif util_type == 'REFRIGERATIO':
-                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, \
+                process.refrigerant[util_name].blocks[uid] = RefrigerantBlock(util_name, \
                 uid, process)
 
         # Retrieve the name of the reboiler utility
@@ -251,12 +251,12 @@ class Flowsheet(object):
             if util_type == 'STEAM':
                 steam_type = process.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
-                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                    process.steam[util_name].blocks[uid] = SteamBlock(util_name, uid, process)
                 elif steam_type == 'STEAM-GEN':
-                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, uid, \
+                    process.steam_gen[util_name].blocks[uid] = SteamGenBlock(util_name, uid, \
                     process)
             elif util_type == 'GAS':
-                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+                process.natural_gas[util_name].blocks[uid] = GasBlock(util_name, uid, process)
 
 
     def assign_utility_heater(self, block, process):
@@ -276,21 +276,21 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'WATER':
-                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+                process.coolwater[util_name].blocks[uid] = CoolwaterBlock(util_name, uid, process)
             elif util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, uid, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, uid, \
                 process)
             elif util_type == 'GAS':
-                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+                process.natural_gas[util_name].blocks[uid] = GasBlock(util_name, uid, process)
             elif util_type == 'STEAM':
                 steam_type = process.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
-                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                    process.steam[util_name].blocks[uid] = SteamBlock(util_name, uid, process)
                 elif steam_type == 'STEAM-GEN':
-                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, \
+                    process.steam_gen[util_name].blocks[uid] = SteamGenBlock(util_name, \
                     uid, process)
             elif util_type == 'REFRIGERATIO':
-                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, \
+                process.refrigerant[util_name].blocks[uid] = RefrigerantBlock(util_name, \
                 uid, process)
 
 
@@ -311,7 +311,7 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, \
                 uid, process)
 
 
@@ -332,7 +332,7 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, \
                 uid, process)
 
         # Retrieve the name of the cooling duty of the multistage compressor
@@ -344,9 +344,9 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'WATER':
-                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+                process.coolwater[util_name].blocks[uid] = CoolwaterBlock(util_name, uid, process)
             elif util_type == 'REFRIGERATIO':
-                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, \
+                process.refrigerant[util_name].blocks[uid] = RefrigerantBlock(util_name, \
                 uid, process)
 
 
@@ -367,7 +367,7 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, \
                 uid, process)
 
 
@@ -388,21 +388,21 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'WATER':
-                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, uid, process)
+                process.coolwater[util_name].blocks[uid] = CoolwaterBlock(util_name, uid, process)
             elif util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, \
                 uid, process)
             elif util_type == 'GAS':
-                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+                process.natural_gas[util_name].blocks[uid] = GasBlock(util_name, uid, process)
             elif util_type == 'STEAM':
                 steam_type = process.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
-                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                    process.steam[util_name].blocks[uid] = SteamBlock(util_name, uid, process)
                 elif steam_type == 'STEAM-GEN':
-                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, \
+                    process.steam_gen[util_name].blocks[uid] = SteamGenBlock(util_name, \
                     uid, process)
             elif util_type == 'REFRIGERATIO':
-                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, \
+                process.refrigerant[util_name].blocks[uid] = RefrigerantBlock(util_name, \
                 uid, process)
 
 
@@ -423,22 +423,22 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'WATER':
-                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, \
+                process.coolwater[util_name].blocks[uid] = CoolwaterBlock(util_name, \
                 uid, process)
             elif util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, \
                 uid, process)
             elif util_type == 'GAS':
-                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+                process.natural_gas[util_name].blocks[uid] = GasBlock(util_name, uid, process)
             elif util_type == 'STEAM':
                 steam_type = process.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
-                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                    process.steam[util_name].blocks[uid] = SteamBlock(util_name, uid, process)
                 elif steam_type == 'STEAM-GEN':
-                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, \
+                    process.steam_gen[util_name].blocks[uid] = SteamGenBlock(util_name, \
                     uid, process)
             elif util_type == 'REFRIGERATIO':
-                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, \
+                process.refrigerant[util_name].blocks[uid] = RefrigerantBlock(util_name, \
                 uid, process)
 
 
@@ -459,20 +459,20 @@ class Flowsheet(object):
             pass
         else:
             if util_type == 'WATER':
-                process.coolwater[util_name].blocks[uid] = Coolwater_Block(util_name, \
+                process.coolwater[util_name].blocks[uid] = CoolwaterBlock(util_name, \
                 uid, process)
             elif util_type == 'ELECTRICITY':
-                process.electricity[util_name].blocks[uid] = Electricity_Block(util_name, \
+                process.electricity[util_name].blocks[uid] = ElectricityBlock(util_name, \
                 uid, process)
             elif util_type == 'GAS':
-                process.natural_gas[util_name].blocks[uid] = Gas_Block(util_name, uid, process)
+                process.natural_gas[util_name].blocks[uid] = GasBlock(util_name, uid, process)
             elif util_type == 'STEAM':
                 steam_type = process.asp.get_steam_type(util_name)
                 if steam_type == 'STEAM':
-                    process.steam[util_name].blocks[uid] = Steam_Block(util_name, uid, process)
+                    process.steam[util_name].blocks[uid] = SteamBlock(util_name, uid, process)
                 elif steam_type == 'STEAM-GEN':
-                    process.steam_gen[util_name].blocks[uid] = Steam_Gen_Block(util_name, \
+                    process.steam_gen[util_name].blocks[uid] = SteamGenBlock(util_name, \
                     uid, process)
             elif util_type == 'REFRIGERATIO':
-                process.refrigerant[util_name].blocks[uid] = Refrigerant_Block(util_name, \
+                process.refrigerant[util_name].blocks[uid] = RefrigerantBlock(util_name, \
                 uid, process)

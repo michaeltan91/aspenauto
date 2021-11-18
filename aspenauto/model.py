@@ -12,7 +12,7 @@ from .utilities import (
     Electricity,
     Coolwater,
     Steam,
-    Steam_Gen,
+    SteamGen,
     Refrigerant,
     Gas
 )
@@ -167,7 +167,7 @@ class Model(object):
                     self.steam[util_name] = Steam(util_name, self)
                     self.utilities[util_name] = self.steam[util_name]
                 elif steam_type == 'STEAM-GEN':
-                    self.steam_gen[util_name] = Steam_Gen(util_name, self)
+                    self.steam_gen[util_name] = SteamGen(util_name, self)
                     self.utilities[util_name] = self.steam_gen[util_name]
             elif util_type == 'REFRIGERATIO':
                 self.refrigerant[util_name] = Refrigerant(util_name, self)
