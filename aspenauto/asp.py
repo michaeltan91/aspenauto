@@ -13,6 +13,12 @@ class ASP(object):
         self.aspen = process.aspen
 
 
+    def get_comp_list(self):
+        
+        path = "\\Data\\Components\\Specifications\\Output\\REPNAME"
+        return [obj.Value for obj in self.aspen.Tree.FindNode(path).Elements]
+
+
     def get_run_error(self):
         """Retrieve the Aspen Plus error status"""
         raise NotImplementedError

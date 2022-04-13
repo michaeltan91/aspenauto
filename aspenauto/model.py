@@ -80,11 +80,14 @@ class Model(object):
         self.steam_gen = ObjectCollection()
         self.utilities = ObjectCollection()
 
-        # Assign classes to all Aspen Plus simulation objects
+        
 
+        # Assign classes to all Aspen Plus simulation objects
         self.asp = ASP(self)
         self.load_utilities()
-        #self.units = Units(self)
+        # Component list
+        self.components = self.asp.get_comp_list()
+        # Load the flowsheet
         self.flowsheet = Flowsheet(self)
 
 
