@@ -1,4 +1,4 @@
-Aspenauto is an object oriented wrapper for Aspen Plus V8.8
+Aspenauto is an object oriented Python wrapper for Aspen Plus 
 
 
 
