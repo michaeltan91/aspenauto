@@ -10,6 +10,7 @@ setup(name='aspenauto',
           'xlrd',
           'pyexcel',
           'pandas',
-          'epynet'
+          'epynet',
+          'openpyxl'
       ],
       zip_safe=False)
