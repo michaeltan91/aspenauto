@@ -1,6 +1,8 @@
 """Contains the stream class and its respective subclasses"""
 from collections import Counter
+from sqlite3 import adapt
 from epynet import ObjectCollection
+from matplotlib.font_manager import ttfFontProperty
 
 from .baseobject import BaseObject
 
@@ -21,13 +23,29 @@ class Stream(BaseObject):
         # Assign feed, product, waste and standard stream tags
         if 'FS-' in name:
             obj_type = 'Feed'
+            if 'FS-NG-' in name:
+                auxiliary = 'NG'
+            elif 'FS-H2-' in name:
+                auxiliary = 'H2'
+            elif 'FS-CO2-' in name:
+                auxiliary = 'CO2'
+            elif 'FS-O2-' in name:
+                auxiliary = 'O2'
+            elif 'FS-AIR-' in name:
+                auxiliary = 'AIR'
+            else:
+                auxiliary = None
         elif 'PS-' in name:
             obj_type = 'Product'
+            auxiliary = None
         elif 'WS-' in name:
             obj_type = 'Waste'
+            auxiliary = None
         else:
             obj_type = 'Standard'
+            auxiliary = None
         self.type = obj_type
+        self.auxiliary = auxiliary
         self.name = name
         self.uid = uid
         self.to_block = None
@@ -73,7 +91,9 @@ class Material(Stream):
         'massflow': '\\Output\\MASSFLMX\\MIXED',
         'moleflow': '\\Output\\MOLEFLMX\\MIXED',
         'volflow': '\\Output\\VOLFLMX\\MIXED',
-        'vfrac': '\\Output\\VFRAC_OUT\\MIXED'
+        'lfrac':   '\\Output\\LFRAC\\MIXED',
+        'vfrac': '\\Output\\VFRAC_OUT\\MIXED',
+        'sfrac': '\\Output\\SFRAC\\MIXED'
         }
     properties_frac = {
         'massfrac': '\\Output\\MASSFRAC\\MIXED',
@@ -127,13 +147,29 @@ class StreamSpecial(BaseObject):
         # Assign feed, product, waste and standard stream tags
         if 'FS-' in name:
             obj_type = 'Feed'
+            if 'FS-NG-' in name:
+                auxiliary = 'NG'
+            elif 'FS-H2-' in name:
+                auxiliary = 'H2'
+            elif 'FS-CO2-' in name:
+                auxiliary = 'CO2'
+            elif 'FS-O2-' in name:
+                auxiliary = 'O2'
+            elif 'FS-AIR-' in name:
+                auxiliary = 'AIR'
+            else:
+                auxiliary = None
         elif 'PS-' in name:
             obj_type = 'Product'
+            auxiliary = None
         elif 'WS-' in name:
             obj_type = 'Waste'
+            auxiliary = None
         else:
             obj_type = 'Standard'
+            auxiliary = None
         self.type = obj_type
+        self.auxiliary = auxiliary
         self.name = name
         self.uid = uid
         self.to_block = None
@@ -148,6 +184,16 @@ class StreamSpecial(BaseObject):
 
         if key == 'massflow' or key == 'moleflow' or key == 'volflow':
             return sum(temp.values())
+        
+        elif key == 'lfrac' or key == 'sfrac' or key == 'vfrac':
+            prop_loc = '\\Output\\MOLEFLMX'
+            moleflow = self.process().asp.get_stream_special_value(self.uid, prop_loc)
+            moleflow.pop('$TOTAL')
+
+            temp2 = 0
+            for key, value in temp.items():
+                temp2 += value * moleflow[key]
+            return temp2/sum(moleflow)
 
         else:
             return max(temp.values())
@@ -209,7 +255,10 @@ class MaterialMIXCISLD(StreamSpecial):
         'moleflow': '\\Output\\MOLEFLMX',
         'volflow': '\\Output\\VOLFLMX',
         'pressure': '\\Output\\PRES_OUT',
-        'temperature': '\\Output\\TEMP_OUT'
+        'temperature': '\\Output\\TEMP_OUT',
+        'lfrac':     '\\Output\\LFRAC',
+        'sfrac':     '\\Output\\SFRAC',
+        'vfrac':     '\\Output\\VFRAC_OUT'
     }
 
     properties_frac = {
@@ -247,7 +296,10 @@ class MaterialMCINCPSD(StreamSpecial):
         'moleflow': '\\Output\\MOLEFLMX',
         'volflow': '\\Output\\VOLFLMX',
         'pressure': '\\Output\\PRES_OUT',
-        'temperature': '\\Output\\TEMP_OUT'
+        'temperature': '\\Output\\TEMP_OUT',
+        'lfrac':     '\\Output\\LFRAC',
+        'sfrac':     '\\Output\\SFRAC',
+        'vfrac':     '\\Output\\VFRAC_OUT'
     }
 
     properties_frac = {
@@ -284,7 +336,10 @@ class MaterialMIXCIPSD(StreamSpecial):
         'moleflow': '\\Output\\MOLEFLMX',
         'volflow': '\\Output\\VOLFLMX',
         'pressure': '\\Output\\PRES_OUT',
-        'temperature': '\\Output\\TEMP_OUT'
+        'temperature': '\\Output\\TEMP_OUT',
+        'lfrac':     '\\Output\\LFRAC',
+        'sfrac':     '\\Output\\SFRAC',
+        'vfrac':     '\\Output\\VFRAC_OUT'
     }
 
     properties_frac = {
