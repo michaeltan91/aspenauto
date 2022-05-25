@@ -193,7 +193,10 @@ class StreamSpecial(BaseObject):
             temp2 = 0
             for key, value in temp.items():
                 temp2 += value * moleflow[key]
-            return temp2/sum(moleflow)
+            try:
+                return temp2/sum(moleflow)
+            except ZeroDivisionError:
+                return 0
 
         else:
             return max(temp.values())
