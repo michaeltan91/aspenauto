@@ -214,7 +214,7 @@ class StreamSpecial(BaseObject):
                 flow = self.process().asp.get_stream_special_flow(self.uid, self.solids[key], key_1)
                 value.update((x, y*flow) for x, y in value.items())
                 total_flow += flow
-            except TypeError:
+            except TypeError as ee:
                 removal.append(key_1)
         for key_1 in removal:
             temp.pop(key_1)
@@ -223,10 +223,14 @@ class StreamSpecial(BaseObject):
         for temp_var in temp:
             temp2 += Counter(temp_var)
 
-        for key_1, value in temp2.items():
-            temp2[key_1] = value/total_flow
+        if total_flow == 0:
+            return ObjectCollection(temp2)
 
-        return ObjectCollection(temp2)
+        else:
+            for key_1, value in temp2.items():
+                temp2[key_1] = value/total_flow
+
+            return ObjectCollection(temp2)
 
     def set_obj_value(self, prop_loc, value):
         self.process().asp.set_stream_value(self.uid, prop_loc, value)
@@ -318,6 +322,46 @@ class MaterialMCINCPSD(StreamSpecial):
 
 class MaterialMIXCIPSD(StreamSpecial):
     """Aspen Plus MIXCIPSD Material stream class"""
+    stream_type = 'Material'
+
+    properties_in = {
+        'pressure': ['\\Input\\PRES\\MIXED',None],
+        'temperature': ['\\Input\\TEMP\\MIXED',None],
+        'massflow': ['\\Input\\TOTFLOW\\MIXED', 'MASS'],
+        'moleflow': ['\\Input\\TOTFLOW\\MIXED', 'MOLE'],
+        'volflow': ['\\Input\\TOTFLOW\\MIXED', 'VOLUME'],
+        'vfrac': ['\\Input\\VFRAC\\MIXED',None]
+    }
+    properties_frac_in = {
+        'massfrac' : ['\\Input\\FLOW\\MIXED','MASS-FRAC'],
+        'molefrac' : ['\\Input\\FLOW\\MIXED','MOLE-FRAC'],
+        'massflow_comp' : ['\\Input\\FLOW\\MIXED','MASS-FLOW']
+    }
+
+    properties = {
+        'massflow': '\\Output\\MASSFLMX',
+        'moleflow': '\\Output\\MOLEFLMX',
+        'volflow': '\\Output\\VOLFLMX',
+        'pressure': '\\Output\\PRES_OUT',
+        'temperature': '\\Output\\TEMP_OUT',
+        'lfrac':     '\\Output\\LFRAC',
+        'sfrac':     '\\Output\\SFRAC',
+        'vfrac':     '\\Output\\VFRAC_OUT'
+    }
+
+    properties_frac = {
+        'massfrac': '\\Output\\MASSFRAC',
+        'molefrac': '\\Output\\MOLEFRAC'
+    }
+
+    solids = {
+        'massfrac': '\\Output\\MASSFLMX\\',
+        'molefrac': '\\Output\\MOLEFLMX\\'
+    }
+
+
+class MaterialMIXNC(StreamSpecial):
+    """Aspen Plus MIXNC Material stream class"""
     stream_type = 'Material'
 
     properties_in = {
