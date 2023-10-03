@@ -112,6 +112,14 @@ class Gas(Utility):
     properties_frac = {}
 
 
+class FiredHeat(Utility):
+    '''Aspen Plus Fired Heat class'''
+    properties_in = {}
+    properties_frac_in = {}
+    properties = {}
+    properties_frac = {}
+
+
 class UtilityBlock(BaseObject):
     '''Main Utility Block class'''
     # The different aspen utility block properties are stored in several property dictionaries
@@ -200,6 +208,17 @@ class RefrigerantBlock(UtilityBlock):
 
 class GasBlock(UtilityBlock):
     '''Aspen Plus Gas utility per block class'''
+    properties_in = {}
+    properties_frac_in = {}
+    properties = {
+        'duty': '\\Output\\UTL_DUTY\\',
+        'usage':'\\Output\\UTL_USAGE\\',
+    }
+    properties_frac = {}
+
+
+class FiredHeatBlock(UtilityBlock):
+    """Aspen Plus Fired Heat """
     properties_in = {}
     properties_frac_in = {}
     properties = {
