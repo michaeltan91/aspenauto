@@ -195,7 +195,11 @@ class ASP(object):
         for element1 in self.aspen.Tree.FindNode(path).Elements:
             temp2 = ObjectCollection()
             for element2 in element1.Elements:
-                temp2[element2.Name] = element2.Value
+                value2 = element2.Value
+                if value2 is None:
+                    temp2[element2.Name] = 0
+                else:
+                    temp2[element2.Name] = element2.Value
             temp1[element1.Name] = temp2
         return temp1
 
@@ -312,6 +316,24 @@ class ASP(object):
 
     def get_pump_util(self, uid):
         '''Returns the utility of a pump'''
+        uids = uid.split('.')
+        temp_path = [self.block+name for name in uids]
+        temp_path.extend('\\Input\\UTILITY_ID')
+        path=''.join(temp_path)
+        return self.aspen.Tree.FindNode(path).Value
+
+
+    def get_flash2_util(self, uid):
+        '''Returns the utility of flash2'''
+        uids = uid.split('.')
+        temp_path = [self.block+name for name in uids]
+        temp_path.extend('\\Input\\UTILITY_ID')
+        path=''.join(temp_path)
+        return self.aspen.Tree.FindNode(path).Value
+
+
+    def get_sep_util(self, uid):
+        '''Returns the utility of seperator'''
         uids = uid.split('.')
         temp_path = [self.block+name for name in uids]
         temp_path.extend('\\Input\\UTILITY_ID')

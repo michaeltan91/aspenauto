@@ -14,7 +14,8 @@ from .utilities import (
     Steam,
     SteamGen,
     Refrigerant,
-    Gas
+    Gas,
+    FiredHeat
 )
 
 class Model(object):
@@ -78,10 +79,11 @@ class Model(object):
         self.refrigerant = ObjectCollection()
         self.steam = ObjectCollection()
         self.steam_gen = ObjectCollection()
+        self.fired_heat = ObjectCollection()
+        self.htheat = ObjectCollection()
         self.utilities = ObjectCollection()
 
         
-
         # Assign classes to all Aspen Plus simulation objects
         self.asp = ASP(self)
         self.load_utilities()
@@ -175,3 +177,6 @@ class Model(object):
             elif util_type == 'REFRIGERATIO':
                 self.refrigerant[util_name] = Refrigerant(util_name, self)
                 self.utilities[util_name] = self.refrigerant[util_name]
+            elif util_type == "GENERAL" and util_name == "FIRINGH":
+                self.fired_heat[util_name] = FiredHeat(util_name, self)
+                self.utilities[util_name] = self.fired_heat[util_name]
