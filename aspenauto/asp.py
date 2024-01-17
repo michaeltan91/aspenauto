@@ -172,7 +172,7 @@ class ASP(object):
 
     def get_stream_special_value(self, uid, prop):
         '''Return the value of a material stream property that is not of stream class "CONVEN"'''
-        uids = uid.split()
+        uids = uid.split('.')
         temp_path = [self.block+name for name in uids[:-1]]
         temp_path.extend([self.stream,uids[-1],prop])
         path=''.join(temp_path)
