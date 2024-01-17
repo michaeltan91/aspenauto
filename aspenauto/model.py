@@ -3,6 +3,7 @@ import os
 import warnings
 import win32com.client as win32
 from epynet import ObjectCollection
+from pywintypes import com_error
 
 from .output import Output
 from .flowsheet import Flowsheet
@@ -25,7 +26,11 @@ class Model(object):
 
         # Load Aspen Model
         self.aspen = win32.Dispatch('Apwn.Document')
-        self.aspen.InitFromArchive2(os.path.abspath(aspen_file))
+        try:
+            self.aspen.InitFromArchive2(os.path.abspath(aspen_file))
+        except com_error as e:
+            self.aspen.close()
+            print(e)
         # Load print output class
         self.output = Output(self)
         self.ready = False
@@ -83,7 +88,7 @@ class Model(object):
         self.htheat = ObjectCollection()
         self.utilities = ObjectCollection()
 
-        
+
         # Assign classes to all Aspen Plus simulation objects
         self.asp = ASP(self)
         self.load_utilities()
