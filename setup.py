@@ -11,6 +11,7 @@ setup(name='aspenauto',
           'pyexcel',
           'pandas',
           'epynet',
-          'openpyxl'
+          'openpyxl',
+          'pywin32'
       ],
       zip_safe=False)
