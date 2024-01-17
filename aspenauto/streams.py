@@ -21,7 +21,7 @@ class Stream(BaseObject):
     def __init__(self, name, uid, process):
 
         # Assign feed, product, waste and standard stream tags
-        if 'FS-' in name:
+        if uid.startswith("FS-"):
             obj_type = 'Feed'
             if 'FS-NG-' in name:
                 auxiliary = 'NG'
@@ -35,10 +35,10 @@ class Stream(BaseObject):
                 auxiliary = 'AIR'
             else:
                 auxiliary = None
-        elif 'PS-' in name:
+        elif uid.startswith("PS-"):
             obj_type = 'Product'
             auxiliary = None
-        elif 'WS-' in name:
+        elif uid.startswith("WS-"):
             obj_type = 'Waste'
             auxiliary = None
         else:
@@ -145,7 +145,7 @@ class StreamSpecial(BaseObject):
     def __init__(self, name, uid, process):
 
         # Assign feed, product, waste and standard stream tags
-        if 'FS-' in name:
+        if uid.startswith("FS-"):
             obj_type = 'Feed'
             if 'FS-NG-' in name:
                 auxiliary = 'NG'
@@ -159,10 +159,10 @@ class StreamSpecial(BaseObject):
                 auxiliary = 'AIR'
             else:
                 auxiliary = None
-        elif 'PS-' in name:
+        elif uid.startswith("PS-"):
             obj_type = 'Product'
             auxiliary = None
-        elif 'WS-' in name:
+        elif uid.startswith("WS-"):
             obj_type = 'Waste'
             auxiliary = None
         else:
